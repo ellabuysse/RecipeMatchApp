@@ -153,6 +153,7 @@
 		750237B52876010F00367EE7 /* RecipeMatch */ = {
 			isa = PBXGroup;
 			children = (
+				750237F4287609B900367EE7 /* View Controllers */,
 				750237B62876010F00367EE7 /* AppDelegate.h */,
 				750237B72876010F00367EE7 /* AppDelegate.m */,
 				750237B92876010F00367EE7 /* SceneDelegate.h */,
@@ -164,12 +165,6 @@
 				750237C42876011000367EE7 /* LaunchScreen.storyboard */,
 				750237C72876011000367EE7 /* Info.plist */,
 				750237C82876011000367EE7 /* main.m */,
-				750237EB287601AC00367EE7 /* LoginViewController.h */,
-				750237EC287601AC00367EE7 /* LoginViewController.m */,
-				750237EE287603C400367EE7 /* ProfileViewController.h */,
-				750237EF287603C400367EE7 /* ProfileViewController.m */,
-				750237F1287603D700367EE7 /* StreamViewController.h */,
-				750237F2287603D700367EE7 /* StreamViewController.m */,
 			);
 			path = RecipeMatch;
 			sourceTree = "<group>";
@@ -189,6 +184,19 @@
 				750237DE2876011000367EE7 /* RecipeMatchUITestsLaunchTests.m */,
 			);
 			path = RecipeMatchUITests;
+			sourceTree = "<group>";
+		};
+		750237F4287609B900367EE7 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				750237EB287601AC00367EE7 /* LoginViewController.h */,
+				750237EC287601AC00367EE7 /* LoginViewController.m */,
+				750237EE287603C400367EE7 /* ProfileViewController.h */,
+				750237EF287603C400367EE7 /* ProfileViewController.m */,
+				750237F1287603D700367EE7 /* StreamViewController.h */,
+				750237F2287603D700367EE7 /* StreamViewController.m */,
+			);
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

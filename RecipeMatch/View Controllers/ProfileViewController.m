@@ -6,6 +6,9 @@
 //
 
 #import "ProfileViewController.h"
+#import "Parse/Parse.h"
+#import "LoginViewController.h"
+#import "SceneDelegate.h"
 
 @interface ProfileViewController ()
 
@@ -16,6 +19,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (IBAction)logoutBtn:(id)sender {
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+        // PFUser.current() will now be nil
+        NSLog(@"Successfully logged out");
+    }];
+    SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    myDelegate.window.rootViewController = loginViewController;
 }
 
 /*

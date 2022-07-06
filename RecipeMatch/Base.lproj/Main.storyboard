@@ -79,14 +79,39 @@
         <!--Profile View Controller-->
         <scene sceneID="Icm-Rd-AfV">
             <objects>
-                <viewController id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EDP-kq-ef7">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G1K-DC-HNo">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                                <items>
+                                    <navigationItem title="Profile" id="qq8-od-3U9">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" id="Zgm-BY-WSW">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="xRL-PP-Jzs">
+                                                <rect key="frame" x="20" y="11" width="92" height="34.5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Logout"/>
+                                                <connections>
+                                                    <action selector="logoutBtn:" destination="OHe-CW-FeY" eventType="touchUpInside" id="8on-xm-P7j"/>
+                                                </connections>
+                                            </button>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="uxu-3A-Csv"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="G1K-DC-HNo" firstAttribute="leading" secondItem="uxu-3A-Csv" secondAttribute="leading" id="ZoW-29-G3R"/>
+                            <constraint firstItem="G1K-DC-HNo" firstAttribute="top" secondItem="uxu-3A-Csv" secondAttribute="top" id="fxP-c6-XmD"/>
+                            <constraint firstItem="G1K-DC-HNo" firstAttribute="trailing" secondItem="uxu-3A-Csv" secondAttribute="trailing" id="ufi-AX-p8p"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="TPZ-tm-M5z"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="person.fill" catalog="system" id="TPZ-tm-M5z"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y06-mr-JgF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -103,19 +128,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bBd-mn-OD8">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                                 <items>
-                                    <navigationItem title="Home" id="tGh-4p-ZQo">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="lOG-QP-nd4">
-                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="1Sz-F6-vtj">
-                                                <rect key="frame" x="20" y="11" width="92" height="34.5"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Logout"/>
-                                                <connections>
-                                                    <action selector="logoutBtn:" destination="awU-g6-Cgv" eventType="touchUpInside" id="ueC-sV-7x3"/>
-                                                </connections>
-                                            </button>
-                                        </barButtonItem>
-                                    </navigationItem>
+                                    <navigationItem title="Home" id="tGh-4p-ZQo"/>
                                 </items>
                             </navigationBar>
                         </subviews>
@@ -127,11 +140,11 @@
                             <constraint firstItem="bBd-mn-OD8" firstAttribute="leading" secondItem="IkR-en-L7Y" secondAttribute="leading" id="zyx-ha-2pN"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="fTC-1b-U7u"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="fTC-1b-U7u"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1bm-fw-YIS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="443" y="798"/>
+            <point key="canvasLocation" x="442.02898550724643" y="797.54464285714278"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="EBY-cx-7bf">
@@ -154,6 +167,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="house" catalog="system" width="128" height="106"/>
+        <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

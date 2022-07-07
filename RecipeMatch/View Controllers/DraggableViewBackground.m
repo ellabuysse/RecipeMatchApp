@@ -8,6 +8,13 @@
 
 #import "DraggableViewBackground.h"
 #import "DraggableView.h"
+#import "StreamViewController.h"
+#import "OverlayView.h"
+
+@interface DraggableViewBackground ()
+@property (strong, nonatomic) NSMutableArray *recipes;
+@property BOOL *postRequestReturned;
+@end
 
 @implementation DraggableViewBackground{
     NSInteger cardsLoadedIndex; //%%% the index of the card you have loaded into the loadedCards array last
@@ -21,8 +28,9 @@
 //this makes it so only two cards are loaded at a time to
 //avoid performance and memory costs
 static const int MAX_BUFFER_SIZE = 2; //%%% max number of cards loaded at any given time, must be greater than 1
-static const float CARD_HEIGHT = 386; //%%% height of the draggable card
+static const float CARD_HEIGHT = 400; //%%% height of the draggable card
 static const float CARD_WIDTH = 290; //%%% width of the draggable card
+static const float BTN_HEIGHT = 59;
 
 @synthesize exampleCardLabels; //%%% all the labels I'm using as example data at the moment
 @synthesize allCards;//%%% all the cards
@@ -30,10 +38,10 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    
     if (self) {
         [super layoutSubviews];
         [self setupView];
-        exampleCardLabels = [[NSArray alloc]initWithObjects:@"first",@"second",@"third",@"fourth",@"last", nil]; //%%% placeholder for card-specific information
         loadedCards = [[NSMutableArray alloc] init];
         allCards = [[NSMutableArray alloc] init];
         cardsLoadedIndex = 0;
@@ -46,19 +54,22 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
 -(void)setupView
 {
 #warning customize all of this.  These are just place holders to make it look pretty
-    //self.backgroundColor = [UIColor colorWithRed:.92 green:.93 blue:.95 alpha:1]; //the gray background colors
-    menuButton = [[UIButton alloc]initWithFrame:CGRectMake(17, 34, 22, 15)];
+    /*menuButton = [[UIButton alloc]initWithFrame:CGRectMake(17, 34, 22, 15)];
     [menuButton setImage:[UIImage imageNamed:@"menuButton"] forState:UIControlStateNormal];
+    
     messageButton = [[UIButton alloc]initWithFrame:CGRectMake(284, 34, 18, 18)];
-    [messageButton setImage:[UIImage imageNamed:@"messageButton"] forState:UIControlStateNormal];
-    xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 485, 59, 59)];
-    [xButton setImage:[UIImage imageNamed:@"xButton"] forState:UIControlStateNormal];
+    [messageButton setImage:[UIImage imageNamed:@"messageButton"] forState:UIControlStateNormal];*/
+    
+    xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 630, BTN_HEIGHT, BTN_HEIGHT)];
+    [xButton setImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
-    checkButton = [[UIButton alloc]initWithFrame:CGRectMake(200, 485, 59, 59)];
-    [checkButton setImage:[UIImage imageNamed:@"checkButton"] forState:UIControlStateNormal];
+    
+    checkButton = [[UIButton alloc]initWithFrame:CGRectMake(270, 630, BTN_HEIGHT, BTN_HEIGHT)];
+    [checkButton setImage:[UIImage imageNamed:@"checkButton.png"] forState:UIControlStateNormal];
     [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:menuButton];
-    [self addSubview:messageButton];
+    
+    /*[self addSubview:menuButton];
+    [self addSubview:messageButton];*/
     [self addSubview:xButton];
     [self addSubview:checkButton];
 }
@@ -69,21 +80,40 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
 // to get rid of it (eg: if you are building cards from data from the internet)
 -(DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index
 {
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-    draggableView.information.text = [exampleCardLabels objectAtIndex:index]; //%%% placeholder for card-specific information
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
+
+    draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
+    draggableView.recipeId = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
+    draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
+    draggableView.ingredients = [self.recipes objectAtIndex:index][@"recipe"][@"ingredientLines"];
+    draggableView.time = [self.recipes objectAtIndex:index][@"recipe"][@"totalTime"];
+    draggableView.servings = [self.recipes objectAtIndex:index][@"recipe"][@"yield"];
+
+    NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
+    NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
+    draggableView.recipeImage.image = [UIImage imageWithData: imageData];
+    
     draggableView.delegate = self;
+        
     return draggableView;
 }
 
 //%%% loads all the cards and puts the first x in the "loaded cards" array
 -(void)loadCards
 {
-    if([exampleCardLabels count] > 0) {
-        NSInteger numLoadedCardsCap =(([exampleCardLabels count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[exampleCardLabels count]);
+    
+    [self getRecipes];
+    // wait for recipe to load
+    while(!self.postRequestReturned){
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+
+    if([self.recipes count] > 0) {
+        NSInteger numLoadedCardsCap =(([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
         //%%% if the buffer size is greater than the data size, there will be an array error, so this makes sure that doesn't happen
         
         //%%% loops through the exampleCardsLabels array to create a card for each label.  This should be customized by removing "exampleCardLabels" with your own array of data
-        for (int i = 0; i<[exampleCardLabels count]; i++) {
+        for (int i = 0; i<[self.recipes count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
             [allCards addObject:newCard];
             
@@ -112,7 +142,7 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
 -(void)cardSwipedLeft:(UIView *)card;
 {
     //do whatever you want with the card that was swiped
-    //    DraggableView *c = (DraggableView *)card;
+    //DraggableView *c = (DraggableView *)card;
     
     [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
     
@@ -129,7 +159,8 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
 -(void)cardSwipedRight:(UIView *)card
 {
     //do whatever you want with the card that was swiped
-    //    DraggableView *c = (DraggableView *)card;
+    
+    DraggableView *c = (DraggableView *)card;
     
     [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
     
@@ -161,6 +192,35 @@ static const float CARD_WIDTH = 290; //%%% width of the draggable card
         dragView.overlayView.alpha = 1;
     }];
     [dragView leftClickAction];
+}
+
+// MY CODE
+- (void)getRecipes {
+    // configure custom alert for network error
+    UIAlertController *networkAlert = [UIAlertController
+                                       alertControllerWithTitle:@"Cannot Get Movies" message:@"The internet connection appears to be offline." preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *tryAgainAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self getRecipes];
+    }];
+    [networkAlert addAction:tryAgainAction];
+
+    //Do any additional setup after loading the view.
+    NSURL *url = [NSURL URLWithString:@"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+           if (error != nil) {
+               NSLog(@"%@", [error localizedDescription]);
+           }
+           else {
+               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+
+               self.recipes = dataDictionary[@"hits"];
+               self.postRequestReturned = YES;
+               NSLog(@"%@", self.recipes);
+           };
+}];
+    [task resume];
 }
 
 /*

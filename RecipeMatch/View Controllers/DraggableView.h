@@ -48,7 +48,14 @@
 @property (nonatomic, strong)UIPanGestureRecognizer *panGestureRecognizer;
 @property (nonatomic)CGPoint originalPoint;
 @property (nonatomic,strong)OverlayView* overlayView;
-@property (nonatomic,strong)UILabel* information; //%%% a placeholder for any card-specific information
+
+@property (nonatomic,strong)UILabel* title;
+@property (nonatomic,strong)UILabel* recipeId;
+@property (nonatomic,strong)UIImageView* recipeImage;
+@property (nonatomic,strong)UILabel* url;
+@property (nonatomic,strong)NSArray* ingredients;
+@property (nonatomic,strong)UILabel* time;
+@property (nonatomic,strong)UILabel* servings;
 
 -(void)leftClickAction;
 -(void)rightClickAction;

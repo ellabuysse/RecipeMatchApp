@@ -17,6 +17,10 @@
 
 #import "DraggableView.h"
 
+@interface DraggableView ()
+
+@end
+
 @implementation DraggableView {
     CGFloat xFromCenter;
     CGFloat yFromCenter;
@@ -26,7 +30,13 @@
 @synthesize delegate;
 
 @synthesize panGestureRecognizer;
-@synthesize information;
+@synthesize title;
+@synthesize recipeId;
+@synthesize recipeImage;
+@synthesize url;
+@synthesize ingredients;
+@synthesize time;
+@synthesize servings;
 @synthesize overlayView;
 
 - (id)initWithFrame:(CGRect)frame
@@ -36,20 +46,51 @@
         [self setupView];
         
 #warning placeholder stuff, replace with card-specific information {
-        information = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, self.frame.size.width, 100)];
-        information.text = @"no info given";
-        [information setTextAlignment:NSTextAlignmentCenter];
-        information.textColor = [UIColor blackColor];
+        title = [[UILabel alloc]initWithFrame:CGRectMake(0, 20, self.frame.size.width, 20)];
+        title.text = @"no info given";
+        [title setTextAlignment:NSTextAlignmentCenter];
+        title.textColor = [UIColor blackColor];
         
         self.backgroundColor = [UIColor whiteColor];
 #warning placeholder stuff, replace with card-specific information }
         
+        recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,0,0)];
+        recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
+        [recipeImage setContentMode:UIViewContentModeScaleAspectFit];
+        [self addSubview:recipeImage];
         
+        // Fixed width
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:recipeImage
+                                                                           attribute:NSLayoutAttributeWidth
+                                                                           relatedBy:NSLayoutRelationEqual
+                                                                              toItem:nil
+                                                                           attribute:NSLayoutAttributeNotAnAttribute
+                                                                          multiplier:1.0
+                                                                            constant:self.frame.size.width * 0.9]];
+    
+        // Center horizontally
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:recipeImage
+                                                         attribute:NSLayoutAttributeCenterX
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:title
+                                                         attribute:NSLayoutAttributeCenterX
+                                                        multiplier:1.0
+                                                          constant:0.0]];
+
+        // Center vertically
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:recipeImage
+                                                         attribute:NSLayoutAttributeCenterY
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:title
+                                                         attribute:NSLayoutAttributeCenterY
+                                                        multiplier:1.0
+                                                          constant:200.0]];
+
         
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         
         [self addGestureRecognizer:panGestureRecognizer];
-        [self addSubview:information];
+        [self addSubview:title];
         
         overlayView = [[OverlayView alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 0, 100, 100)];
         overlayView.alpha = 0;

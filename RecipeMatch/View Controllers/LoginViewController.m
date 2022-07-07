@@ -6,7 +6,8 @@
 //
 
 #import "LoginViewController.h"
-#import <Parse/Parse.h>
+@import Parse;
+#import "FBSDKLoginKit/FBSDKLoginKit.h"
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
@@ -19,7 +20,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    loginButton.permissions = @[@"username", @"email"];
+    loginButton.center = self.view.center;
+    [self.view addSubview:loginButton];
+    
+    
 }
+
 - (IBAction)signupBtn:(id)sender {
     [self registerUser];
     
@@ -85,6 +94,28 @@
         }
     }];
 }
+
+- (void)loginWithFacebook{
+    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[@"username", @"email"] block:^(PFUser *user, NSError *error) {
+        if (!user) {
+            //  NSLog(@"Uh oh. The user cancelled the Facebook login.");
+        } else if (user.isNew) {
+            NSString *message = [NSString stringWithFormat:@"@%@ logged in! (%@)",
+                                 [PFUser currentUser].username, [PFUser currentUser].objectId];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logged in!"
+                                                            message:message
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+
+        } else {
+            //  NSLog(@"User logged in through Facebook!");
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
+    }];
+}
+
 /*
 #pragma mark - Navigation
 

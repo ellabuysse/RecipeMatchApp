@@ -10,6 +10,7 @@
 #import "DraggableView.h"
 #import "StreamViewController.h"
 #import "OverlayView.h"
+#import "Recipe.h"
 
 @interface DraggableViewBackground ()
 @property (strong, nonatomic) NSMutableArray *recipes;
@@ -161,6 +162,11 @@ static const float BTN_HEIGHT = 59;
     //do whatever you want with the card that was swiped
     
     DraggableView *c = (DraggableView *)card;
+    
+    [Recipe postRecipe:c.title.text withId:c.recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        NSLog(@"success!");
+    }];
+    
     
     [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
     

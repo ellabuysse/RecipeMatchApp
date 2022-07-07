@@ -17,15 +17,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WDi-Y2-4db">
-                                <rect key="frame" x="40" y="345" width="68" height="31"/>
+                                <rect key="frame" x="40" y="342" width="73" height="31"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Sign in"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign up"/>
                                 <connections>
                                     <action selector="signupBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="o5y-JZ-t1c"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-sA-qGm">
-                                <rect key="frame" x="314" y="345" width="60" height="31"/>
+                                <rect key="frame" x="314" y="342" width="60" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Login"/>
                                 <connections>
@@ -33,37 +33,38 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AXM-To-nVK">
-                                <rect key="frame" x="40" y="237" width="334" height="34"/>
+                                <rect key="frame" x="40" y="234" width="334" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipe Matcher" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nxO-EK-N5b">
-                                <rect key="frame" x="92.5" y="164" width="229" height="43"/>
-                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="36"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wyj-3v-jYU">
-                                <rect key="frame" x="40" y="291" width="334" height="34"/>
+                                <rect key="frame" x="40" y="288" width="334" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kPc-Nt-Hda">
+                                <rect key="frame" x="107" y="144" width="200" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="DMt-8q-Fek"/>
+                                    <constraint firstAttribute="height" constant="70" id="gI8-7l-3yI"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="AXM-To-nVK" secondAttribute="trailing" constant="40" id="Brq-bN-IGd"/>
+                            <constraint firstItem="kPc-Nt-Hda" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="FBx-qE-Mmh"/>
                             <constraint firstItem="wyj-3v-jYU" firstAttribute="leading" secondItem="AXM-To-nVK" secondAttribute="leading" id="Hue-Hw-PtN"/>
-                            <constraint firstItem="nxO-EK-N5b" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="120" id="N2R-3F-qiN"/>
+                            <constraint firstItem="kPc-Nt-Hda" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="I9Y-VN-dPq"/>
                             <constraint firstItem="wyj-3v-jYU" firstAttribute="trailing" secondItem="AXM-To-nVK" secondAttribute="trailing" id="TgC-l7-5IG"/>
                             <constraint firstItem="WDi-Y2-4db" firstAttribute="top" secondItem="wyj-3v-jYU" secondAttribute="bottom" constant="20" id="W6Y-UC-Cv1"/>
                             <constraint firstItem="AXM-To-nVK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="XcQ-tr-FE7"/>
-                            <constraint firstItem="nxO-EK-N5b" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aWa-9e-aj0"/>
                             <constraint firstItem="0hH-sA-qGm" firstAttribute="centerY" secondItem="WDi-Y2-4db" secondAttribute="centerY" id="f6E-ZR-9m7"/>
                             <constraint firstItem="wyj-3v-jYU" firstAttribute="top" secondItem="AXM-To-nVK" secondAttribute="bottom" constant="20" id="hwk-V3-SAj"/>
                             <constraint firstItem="WDi-Y2-4db" firstAttribute="leading" secondItem="wyj-3v-jYU" secondAttribute="leading" id="pIg-X8-Vzc"/>
                             <constraint firstItem="0hH-sA-qGm" firstAttribute="trailing" secondItem="wyj-3v-jYU" secondAttribute="trailing" id="pwB-gn-dc8"/>
-                            <constraint firstItem="AXM-To-nVK" firstAttribute="top" secondItem="nxO-EK-N5b" secondAttribute="bottom" constant="30" id="riO-II-amN"/>
+                            <constraint firstItem="AXM-To-nVK" firstAttribute="top" secondItem="kPc-Nt-Hda" secondAttribute="bottom" constant="20" id="vme-ae-r4n"/>
                         </constraints>
                     </view>
                     <connections>
@@ -168,6 +169,7 @@
     </scenes>
     <resources>
         <image name="house" catalog="system" width="128" height="106"/>
+        <image name="logo.png" width="225" height="75"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

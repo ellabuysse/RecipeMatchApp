@@ -21,12 +21,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.permissions = @[@"username", @"email"];
-    loginButton.center = self.view.center;
-    [self.view addSubview:loginButton];
+    //FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    //loginButton.center = self.view.center;
+    //[self.view addSubview:loginButton];
     
     
+}
+
+
+- (IBAction)facebookLogin:(id)sender {
+    [self loginWithFacebook];
 }
 
 - (IBAction)signupBtn:(id)sender {
@@ -96,24 +100,46 @@
 }
 
 - (void)loginWithFacebook{
-    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[@"username", @"email"] block:^(PFUser *user, NSError *error) {
+    
+    [PFFacebookUtils logInInBackgroundWithReadPermissions:@[@"public_profile", @"email"] block:^(PFUser *user, NSError *error) {
         if (!user) {
-            //  NSLog(@"Uh oh. The user cancelled the Facebook login.");
+            NSLog(@"Uh oh. The user cancelled the Facebook login.");
+            
         } else if (user.isNew) {
-            NSString *message = [NSString stringWithFormat:@"@%@ logged in! (%@)",
-                                 [PFUser currentUser].username, [PFUser currentUser].objectId];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logged in!"
-                                                            message:message
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            [self performSegueWithIdentifier:@"mainSegue" sender:nil];
 
+            // Save user to Parse
+           // [self fetchUserInfo];
+            
         } else {
-            //  NSLog(@"User logged in through Facebook!");
-            [self.navigationController popToRootViewControllerAnimated:NO];
+            NSLog(@"User logged in through Facebook!");
+            [self performSegueWithIdentifier:@"mainSegue" sender:nil];
         }
+        
     }];
+}
+
+-(void)fetchUserInfo {
+
+    if ([FBSDKAccessToken currentAccessToken]) {
+
+    NSLog(@"Token is available");
+
+    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
+     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+         if (!error) {
+             NSLog(@"Fetched User Information:%@", result);
+             
+         }
+         else {
+             NSLog(@"Error %@",error);
+         }
+     }];
+
+    } else {
+
+        NSLog(@"User is not Logged in");
+    }
 }
 
 /*

@@ -14,7 +14,7 @@
 
 @interface DraggableViewBackground ()
 @property (strong, nonatomic) NSMutableArray *recipes;
-@property BOOL *postRequestReturned;
+@property BOOL *getRequestReturned;
 @end
 
 @implementation DraggableViewBackground{
@@ -105,7 +105,7 @@ static const float BTN_HEIGHT = 59;
     
     [self getRecipes];
     // wait for recipe to load
-    while(!self.postRequestReturned){
+    while(!self.getRequestReturned){
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
 
@@ -222,7 +222,7 @@ static const float BTN_HEIGHT = 59;
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
 
                self.recipes = dataDictionary[@"hits"];
-               self.postRequestReturned = YES;
+               self.getRequestReturned = YES;
                NSLog(@"%@", self.recipes);
            };
 }];

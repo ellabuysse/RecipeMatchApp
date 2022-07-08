@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 Original App Design Project - README Template
 ===
-=======
->>>>>>> 6dde6095aa89644d50886c421820e2faed22ba73
 
 # Recipe Matching App
 
@@ -120,7 +117,3 @@ user          | Pointer to User | current user
 ### Networking
 Recipe API
 Base URL: https://api.edamam.com/api/recipes/v2?q=&app_id=YOURAPP_ID&app_key=YOURAPP_KEY
-<<<<<<< HEAD
-
-=======
->>>>>>> 6dde6095aa89644d50886c421820e2faed22ba73

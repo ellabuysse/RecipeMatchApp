@@ -23,12 +23,8 @@
 		750237F7287611AF00367EE7 /* DraggableViewBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 750237F6287611AF00367EE7 /* DraggableViewBackground.m */; };
 		750237FA287611E900367EE7 /* DraggableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 750237F9287611E900367EE7 /* DraggableView.m */; };
 		750237FD287612BC00367EE7 /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 750237FC287612BC00367EE7 /* OverlayView.m */; };
-		750238012876204F00367EE7 /* Recipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 750238002876204F00367EE7 /* Recipe.m */; };
-		750238032877407400367EE7 /* checkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 750238022877407400367EE7 /* checkButton.png */; };
-		750238052877407800367EE7 /* xButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 750238042877407800367EE7 /* xButton.png */; };
-		7502380A287796E400367EE7 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 75023809287796E400367EE7 /* logo.png */; };
-		7502380C2877991C00367EE7 /* app-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7502380B2877991C00367EE7 /* app-logo.png */; };
-		7502381228779B4F00367EE7 /* loading-screen.png in Resources */ = {isa = PBXBuildFile; fileRef = 7502381128779B4E00367EE7 /* loading-screen.png */; };
+		750238152878D17000367EE7 /* APIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 750238142878D17000367EE7 /* APIManager.m */; };
+		7502381D2878E06E00367EE7 /* LikedRecipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 7502381C2878E06E00367EE7 /* LikedRecipe.m */; };
 		87EDF27A08FD44653147F8BE /* Pods_RecipeMatchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12B6F7397E19C6A6B9DECCE2 /* Pods_RecipeMatchTests.framework */; };
 		934EF84F3F3CB69102C0A0F7 /* Pods_RecipeMatch_RecipeMatchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3DDD5EE0B590FE43A4636D3 /* Pods_RecipeMatch_RecipeMatchUITests.framework */; };
 		DD8E1568C25F29B80D81AEEB /* Pods_RecipeMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FD8C05F1FE7D9F9CA433C61 /* Pods_RecipeMatch.framework */; };
@@ -87,14 +83,11 @@
 		750237F9287611E900367EE7 /* DraggableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DraggableView.m; sourceTree = "<group>"; };
 		750237FB287612BC00367EE7 /* OverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
 		750237FC287612BC00367EE7 /* OverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OverlayView.m; sourceTree = "<group>"; };
-		750237FF2876204F00367EE7 /* Recipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recipe.h; sourceTree = "<group>"; };
-		750238002876204F00367EE7 /* Recipe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Recipe.m; sourceTree = "<group>"; };
-		750238022877407400367EE7 /* checkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkButton.png; sourceTree = "<group>"; };
-		750238042877407800367EE7 /* xButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = xButton.png; path = ../xButton.png; sourceTree = "<group>"; };
 		750238062877857100367EE7 /* RecipeMatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RecipeMatch.entitlements; sourceTree = "<group>"; };
-		75023809287796E400367EE7 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		7502380B2877991C00367EE7 /* app-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app-logo.png"; sourceTree = "<group>"; };
-		7502381128779B4E00367EE7 /* loading-screen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading-screen.png"; sourceTree = "<group>"; };
+		750238132878D17000367EE7 /* APIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIManager.h; sourceTree = "<group>"; };
+		750238142878D17000367EE7 /* APIManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIManager.m; sourceTree = "<group>"; };
+		7502381B2878E06E00367EE7 /* LikedRecipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LikedRecipe.h; sourceTree = "<group>"; };
+		7502381C2878E06E00367EE7 /* LikedRecipe.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LikedRecipe.m; sourceTree = "<group>"; };
 		815B6F5D9CD89E392CA83E8C /* Pods-RecipeMatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatchTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeMatchTests/Pods-RecipeMatchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CD1C4C5D86C051FB5C316B86 /* Pods-RecipeMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatch.release.xcconfig"; path = "Target Support Files/Pods-RecipeMatch/Pods-RecipeMatch.release.xcconfig"; sourceTree = "<group>"; };
 		E3DDD5EE0B590FE43A4636D3 /* Pods_RecipeMatch_RecipeMatchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RecipeMatch_RecipeMatchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,12 +169,9 @@
 		750237B52876010F00367EE7 /* RecipeMatch */ = {
 			isa = PBXGroup;
 			children = (
+				750238172878D65800367EE7 /* Views */,
+				750238162878D62700367EE7 /* API */,
 				750238062877857100367EE7 /* RecipeMatch.entitlements */,
-				75023809287796E400367EE7 /* logo.png */,
-				750238022877407400367EE7 /* checkButton.png */,
-				7502380B2877991C00367EE7 /* app-logo.png */,
-				7502381128779B4E00367EE7 /* loading-screen.png */,
-				750238042877407800367EE7 /* xButton.png */,
 				750237FE2876201E00367EE7 /* Models */,
 				750237F4287609B900367EE7 /* View Controllers */,
 				750237B62876010F00367EE7 /* AppDelegate.h */,
@@ -225,12 +215,6 @@
 				750237EF287603C400367EE7 /* ProfileViewController.m */,
 				750237F1287603D700367EE7 /* StreamViewController.h */,
 				750237F2287603D700367EE7 /* StreamViewController.m */,
-				750237F5287611AF00367EE7 /* DraggableViewBackground.h */,
-				750237F6287611AF00367EE7 /* DraggableViewBackground.m */,
-				750237F8287611E900367EE7 /* DraggableView.h */,
-				750237F9287611E900367EE7 /* DraggableView.m */,
-				750237FB287612BC00367EE7 /* OverlayView.h */,
-				750237FC287612BC00367EE7 /* OverlayView.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -238,10 +222,32 @@
 		750237FE2876201E00367EE7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				750237FF2876204F00367EE7 /* Recipe.h */,
-				750238002876204F00367EE7 /* Recipe.m */,
+				7502381B2878E06E00367EE7 /* LikedRecipe.h */,
+				7502381C2878E06E00367EE7 /* LikedRecipe.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		750238162878D62700367EE7 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				750238132878D17000367EE7 /* APIManager.h */,
+				750238142878D17000367EE7 /* APIManager.m */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		750238172878D65800367EE7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				750237F5287611AF00367EE7 /* DraggableViewBackground.h */,
+				750237F6287611AF00367EE7 /* DraggableViewBackground.m */,
+				750237F8287611E900367EE7 /* DraggableView.h */,
+				750237F9287611E900367EE7 /* DraggableView.m */,
+				750237FB287612BC00367EE7 /* OverlayView.h */,
+				750237FC287612BC00367EE7 /* OverlayView.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,14 +358,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				750238032877407400367EE7 /* checkButton.png in Resources */,
-				7502380A287796E400367EE7 /* logo.png in Resources */,
 				750237C62876011000367EE7 /* LaunchScreen.storyboard in Resources */,
 				750237C32876011000367EE7 /* Assets.xcassets in Resources */,
-				7502380C2877991C00367EE7 /* app-logo.png in Resources */,
 				750237C12876010F00367EE7 /* Main.storyboard in Resources */,
-				7502381228779B4F00367EE7 /* loading-screen.png in Resources */,
-				750238052877407800367EE7 /* xButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,14 +488,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				750238012876204F00367EE7 /* Recipe.m in Sources */,
 				750237FA287611E900367EE7 /* DraggableView.m in Sources */,
 				750237FD287612BC00367EE7 /* OverlayView.m in Sources */,
 				750237F7287611AF00367EE7 /* DraggableViewBackground.m in Sources */,
+				7502381D2878E06E00367EE7 /* LikedRecipe.m in Sources */,
 				750237BE2876010F00367EE7 /* ViewController.m in Sources */,
 				750237B82876010F00367EE7 /* AppDelegate.m in Sources */,
 				750237C92876011000367EE7 /* main.m in Sources */,
 				750237F3287603D700367EE7 /* StreamViewController.m in Sources */,
+				750238152878D17000367EE7 /* APIManager.m in Sources */,
 				750237BB2876010F00367EE7 /* SceneDelegate.m in Sources */,
 				750237F0287603C400367EE7 /* ProfileViewController.m in Sources */,
 				750237ED287601AC00367EE7 /* LoginViewController.m in Sources */,

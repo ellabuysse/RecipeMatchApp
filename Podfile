@@ -9,7 +9,9 @@ target 'RecipeMatch' do
   pod 'Parse'
   pod 'Parse/FacebookUtils'
   pod 'FBSDKLoginKit'
-
+  pod 'AFNetworking'
+  pod 'BDBOAuth1Manager'
+  
   target 'RecipeMatchTests' do
     inherit! :search_paths
     # Pods for testing

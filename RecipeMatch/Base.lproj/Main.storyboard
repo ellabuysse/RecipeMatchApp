@@ -198,7 +198,7 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bBd-mn-OD8" customClass="navigationBar">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                                 <items>
-                                    <navigationItem title="Title" id="FNa-BF-PTS" customClass="navigationTitle"/>
+                                    <navigationItem title="Home" id="FNa-BF-PTS" customClass="navigationTitle"/>
                                 </items>
                             </navigationBar>
                         </subviews>

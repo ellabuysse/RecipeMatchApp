@@ -12,6 +12,7 @@
 #import "GridRecipeCell.h"
 #import "LikedRecipe.h"
 #import "UIImageView+AFNetworking.h"
+#import "DetailsViewController.h"
 
 @interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
@@ -110,14 +111,23 @@
     myDelegate.window.rootViewController = loginViewController;
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+        DetailsViewController *detailsController = [segue destinationViewController];
+    
+        UICollectionViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
+    
+        LikedRecipe *recipe = self.recipes[indexPath.row];
+        detailsController.likedRecipe = recipe;
+    }
 }
-*/
+
 
 @end

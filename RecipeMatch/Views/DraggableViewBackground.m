@@ -106,6 +106,7 @@ static const float BTN_HEIGHT = 59;
     draggableView.servings = [self.recipes objectAtIndex:index][@"recipe"][@"yield"];
 
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
+    draggableView.imageUrl = imageUrl;
     NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
     draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     
@@ -172,7 +173,7 @@ static const float BTN_HEIGHT = 59;
     
     DraggableView *c = (DraggableView *)card;
     
-    [LikedRecipe postLikedRecipe:c.title.text withId:c.recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [LikedRecipe postLikedRecipe:c.title.text withId:c.recipeId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(error){
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }

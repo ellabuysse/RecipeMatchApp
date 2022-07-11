@@ -13,9 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LikedRecipe : PFObject<PFSubclassing>
 @property (nonatomic, strong) NSString *recipeId;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *image;
+@property (nonatomic,strong)NSString *image;
+@property (nonatomic, strong) PFUser *user;
 
-+ (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withCompletion: (PFBooleanResultBlock  _Nullable)completion;
++ (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion;
   
 @end
 

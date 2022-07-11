@@ -33,6 +33,7 @@
 @synthesize title;
 @synthesize recipeId;
 @synthesize recipeImage;
+@synthesize imageUrl;
 @synthesize url;
 @synthesize ingredients;
 @synthesize time;

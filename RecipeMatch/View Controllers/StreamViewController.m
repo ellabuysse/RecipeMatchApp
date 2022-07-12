@@ -24,7 +24,7 @@
     [imgView setContentMode:UIViewContentModeScaleAspectFit];
     self.navigationItem.titleView = imgView;
      
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
     spinner.tag = 12;
     [self.view addSubview:spinner];

@@ -25,6 +25,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+    [self fetchRecipeInfo];
+}
+
+-(void)fetchRecipeInfo{
     [APIManager getIdRecipe:self.likedRecipe.recipeId withCompletion: ^(NSDictionary *recipe, NSError *error){
         if(recipe)
         {
@@ -40,25 +44,22 @@
             self.ingredients.text = [@"• " stringByAppendingString:ingrString];
             self.yield.text = [NSString stringWithFormat:@"%@", recipe[@"yield"]];
             
-
             NSString *imageUrl = recipe[@"image"];
             NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
             self.recipeImage.image = [UIImage imageWithData: imageData];
             
             [self.view setNeedsDisplay];
         } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 Error getting recipe info: %@", error.localizedDescription);
         }
     }];
 }
-
 
 - (IBAction)didUnfavorite:(id)sender {
     [APIManager unfavorite:self.likedRecipe.recipeId withCompletion: ^(NSArray *recipes, NSError *error){
         if(recipes)
         {
             NSLog(@"Successfully unfavorited");
-
             [self performSegueWithIdentifier:@"returnToProfile" sender:nil];
             
         }else {

@@ -69,13 +69,6 @@ static const float BTN_HEIGHT = 59;
 //%%% sets up the extra buttons on the screen
 -(void)setupView
 {
-#warning customize all of this.  These are just place holders to make it look pretty
-    /*menuButton = [[UIButton alloc]initWithFrame:CGRectMake(17, 34, 22, 15)];
-    [menuButton setImage:[UIImage imageNamed:@"menuButton"] forState:UIControlStateNormal];
-    
-    messageButton = [[UIButton alloc]initWithFrame:CGRectMake(284, 34, 18, 18)];
-    [messageButton setImage:[UIImage imageNamed:@"messageButton"] forState:UIControlStateNormal];*/
-    
     xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 630, BTN_HEIGHT, BTN_HEIGHT)];
     [xButton setImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
@@ -84,13 +77,10 @@ static const float BTN_HEIGHT = 59;
     [checkButton setImage:[UIImage imageNamed:@"checkButton.png"] forState:UIControlStateNormal];
     [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
     
-    /*[self addSubview:menuButton];
-    [self addSubview:messageButton];*/
     [self addSubview:xButton];
     [self addSubview:checkButton];
 }
 
-#warning include own card customization here!
 //%%% creates a card and returns it.  This should be customized to fit your needs.
 // use "index" to indicate where the information should be pulled.  If this doesn't apply to you, feel free
 // to get rid of it (eg: if you are building cards from data from the internet)
@@ -175,7 +165,7 @@ static const float BTN_HEIGHT = 59;
     NSString *longId = (NSString *)c.recipeId;
     NSString *shortId = [longId substringFromIndex:51];
     
-    [LikedRecipe postLikedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager postLikedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(error){
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }

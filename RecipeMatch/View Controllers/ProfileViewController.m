@@ -46,7 +46,6 @@
     self.navigationItem.leftBarButtonItem = logout;
 
     [self fetchRecipes];
-    // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear{
@@ -57,7 +56,6 @@
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];
     [recipeQuery includeKey:@"user"];
-    //postQuery.limit = 20;
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     
     // fetch data asynchronously
@@ -108,8 +106,6 @@
     return CGSizeMake(widthDimensions, heightDimensions);
 }
 
-
-
 - (IBAction)logoutBtn:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
         // PFUser.current() will now be nil
@@ -121,7 +117,6 @@
     myDelegate.window.rootViewController = loginViewController;
 }
 
-
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -129,14 +124,11 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-        DetailsViewController *detailsController = [segue destinationViewController];
-    
-        UICollectionViewCell *tappedCell = sender;
-        NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
-    
-        LikedRecipe *recipe = self.recipes[indexPath.row];
-        detailsController.likedRecipe = recipe;
-    
+    DetailsViewController *detailsController = [segue destinationViewController];
+    UICollectionViewCell *tappedCell = sender;
+    NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
+    LikedRecipe *recipe = self.recipes[indexPath.row];
+    detailsController.likedRecipe = recipe;
 }
 
 

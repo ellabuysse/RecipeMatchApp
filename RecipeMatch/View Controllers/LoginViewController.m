@@ -37,7 +37,6 @@
 }
 - (IBAction)loginBtn:(id)sender {
     [self loginUser];
-    
 }
 
 - (void)registerUser {
@@ -68,8 +67,6 @@
 
             [self presentViewController:signupSuccess animated:YES completion:^{
             }];
-            // manually segue to logged in view
-         
         }
     }];
 }
@@ -105,9 +102,6 @@
             
         } else if (user.isNew) {
             [self performSegueWithIdentifier:@"mainSegue" sender:nil];
-
-            // Save user to Parse
-           // [self fetchUserInfo];
             
         } else {
             NSLog(@"User logged in through Facebook!");
@@ -116,6 +110,7 @@
     }];
 }
 
+/*
 -(void)fetchUserInfo {
 
     if ([FBSDKAccessToken currentAccessToken]) {
@@ -138,7 +133,7 @@
         NSLog(@"User is not Logged in");
     }
 }
-
+*/
 /*
 #pragma mark - Navigation
 

@@ -167,7 +167,7 @@
         overlayView.mode = GGOverlayViewModeLeft;
     }
     
-    overlayView.alpha = MIN(fabsf(distance)/100, 0.4);
+    overlayView.alpha = MIN(fabs(distance)/100, 0.4);
 }
 
 //%%% called when the card is let go
@@ -182,7 +182,7 @@
                          animations:^{
                              self.center = self.originalPoint;
                              self.transform = CGAffineTransformMakeRotation(0);
-                             overlayView.alpha = 0;
+                            self->overlayView.alpha = 0;
                          }];
     }
 }
@@ -250,7 +250,5 @@
     
     NSLog(@"NO");
 }
-
-
 
 @end

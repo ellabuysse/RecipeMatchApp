@@ -92,13 +92,39 @@
 
 + (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
-    LikedRecipe *newRecipe = [LikedRecipe new];
-    newRecipe.name = title;
-    newRecipe.recipeId = recipeId;
-    newRecipe.image = image;
-    newRecipe.user = [PFUser currentUser];
+    [self beforeSave:recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(!succeeded){
+            NSLog(@"user already favorited");
+            completion(NO, error);
+        }
+        else{
+            LikedRecipe *newRecipe = [LikedRecipe new];
+            newRecipe.name = title;
+            newRecipe.recipeId = recipeId;
+            newRecipe.image = image;
+            newRecipe.user = [PFUser currentUser];
 
-    [newRecipe saveInBackgroundWithBlock: completion];
+            [newRecipe saveInBackgroundWithBlock: completion];
+        }
+    }];
+}
+
++(void)beforeSave:( NSString * _Nullable )recipeId withCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound) {
+            // do something with the data fetched
+            completion(NO, error);
+        }
+        else {
+            completion(YES, nil);
+        }
+    }];
 }
 
 @end

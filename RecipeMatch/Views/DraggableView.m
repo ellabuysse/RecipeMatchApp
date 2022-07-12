@@ -60,6 +60,8 @@
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width-imgSize)/2,10,imgSize,imgSize)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
         [recipeImage setContentMode:UIViewContentModeScaleAspectFit];
+        recipeImage.layer.masksToBounds = YES;
+        recipeImage.layer.cornerRadius = 15;
         [self addSubview:recipeImage];
         
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];

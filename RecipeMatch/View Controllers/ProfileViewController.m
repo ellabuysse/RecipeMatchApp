@@ -38,6 +38,12 @@
         [self.recipesCollectionView addSubview:self.refreshControl];
     }
     
+    UIBarButtonItem *logout = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Logout"
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(logoutBtn:)];
+    self.navigationItem.leftBarButtonItem = logout;
 
     [self fetchRecipes];
     // Do any additional setup after loading the view.
@@ -85,7 +91,7 @@
     
     NSString *imageUrl = recipe[@"image"];
     [cell.imageView setImageWithURL:[NSURL URLWithString:imageUrl]];
-    cell.imageView.layer.cornerRadius = 20;
+    cell.imageView.layer.cornerRadius = 15;
     cell.recipeTitle.text = recipe[@"name"];
     return cell;
 }
@@ -118,7 +124,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+    
         DetailsViewController *detailsController = [segue destinationViewController];
     
         UICollectionViewCell *tappedCell = sender;
@@ -126,7 +132,7 @@
     
         LikedRecipe *recipe = self.recipes[indexPath.row];
         detailsController.likedRecipe = recipe;
-    }
+    
 }
 
 

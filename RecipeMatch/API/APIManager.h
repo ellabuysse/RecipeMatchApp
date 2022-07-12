@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 
 - (void)getRecipes:(void(^)(NSArray *recipes, NSError *error))completion;
--(void)getRecipeWithId:(void(^)(NSDictionary *recipe, NSError *error))completion;
 + (void)getIdRecipe:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion;
++ (void)unfavorite:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -57,6 +57,7 @@
 @property (nonatomic,strong)NSArray* ingredients;
 @property (nonatomic,strong)UILabel* time;
 @property (nonatomic,strong)UILabel* servings;
+@property (nonatomic,strong)UIButton* detailsBtn;
 
 -(void)leftClickAction;
 -(void)rightClickAction;

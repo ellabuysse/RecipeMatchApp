@@ -39,6 +39,7 @@
 @synthesize time;
 @synthesize servings;
 @synthesize overlayView;
+@synthesize detailsBtn;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -64,6 +65,14 @@
         recipeImage.layer.cornerRadius = 15;
         [self addSubview:recipeImage];
         
+        /*detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, self.frame.size.width * (2/3), self.frame.size.width/3, 20)];
+        [detailsBtn setTitle:@"details" forState:UIControlStateNormal];
+        [detailsBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [detailsBtn addTarget:self
+                     action:@selector(detailsPressed)
+           forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:detailsBtn];*/
+
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         
         [self addGestureRecognizer:panGestureRecognizer];
@@ -74,6 +83,10 @@
         [self addSubview:overlayView];
     }
     return self;
+}
+
+-(void)detailsPressed{
+    //[self. performSegueWithIdentifier:@"detailsSegue" sender:sender];
 }
 
 -(void)setupView

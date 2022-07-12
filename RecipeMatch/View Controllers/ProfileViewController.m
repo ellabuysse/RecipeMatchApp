@@ -49,6 +49,10 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillAppear{
+    [self fetchRecipes];
+}
+
 - (void) fetchRecipes{
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];

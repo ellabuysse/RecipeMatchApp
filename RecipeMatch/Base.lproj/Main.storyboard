@@ -185,10 +185,13 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="fTC-1b-U7u"/>
                     <navigationItem key="navigationItem" id="EoU-Ld-gJ3"/>
+                    <connections>
+                        <segue destination="3d8-s9-noU" kind="show" id="iFt-Us-QNR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1bm-fw-YIS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="635" y="1507"/>
+            <point key="canvasLocation" x="635" y="1546"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="EBY-cx-7bf">
@@ -298,10 +301,19 @@
                                                 <color key="textColor" red="0.50196078430000002" green="0.79607843140000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MUn-1a-CGF">
+                                                <rect key="frame" x="331" y="373.5" width="43" height="31"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="bookmark.fill" catalog="system" title=""/>
+                                                <connections>
+                                                    <action selector="didUnfavorite:" destination="3d8-s9-noU" eventType="touchUpInside" id="9eW-9F-nie"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="mbP-eR-5yc" secondAttribute="trailing" constant="30" id="0lJ-Og-tzI"/>
+                                            <constraint firstItem="MUn-1a-CGF" firstAttribute="centerY" secondItem="IGK-Yg-w0M" secondAttribute="centerY" id="1fX-j9-pTf"/>
                                             <constraint firstAttribute="trailing" secondItem="y4E-PX-wXI" secondAttribute="trailing" constant="30" id="23J-YI-XdI"/>
                                             <constraint firstItem="mRd-xE-qLP" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" id="40B-0Q-13H"/>
                                             <constraint firstAttribute="height" constant="900" id="5Fd-TA-esT"/>
@@ -326,6 +338,7 @@
                                             <constraint firstItem="y4E-PX-wXI" firstAttribute="leading" secondItem="mbP-eR-5yc" secondAttribute="leading" constant="-4" id="pdn-lT-lCS"/>
                                             <constraint firstAttribute="trailing" secondItem="0MF-1s-Eal" secondAttribute="trailing" constant="20" id="qoM-5I-zkB"/>
                                             <constraint firstItem="mbP-eR-5yc" firstAttribute="top" secondItem="K5V-di-0KL" secondAttribute="top" constant="10" id="rFf-vT-uvu"/>
+                                            <constraint firstAttribute="trailing" secondItem="MUn-1a-CGF" secondAttribute="trailing" constant="40" id="w7i-we-Tib"/>
                                             <constraint firstItem="F2b-bh-SDW" firstAttribute="leading" secondItem="mbP-eR-5yc" secondAttribute="leading" id="x4Y-mK-B4p"/>
                                         </constraints>
                                     </view>
@@ -354,11 +367,12 @@
                         <outlet property="source" destination="F2b-bh-SDW" id="2hx-9t-ebf"/>
                         <outlet property="totalTime" destination="oMN-LK-aUr" id="5mx-pk-j3h"/>
                         <outlet property="yield" destination="IGK-Yg-w0M" id="i0F-pH-J8K"/>
+                        <segue destination="OHe-CW-FeY" kind="show" identifier="returnToProfile" id="aok-Jv-uoA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z20-a3-bPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2462.3188405797105" y="815.625"/>
+            <point key="canvasLocation" x="1102.8985507246377" y="2336.3839285714284"/>
         </scene>
         <!--Item-->
         <scene sceneID="s17-aq-Ep3">
@@ -397,7 +411,12 @@
             <point key="canvasLocation" x="1554" y="816"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="iFt-Us-QNR"/>
+        <segue reference="aok-Jv-uoA"/>
+    </inferredMetricsTieBreakers>
     <resources>
+        <image name="bookmark.fill" catalog="system" width="112" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="logo.png" width="225" height="75"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>

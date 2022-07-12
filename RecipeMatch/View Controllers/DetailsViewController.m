@@ -50,34 +50,21 @@
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
-    
-    /*[[APIManager shared] getRecipeWithId:^(NSDictionary *recipe, NSError *error) {
-        if(recipe)
-        {
-            self.fullRecipe = recipe;
-            self.recipeTitle.text = recipe[@"label"];
-            self.source.text = recipe[@"source"];
-            self.recipeUrl.text = recipe[@"url"];
-            NSString *time = [NSString stringWithFormat:@"%@", recipe[@"totalTime"]];
-            self.totalTime.text = [time stringByAppendingString:@"m"];
-            
-            NSArray *ingrArray = recipe[@"ingredientLines"];
-            NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
-            self.ingredients.text = [@"• " stringByAppendingString:ingrString];
-            self.yield.text = [NSString stringWithFormat:@"%@", recipe[@"yield"]];
-            
+}
 
-            NSString *imageUrl = recipe[@"image"];
-            NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
-            self.recipeImage.image = [UIImage imageWithData: imageData];
+
+- (IBAction)didUnfavorite:(id)sender {
+    [APIManager unfavorite:self.likedRecipe.recipeId withCompletion: ^(NSArray *recipes, NSError *error){
+        if(recipes)
+        {
+            NSLog(@"Successfully unfavorited");
+
+            [self performSegueWithIdentifier:@"returnToProfile" sender:nil];
             
-            [self.view setNeedsDisplay];
-        } else {
+        }else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
-    }];*/
-    
-    
+    }];
 }
 
 /*

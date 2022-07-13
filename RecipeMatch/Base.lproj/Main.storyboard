@@ -9,6 +9,58 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Preferences View Controller-->
+        <scene sceneID="vC0-vW-1z2">
+            <objects>
+                <viewController id="f37-ou-fth" customClass="PreferencesViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="A9O-l0-NA6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cuisine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GM7-Xj-uCr">
+                                <rect key="frame" x="40" y="107" width="56" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tx3-gY-L3E">
+                                <rect key="frame" x="40" y="188" width="50" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cBW-Hw-qPn">
+                                <rect key="frame" x="40" y="269" width="31" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meal type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N6H-K0-4GJ">
+                                <rect key="frame" x="40" y="350" width="75" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Qkr-wf-TqK"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Tx3-gY-L3E" firstAttribute="top" secondItem="GM7-Xj-uCr" secondAttribute="bottom" constant="60" id="NsD-tW-eqr"/>
+                            <constraint firstItem="GM7-Xj-uCr" firstAttribute="leading" secondItem="Qkr-wf-TqK" secondAttribute="leading" constant="40" id="dNF-ev-Ytr"/>
+                            <constraint firstItem="N6H-K0-4GJ" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="fl8-QB-pTR"/>
+                            <constraint firstItem="N6H-K0-4GJ" firstAttribute="top" secondItem="cBW-Hw-qPn" secondAttribute="bottom" constant="60" id="gtv-SD-nCg"/>
+                            <constraint firstItem="Tx3-gY-L3E" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="gzY-IW-LwO"/>
+                            <constraint firstItem="cBW-Hw-qPn" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="h5u-bq-ue1"/>
+                            <constraint firstItem="GM7-Xj-uCr" firstAttribute="top" secondItem="Qkr-wf-TqK" secondAttribute="top" constant="51" id="ohR-lZ-egH"/>
+                            <constraint firstItem="cBW-Hw-qPn" firstAttribute="top" secondItem="Tx3-gY-L3E" secondAttribute="bottom" constant="60" id="tbY-wX-cVW"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="AbD-xy-ScW"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="okt-v8-bsi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-246.37681159420291" y="1545.5357142857142"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -184,7 +236,20 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="fTC-1b-U7u"/>
-                    <navigationItem key="navigationItem" id="EoU-Ld-gJ3"/>
+                    <navigationItem key="navigationItem" id="EoU-Ld-gJ3">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="kxa-8M-67a">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="2L7-ZK-dYr">
+                                <rect key="frame" x="302" y="11" width="92" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="line.horizontal.3.circle" catalog="system"/>
+                                <connections>
+                                    <segue destination="f37-ou-fth" kind="show" id="dRs-q0-jaO"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="3d8-s9-noU" kind="show" id="iFt-Us-QNR"/>
                     </connections>
@@ -372,7 +437,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z20-a3-bPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1102.8985507246377" y="2336.3839285714284"/>
+            <point key="canvasLocation" x="635" y="2332"/>
         </scene>
         <!--Item-->
         <scene sceneID="s17-aq-Ep3">
@@ -415,9 +480,11 @@
         <segue reference="iFt-Us-QNR"/>
         <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.0" green="0.45882352941176469" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
     <resources>
         <image name="bookmark.fill" catalog="system" width="112" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>
+        <image name="line.horizontal.3.circle" catalog="system" width="128" height="121"/>
         <image name="logo.png" width="225" height="75"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="photo" catalog="system" width="128" height="93"/>

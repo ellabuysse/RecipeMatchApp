@@ -17,21 +17,24 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    UIImage *img = [UIImage imageNamed:@"logo"];
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    [imgView setImage:img];
-    // setContent mode aspect fit
-    [imgView setContentMode:UIViewContentModeScaleAspectFit];
-    self.navigationItem.titleView = imgView;
-     
+    // add centered logo
+    UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)];
+    imageView.frame = titleView.bounds;
+    [titleView addSubview:imageView];
+
+    self.navigationItem.titleView = titleView;
+    
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
     spinner.tag = 12;
     [self.view addSubview:spinner];
     [spinner startAnimating];
     
-    DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:draggableBackground];
+    /*DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
+    [self.view addSubview:draggableBackground];*/
 }
 
 -(void)showCards{

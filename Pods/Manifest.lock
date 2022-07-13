@@ -17,6 +17,7 @@ PODS:
   - BDBOAuth1Manager (2.0.0):
     - AFNetworking/NSURLSession (~> 3.0.0)
   - Bolts/Tasks (1.9.1)
+  - CCDropDownMenus (0.1.2)
   - FBSDKCoreKit (11.0.1):
     - FBSDKCoreKit/Core (= 11.0.1)
   - FBSDKCoreKit/Core (11.0.1):
@@ -41,6 +42,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
+  - CCDropDownMenus
   - FBSDKLoginKit
   - Parse
   - Parse/FacebookUtils
@@ -50,6 +52,7 @@ SPEC REPOS:
     - AFNetworking
     - BDBOAuth1Manager
     - Bolts
+    - CCDropDownMenus
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
@@ -59,11 +62,12 @@ SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   BDBOAuth1Manager: 92d17d06f8a648602962304cd2f35ae7394fa001
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
+  CCDropDownMenus: ee65b63286a16354907fdde49c40c1817f463470
   FBSDKCoreKit: 38c9e29a3f1436362acacff6486d3a28628c288f
   FBSDKCoreKit_Basics: 06780a4a12e16596bde8406add02c6aa1bf38616
   FBSDKLoginKit: 8243e04c590c38b85c69fcf09d1234514d2475c3
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
 
-PODFILE CHECKSUM: 9b5f83b87a97d9f0dc9ed69565787a81dd88dc14
+PODFILE CHECKSUM: 8e6e281a78189750e6dca6bb64f680220e8c8e45
 
 COCOAPODS: 1.11.3

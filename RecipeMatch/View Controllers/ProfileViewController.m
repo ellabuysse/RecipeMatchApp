@@ -13,6 +13,7 @@
 #import "LikedRecipe.h"
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
+#import "APIManager.h"
 
 @interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
@@ -31,12 +32,7 @@
 
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
-    
-    if (@available(iOS 10.0, *)) {
-        self.recipesCollectionView.refreshControl = self.refreshControl;
-    } else {
-        [self.recipesCollectionView addSubview:self.refreshControl];
-    }
+    self.recipesCollectionView.refreshControl = self.refreshControl;
     
     UIBarButtonItem *logout = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Logout"
@@ -50,27 +46,17 @@
 
 -(void)viewWillAppear{
     [super viewDidLoad];
-        
     [self fetchRecipes];
 }
 
 - (void) fetchRecipes{
-    PFQuery *recipeQuery = [LikedRecipe query];
-    [recipeQuery orderByDescending:@"createdAt"];
-    [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    
-    // fetch data asynchronously
-    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
-        if (recipesFound) {
-            // do something with the data fetched
-            self.recipes = (NSMutableArray *)recipesFound;
+    [APIManager fetchLikedRecipes:^(NSArray *recipes, NSError *error) {
+        if(recipes){
+            self.recipes = recipes;
             [self.recipesCollectionView reloadData];
             [self.refreshControl endRefreshing];
-        }
-        else {
-            // handle error
-            NSLog(@"%@", error.localizedDescription);
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
 }

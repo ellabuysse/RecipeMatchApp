@@ -6,10 +6,9 @@
 //
 
 #import "PreferencesViewController.h"
-#import "ExpandableTableViewCell.h"
 #import <CCDropDownMenus/CCDropDownMenus.h>
 
-@interface PreferencesViewController ()
+@interface PreferencesViewController () <CCDropDownMenuDelegate>
 @property (nonatomic, strong) ManaDropDownMenu *cuisineMenu;
 @property (nonatomic, strong) ManaDropDownMenu *healthMenu;
 @property (nonatomic, strong) ManaDropDownMenu *dietMenu;
@@ -44,41 +43,40 @@
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-220), 133, 200, 37);
     
     self.cuisineMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
-    self.cuisineMenu.delegate = self;
     self.cuisineMenu.numberOfRows = 19;
     self.cuisineMenu.textOfRows = @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
     self.cuisineMenu.activeColor = UIColorFromRGB(0x80CB99);
     self.cuisineMenu.heightOfRows = 30;
+    self.cuisineMenu.delegate = self;
     [self.view addSubview:self.cuisineMenu];
     
     
     self.healthMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, 80) title:@"no preference"];
-    self.healthMenu.delegate = self;
     self.healthMenu.numberOfRows = 10;
     self.healthMenu.textOfRows = @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
     self.healthMenu.activeColor = UIColorFromRGB(0x80CB99);
     self.healthMenu.heightOfRows = 30;
+    self.healthMenu.delegate = self;
     [self.view addSubview:self.healthMenu];
 
     self.dietMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame,0,160) title:@"no preference"];
-    self.dietMenu.delegate = self;
     self.dietMenu.numberOfRows = 7;
     self.dietMenu.textOfRows = @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
     self.dietMenu.activeColor = UIColorFromRGB(0x80CB99);
     self.dietMenu.heightOfRows = 30;
+    self.dietMenu.delegate = self;
     [self.view addSubview:self.dietMenu];
     
     self.mealMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, 240) title:@"no preference"];
-    self.mealMenu.delegate = self;
     self.mealMenu.numberOfRows = 6;
     self.mealMenu.textOfRows = @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
     self.mealMenu.activeColor = UIColorFromRGB(0x80CB99);
     self.mealMenu.heightOfRows = 30;
+    self.mealMenu.delegate = self;
     [self.view addSubview:self.mealMenu];
-    
 }
 
-- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index {
+- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
     if (dropDownMenu == self.cuisineMenu) {
         self.cuisineLabel = @"&cuisineType=";
         self.cuisineLabel = [self.cuisineLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
@@ -103,19 +101,18 @@
     [super viewWillDisappear:animated];
     NSString *finalRequest = [[NSString alloc] init];
     
-    if(self.cuisineLabel){
+    if(self.cuisineLabel && ![self.cuisineLabel isEqualToString:@"no preference"]){
         finalRequest = [finalRequest stringByAppendingString:self.cuisineLabel];
     }
-    if(self.healthLabel){
+    if(self.healthLabel && ![self.healthLabel isEqualToString:@"no preference"]){
         finalRequest = [finalRequest stringByAppendingString:self.healthLabel];
     }
-    if(self.dietLabel){
+    if(self.dietLabel && ![self.dietLabel isEqualToString:@"no preference"]){
         finalRequest = [finalRequest stringByAppendingString:self.dietLabel];
     }
-    if(self.mealLabel){
+    if(self.mealLabel && ![self.mealLabel isEqualToString:@"no preference"]){
         finalRequest = [finalRequest stringByAppendingString:self.mealLabel];
     }
-
     [delegate sendData:finalRequest];
 }
 

@@ -11,11 +11,11 @@
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
-@property (weak, nonatomic) IBOutlet UILabel *source;
 @property (weak, nonatomic) IBOutlet UILabel *totalTime;
 @property (weak, nonatomic) IBOutlet UILabel *yield;
 @property (weak, nonatomic) IBOutlet UILabel *ingredients;
-@property (weak, nonatomic) IBOutlet UITextView *recipeUrl;
+@property (weak, nonatomic) IBOutlet UIButton *source;
+@property (strong, nonatomic) NSString *recipeUrl;
 @property NSDictionary *fullRecipe;
 @end
 
@@ -34,8 +34,12 @@
         {
             self.fullRecipe = recipe;
             self.recipeTitle.text = recipe[@"label"];
-            self.source.text = recipe[@"source"];
-            self.recipeUrl.text = recipe[@"url"];
+            [self.source setTitle:recipe[@"source"] forState:UIControlStateNormal];
+            [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+           
+            [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
+            
+            self.recipeUrl = recipe[@"url"];
             NSString *time = [NSString stringWithFormat:@"%@", recipe[@"totalTime"]];
             self.totalTime.text = [time stringByAppendingString:@"m"];
             
@@ -54,6 +58,14 @@
         }
     }];
 }
+
+- (void)didTapSource:(UIButton *)sender {
+    UIApplication *application = [UIApplication sharedApplication];
+    NSURL *URL = [NSURL URLWithString:self.recipeUrl];
+    [application openURL:URL options:@{} completionHandler:nil];
+    
+}
+
 
 - (IBAction)didUnfavorite:(id)sender {
     [APIManager unfavorite:self.likedRecipe.recipeId withCompletion: ^(NSArray *recipes, NSError *error){

@@ -34,7 +34,7 @@
     NSString *app_id = [dict objectForKey: @"app_id"];
     NSString *app_key = [dict objectForKey: @"app_key"];
 
-    NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=";
+    NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=fruit&app_id=";
     apiString = [apiString stringByAppendingString:app_id];
     apiString = [apiString stringByAppendingString:@"&app_key="];
     apiString = [apiString stringByAppendingString:app_key];
@@ -49,7 +49,7 @@
            if (error != nil) {
                NSLog(@"%@", [error localizedDescription]);
                completion(nil, error);
-               
+
            }
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
@@ -57,7 +57,6 @@
                NSMutableArray *recipes = dataDictionary[@"hits"];
    
                completion(recipes, nil);
-
            };
 }];
     [task resume];
@@ -90,12 +89,9 @@
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
 
-               //NSMutableArray *recipes = dataDictionary[@"hits"];
-   
                completion(dataDictionary[@"recipe"], nil);
-
            };
-}];
+    }];
     [task resume];
 }
 
@@ -153,6 +149,26 @@
         }
         else {
             completion(YES, nil);
+        }
+    }];
+}
+
++ (void)fetchLikedRecipes:(void (^)(NSArray *recipes, NSError *error))completion{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery orderByDescending:@"createdAt"];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound) {
+            // do something with the data fetched
+            completion(recipesFound,nil);
+        }
+        else {
+            // handle error
+            completion(nil,error);
+            NSLog(@"%@", error.localizedDescription);
         }
     }];
 }

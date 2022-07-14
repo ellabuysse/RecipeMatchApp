@@ -39,12 +39,9 @@
     [spinner startAnimating];
     
     [self showCards];
-    /*DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:draggableBackground];*/
 }
 
 -(void)showCards{
-    
     self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
     self.draggableBackground.preferences = self.preferences;
     [self.draggableBackground fetchRecipes];
@@ -53,9 +50,11 @@
 }
 
 -(void)sendData:(NSString *)prefRequest{
-    self.preferences = prefRequest;
-    [self.draggableBackground removeFromSuperview];
-    [self viewDidLoad];
+    if(prefRequest != (id)[NSNull null] && prefRequest.length != 0){
+        self.preferences = prefRequest;
+        [self.draggableBackground removeFromSuperview];
+        [self viewDidLoad];
+    }
 }
 
 #pragma mark - Navigation

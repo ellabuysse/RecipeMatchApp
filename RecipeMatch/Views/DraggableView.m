@@ -51,8 +51,9 @@
         self.backgroundColor = [UIColor whiteColor];
 #warning placeholder stuff, replace with card-specific information }
         
-        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 60, self.frame.size.width, 20)];
-        title.text = @"no info given";
+        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 80, self.frame.size.width, 60)];
+        title.lineBreakMode = NSLineBreakByWordWrapping;
+        title.numberOfLines = 0;
         [title setTextAlignment:NSTextAlignmentCenter];
         title.textColor = [UIColor blackColor];
         [[self title] setFont:[UIFont systemFontOfSize:16]];
@@ -183,7 +184,7 @@
                              self.center = self.originalPoint;
                              self.transform = CGAffineTransformMakeRotation(0);
                             self->overlayView.alpha = 0;
-                         }];
+        }];
     }
 }
 

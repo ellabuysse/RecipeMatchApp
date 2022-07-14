@@ -139,7 +139,6 @@ static const float BTN_HEIGHT = 59;
     }
 }
 
-
 #warning include own action here!
 //%%% action called when the card goes to the left.
 // This should be customized with your own action

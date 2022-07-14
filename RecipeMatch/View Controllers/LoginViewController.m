@@ -95,7 +95,6 @@
 }
 
 - (void)loginWithFacebook{
-
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[@"public_profile", @"email"] block:^(PFUser *user, NSError *error) {
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
@@ -110,30 +109,6 @@
     }];
 }
 
-/*
--(void)fetchUserInfo {
-
-    if ([FBSDKAccessToken currentAccessToken]) {
-
-    NSLog(@"Token is available");
-
-    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
-     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-         if (!error) {
-             NSLog(@"Fetched User Information:%@", result);
-             
-         }
-         else {
-             NSLog(@"Error %@",error);
-         }
-     }];
-
-    } else {
-
-        NSLog(@"User is not Logged in");
-    }
-}
-*/
 /*
 #pragma mark - Navigation
 

@@ -34,8 +34,8 @@
             filePath = "RecipeMatch/Views/DraggableView.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "-detailsPressed"
             landmarkType = "7">
          </BreakpointContent>
@@ -79,32 +79,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "235A76D2-B653-4F24-A2FE-F652B42C4529"
+            uuid = "B5283FB0-2561-4303-B436-0EC864278ED4"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RecipeMatch/View Controllers/ProfileViewController.m"
+            filePath = "RecipeMatch/Views/DraggableViewBackground.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "-fetchRecipes"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AF28F17E-B1F5-4E19-B587-9D7DAD097BB0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RecipeMatch/API/APIManager.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
-            landmarkName = "+postLikedRecipe:withId:withImage:withCompletion:"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "-cardSwipedRight:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -9,6 +9,11 @@
 #import "LikedRecipe.h"
 @import Parse;
 
+/*@interface APIManager ()
+@property (nonatomic, strong) NSString *app_id;
+@property (nonatomic, strong) NSString *app_key;
+@end*/
+
 @implementation APIManager
 
 + (instancetype)shared {
@@ -17,13 +22,22 @@
     dispatch_once(&onceToken, ^{
         sharedManager = [[self alloc] init];
     });
+    
     return sharedManager;
 }
 
 - (void)getRecipes:( NSString * _Nullable )preferences withCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
-    NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111";
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
+    NSString *app_id = [dict objectForKey: @"app_id"];
+    NSString *app_key = [dict objectForKey: @"app_key"];
+
+    NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=";
+    apiString = [apiString stringByAppendingString:app_id];
+    apiString = [apiString stringByAppendingString:@"&app_key="];
+    apiString = [apiString stringByAppendingString:app_key];
     if(preferences){
         apiString = [apiString stringByAppendingString: preferences];
     }
@@ -51,11 +65,21 @@
 
 + (void)getIdRecipe:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
-    NSString *url1 = @"https://api.edamam.com/api/recipes/v2/";
-    NSString *url2 = [url1 stringByAppendingString:recipeId];
-    NSURL *url3 = [NSURL URLWithString:[url2 stringByAppendingString:@"?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111"]];
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:url3 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
+    NSString *app_id = [dict objectForKey: @"app_id"];
+    NSString *app_key = [dict objectForKey: @"app_key"];
+
+    NSString *apiString = @"https://api.edamam.com/api/recipes/v2/";
+    apiString = [apiString stringByAppendingString:recipeId];
+    apiString = [apiString stringByAppendingString:@"?type=public&q=apple&app_id="];
+    apiString = [apiString stringByAppendingString:app_id];
+    apiString = [apiString stringByAppendingString:@"&app_key="];
+    
+    NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:app_key]];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:apiUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
            if (error != nil) {

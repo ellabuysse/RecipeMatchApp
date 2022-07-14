@@ -49,6 +49,8 @@
 }
 
 -(void)viewWillAppear{
+    [super viewDidLoad];
+        
     [self fetchRecipes];
 }
 

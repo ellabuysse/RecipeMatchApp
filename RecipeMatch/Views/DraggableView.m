@@ -57,7 +57,7 @@
         title.textColor = [UIColor blackColor];
         [[self title] setFont:[UIFont systemFontOfSize:16]];
         
-        int imgSize = 260;
+        int imgSize = 300;
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width-imgSize)/2,10,imgSize,imgSize)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
         [recipeImage setContentMode:UIViewContentModeScaleAspectFit];

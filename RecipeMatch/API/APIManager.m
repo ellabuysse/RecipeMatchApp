@@ -20,9 +20,15 @@
     return sharedManager;
 }
 
-- (void)getRecipes:(void(^)(NSArray *recipes, NSError *error))completion{
+- (void)getRecipes:( NSString * _Nullable )preferences withCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
-    NSURL *url = [NSURL URLWithString:@"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111"];
+    
+    NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111";
+    if(preferences){
+        apiString = [apiString stringByAppendingString: preferences];
+    }
+    NSURL *url = [NSURL URLWithString:apiString];
+    
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -93,7 +99,7 @@
 + (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
     [self beforeSave:recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(!succeeded){
+        if(succeeded == NO){
             NSLog(@"user already favorited");
             completion(NO, error);
         }
@@ -117,7 +123,7 @@
 
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
-        if (recipesFound) {
+        if (recipesFound.count != 0) {
             // do something with the data fetched
             completion(NO, error);
         }

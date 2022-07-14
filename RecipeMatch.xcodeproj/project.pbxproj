@@ -221,6 +221,8 @@
 		750237F4287609B900367EE7 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7548BE79287F2C3700BC2070 /* PreferencesViewController.h */,
+				7548BE7A287F2C3700BC2070 /* PreferencesViewController.m */,
 				750237EB287601AC00367EE7 /* LoginViewController.h */,
 				750237EC287601AC00367EE7 /* LoginViewController.m */,
 				750237EE287603C400367EE7 /* ProfileViewController.h */,
@@ -238,10 +240,6 @@
 			children = (
 				7502381B2878E06E00367EE7 /* LikedRecipe.h */,
 				7502381C2878E06E00367EE7 /* LikedRecipe.m */,
-				75023821287C823300367EE7 /* GridRecipeCell.h */,
-				75023822287C823300367EE7 /* GridRecipeCell.m */,
-				7548BE7C287F2D6600BC2070 /* ExpandableTableViewCell.h */,
-				7548BE7D287F2D6600BC2070 /* ExpandableTableViewCell.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -264,8 +262,10 @@
 				750237F9287611E900367EE7 /* DraggableView.m */,
 				750237FB287612BC00367EE7 /* OverlayView.h */,
 				750237FC287612BC00367EE7 /* OverlayView.m */,
-				7548BE79287F2C3700BC2070 /* PreferencesViewController.h */,
-				7548BE7A287F2C3700BC2070 /* PreferencesViewController.m */,
+				75023821287C823300367EE7 /* GridRecipeCell.h */,
+				75023822287C823300367EE7 /* GridRecipeCell.m */,
+				7548BE7C287F2D6600BC2070 /* ExpandableTableViewCell.h */,
+				7548BE7D287F2D6600BC2070 /* ExpandableTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";

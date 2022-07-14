@@ -6,11 +6,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PreferencesViewController.h"
+#import "DraggableViewBackground.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface StreamViewController : UIViewController
+@interface StreamViewController : UIViewController <PreferencesViewControllerDelegate>
 @property NSMutableArray *recipes;
+
 @end
 
 

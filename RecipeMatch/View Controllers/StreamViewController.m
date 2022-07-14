@@ -11,6 +11,11 @@
 #import "SceneDelegate.h"
 #import "DraggableViewBackground.h"
 
+@interface StreamViewController()
+@property (nonatomic, strong) NSString *preferences;
+@property (nonatomic, strong) DraggableViewBackground *draggableBackground;
+@end
+
 @implementation StreamViewController
 
 - (void)viewDidLoad {
@@ -33,25 +38,35 @@
     [self.view addSubview:spinner];
     [spinner startAnimating];
     
+    [self showCards];
     /*DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
     [self.view addSubview:draggableBackground];*/
 }
 
 -(void)showCards{
-    DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:draggableBackground];
+    
+    self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
+    self.draggableBackground.preferences = self.preferences;
+    [self.draggableBackground fetchRecipes];
+    
+    [self.view addSubview:self.draggableBackground];
 }
 
+-(void)sendData:(NSString *)prefRequest{
+    self.preferences = prefRequest;
+    [self.draggableBackground removeFromSuperview];
+    [self viewDidLoad];
+}
 
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    PreferencesViewController *preferencesController = [segue destinationViewController];
+    preferencesController.delegate = self; // Set the second view controller's
 }
-*/
+
 
 @end

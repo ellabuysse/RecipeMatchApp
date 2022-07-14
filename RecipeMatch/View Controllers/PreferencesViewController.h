@@ -10,8 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PreferencesViewController : UIViewController
+@protocol PreferencesViewControllerDelegate <NSObject>
+@required
+-(void)sendData:(NSString *)request;
+@end
 
+@interface PreferencesViewController : UIViewController
+@property(nonatomic,assign)id<PreferencesViewControllerDelegate> delegate;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -43,20 +43,22 @@ static const float BTN_HEIGHT = 59;
     
     if (self) {
         [super layoutSubviews];
-        
-        [[APIManager shared] getRecipes:^(NSArray *recipes, NSError *error) {
-            if(recipes)
-            {
-                self.recipes = recipes;
-                [self getCards];
-            } else {
-                NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-            }
-        }];
+    
     }
     return self;
 }
-
+-(void)fetchRecipes{
+    
+    [[APIManager shared] getRecipes:self.preferences withCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes)
+        {
+            self.recipes = recipes;
+            [self getCards];
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+    }];
+}
 -(void)getCards
 {
     [self setupView];
@@ -65,6 +67,7 @@ static const float BTN_HEIGHT = 59;
     cardsLoadedIndex = 0;
     [self loadCards];
 }
+
 
 //%%% sets up the extra buttons on the screen
 -(void)setupView

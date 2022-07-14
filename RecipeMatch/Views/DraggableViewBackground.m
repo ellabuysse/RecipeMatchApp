@@ -10,11 +10,11 @@
 #import "DraggableView.h"
 #import "StreamViewController.h"
 #import "OverlayView.h"
-#import "Recipe.h"
+#import "APIManager.h"
 
 @interface DraggableViewBackground ()
-@property (strong, nonatomic) NSMutableArray *recipes;
 @property BOOL *getRequestReturned;
+@property NSArray *recipes;
 @end
 
 @implementation DraggableViewBackground{
@@ -25,6 +25,7 @@
     UIButton* messageButton;
     UIButton* checkButton;
     UIButton* xButton;
+    
 }
 //this makes it so only two cards are loaded at a time to
 //avoid performance and memory costs
@@ -42,13 +43,27 @@ static const float BTN_HEIGHT = 59;
     
     if (self) {
         [super layoutSubviews];
-        [self setupView];
-        loadedCards = [[NSMutableArray alloc] init];
-        allCards = [[NSMutableArray alloc] init];
-        cardsLoadedIndex = 0;
-        [self loadCards];
+        
+        [[APIManager shared] getRecipes:^(NSArray *recipes, NSError *error) {
+            if(recipes)
+            {
+                self.recipes = recipes;
+                [self getCards];
+            } else {
+                NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            }
+        }];
     }
     return self;
+}
+
+-(void)getCards
+{
+    [self setupView];
+    loadedCards = [[NSMutableArray alloc] init];
+    allCards = [[NSMutableArray alloc] init];
+    cardsLoadedIndex = 0;
+    [self loadCards];
 }
 
 //%%% sets up the extra buttons on the screen
@@ -91,6 +106,7 @@ static const float BTN_HEIGHT = 59;
     draggableView.servings = [self.recipes objectAtIndex:index][@"recipe"][@"yield"];
 
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
+    draggableView.imageUrl = imageUrl;
     NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
     draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     
@@ -102,13 +118,6 @@ static const float BTN_HEIGHT = 59;
 //%%% loads all the cards and puts the first x in the "loaded cards" array
 -(void)loadCards
 {
-    
-    [self getRecipes];
-    // wait for recipe to load
-    while(!self.getRequestReturned){
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }
-
     if([self.recipes count] > 0) {
         NSInteger numLoadedCardsCap =(([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
         //%%% if the buffer size is greater than the data size, there will be an array error, so this makes sure that doesn't happen
@@ -137,6 +146,7 @@ static const float BTN_HEIGHT = 59;
     }
 }
 
+
 #warning include own action here!
 //%%% action called when the card goes to the left.
 // This should be customized with your own action
@@ -163,8 +173,14 @@ static const float BTN_HEIGHT = 59;
     
     DraggableView *c = (DraggableView *)card;
     
-    [Recipe postRecipe:c.title.text withId:c.recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        NSLog(@"success!");
+    [LikedRecipe postLikedRecipe:c.title.text withId:c.recipeId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(error){
+            NSLog(@"Error posting recipe: %@", error.localizedDescription);
+        }
+        else{
+            //[self.delegate didTweet:tweet];
+            NSLog(@"Post recipe success!");
+        }
     }];
     
     
@@ -198,35 +214,6 @@ static const float BTN_HEIGHT = 59;
         dragView.overlayView.alpha = 1;
     }];
     [dragView leftClickAction];
-}
-
-// MY CODE
-- (void)getRecipes {
-    // configure custom alert for network error
-    UIAlertController *networkAlert = [UIAlertController
-                                       alertControllerWithTitle:@"Cannot Get Movies" message:@"The internet connection appears to be offline." preferredStyle:(UIAlertControllerStyleAlert)];
-    UIAlertAction *tryAgainAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self getRecipes];
-    }];
-    [networkAlert addAction:tryAgainAction];
-
-    //Do any additional setup after loading the view.
-    NSURL *url = [NSURL URLWithString:@"https://api.edamam.com/api/recipes/v2?type=public&q=apple&app_id=00fb2355&app_key=1020f34ec9260531e5ad653a90e2d111"];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-           if (error != nil) {
-               NSLog(@"%@", [error localizedDescription]);
-           }
-           else {
-               NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-
-               self.recipes = dataDictionary[@"hits"];
-               self.getRequestReturned = YES;
-               NSLog(@"%@", self.recipes);
-           };
-}];
-    [task resume];
 }
 
 /*

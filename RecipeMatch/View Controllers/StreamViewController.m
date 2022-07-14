@@ -17,23 +17,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
+    spinner.tag = 12;
+    [self.view addSubview:spinner];
+    [spinner startAnimating];
+    
     DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
     [self.view addSubview:draggableBackground];
-    
-    
-    /*CGRect frame = self.view.frame;
-    frame.origin.y = -self.view.frame.size.height; //optional: if you want the view to drop down
-    DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:frame];
-    draggableBackground.alpha = 0; //optional: if you want the view to fade in
+}
 
+-(void)showCards{
+    DraggableViewBackground *draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
     [self.view addSubview:draggableBackground];
-
-      //optional: animate down and in
-    [UIView animateWithDuration:0.5 animations:^{
-        draggableBackground.center = self.view.center;
-        draggableBackground.alpha = 1;
-    }];
-    */
 }
 
 

@@ -9,17 +9,95 @@
 #import "Parse/Parse.h"
 #import "LoginViewController.h"
 #import "SceneDelegate.h"
+#import "GridRecipeCell.h"
+#import "LikedRecipe.h"
+#import "UIImageView+AFNetworking.h"
 
-@interface ProfileViewController ()
-
+@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
+@property (nonatomic, strong) NSArray *recipes;
+@property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.recipesCollectionView.dataSource = self;
+    self.recipesCollectionView.delegate = self;
+
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
+    
+    if (@available(iOS 10.0, *)) {
+        self.recipesCollectionView.refreshControl = self.refreshControl;
+    } else {
+        [self.recipesCollectionView addSubview:self.refreshControl];
+    }
+    
+
+    [self fetchRecipes];
     // Do any additional setup after loading the view.
 }
+
+- (void) fetchRecipes{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery orderByDescending:@"createdAt"];
+    [recipeQuery includeKey:@"user"];
+    //postQuery.limit = 20;
+    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound) {
+            // do something with the data fetched
+            self.recipes = (NSMutableArray *)recipesFound;
+            [self.recipesCollectionView reloadData];
+            [self.refreshControl endRefreshing];
+        }
+        else {
+            // handle error
+            NSLog(@"%@", error.localizedDescription);
+        }
+    }];
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+
+    self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    self.flowLayout.minimumLineSpacing = 10;
+    self.flowLayout.minimumInteritemSpacing = 0;
+    self.flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.recipes.count;
+}
+
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
+    GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
+    NSDictionary *recipe = self.recipes[indexPath.row];
+    
+    NSString *imageUrl = recipe[@"image"];
+    [cell.imageView setImageWithURL:[NSURL URLWithString:imageUrl]];
+    cell.imageView.layer.cornerRadius = 20;
+    cell.recipeTitle.text = recipe[@"name"];
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    int totalwidth = self.recipesCollectionView.bounds.size.width;
+    int numberOfCellsPerRow = 2;
+    int widthDimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
+    int heightDimensions = widthDimensions * 1.2;
+    return CGSizeMake(widthDimensions, heightDimensions);
+}
+
+
 
 - (IBAction)logoutBtn:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {

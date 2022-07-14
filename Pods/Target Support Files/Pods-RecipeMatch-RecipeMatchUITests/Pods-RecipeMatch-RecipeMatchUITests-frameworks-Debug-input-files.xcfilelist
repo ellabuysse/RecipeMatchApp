@@ -1,4 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-RecipeMatch-RecipeMatchUITests/Pods-RecipeMatch-RecipeMatchUITests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework
+${BUILT_PRODUCTS_DIR}/BDBOAuth1Manager/BDBOAuth1Manager.framework
 ${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework
 ${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework
 ${BUILT_PRODUCTS_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework

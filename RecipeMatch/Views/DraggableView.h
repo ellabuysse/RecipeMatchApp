@@ -52,6 +52,7 @@
 @property (nonatomic,strong)UILabel* title;
 @property (nonatomic,strong)UILabel* recipeId;
 @property (nonatomic,strong)UIImageView* recipeImage;
+@property (nonatomic,strong)NSString* imageUrl;
 @property (nonatomic,strong)UILabel* url;
 @property (nonatomic,strong)NSArray* ingredients;
 @property (nonatomic,strong)UILabel* time;

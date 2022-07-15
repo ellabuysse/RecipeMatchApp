@@ -49,7 +49,7 @@ static const float BTN_HEIGHT = 59;
 }
 -(void)fetchRecipes{
     
-    [[APIManager shared] getRecipes:self.preferences withCompletion: ^(NSMutableArray *recipes, NSError *error) {
+    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
         if(recipes)
         {
             self.recipes = recipes;
@@ -167,7 +167,7 @@ static const float BTN_HEIGHT = 59;
     NSString *longId = (NSString *)c.recipeId;
     NSString *shortId = [longId substringFromIndex:51];
     
-    [APIManager postSavedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager postSavedRecipeWithTitle:c.title.text andId:shortId andImage:c.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(error){
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }

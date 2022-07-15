@@ -37,8 +37,8 @@
     return self;
 }
 
-// get initial recipes for home feed
-- (void)getRecipes:( NSString * _Nullable )preferences withCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
+// get initial array of recipes for home feed from recipe API
+- (void)getRecipesWithPreferences:( NSString * _Nullable )preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
     NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=fruit&app_id=";
@@ -69,8 +69,8 @@
     [task resume];
 }
 
-// get specific recipe by id
-- (void)getIdRecipe:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
+// get specific recipe by id from recipe API
+- (void)getRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
     NSString *apiString = @"https://api.edamam.com/api/recipes/v2/";
@@ -97,8 +97,8 @@
     [task resume];
 }
 
-// remove recipe from saves
-+ (void)unsave:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
+// remove recipe from SavedRecipe Parse class
++ (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -135,7 +135,7 @@
         }
         else {
             // no recipe found, add it to likes
-            [[self shared] getIdRecipe:recipeId withCompletion:^(NSDictionary *recipe, NSError *error){
+            [[self shared] getRecipeWithId:recipeId andCompletion:^(NSDictionary *recipe, NSError *error){
                 if(recipe){
                     LikedRecipe *newRecipe = [LikedRecipe new];
                     /*newRecipe.name = recipe.name;
@@ -156,10 +156,10 @@
 }
 
 
-// add recipes to saves
-+ (void)postSavedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion{
+// add recipe to SavedRecipe Parse class
++ (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
-    [self checkIfSaved:recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [self checkIfSavedWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
             NSLog(@"user already favorited");
             completion(NO, error);
@@ -176,8 +176,8 @@
     }];
 }
 
-// check if current user saved recipe by id
-+(void)checkIfSaved:( NSString * _Nullable )recipeId withCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
+// check if recipe is saved by current user in SavedRecipe Parse class
++(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -195,7 +195,7 @@
     }];
 }
 
-// get all saved recipes of current user
+// get all saved recipes of current user from SavedRecipe Parse class
 + (void)fetchSavedRecipes:(void (^)(NSArray *recipes, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];

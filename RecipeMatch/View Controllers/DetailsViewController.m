@@ -34,7 +34,7 @@
     
     [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
 
-    [APIManager checkIfSaved:self.savedRecipe.recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager checkIfSavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
             [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
         } else{
@@ -44,7 +44,7 @@
 }
 
 -(void)fetchRecipeInfo{
-    [[APIManager shared] getIdRecipe:self.savedRecipe.recipeId withCompletion: ^(NSDictionary *recipe, NSError *error){
+    [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSDictionary *recipe, NSError *error){
         if(recipe)
         {
             self.fullRecipe = recipe;
@@ -81,7 +81,7 @@
 
 
 - (void)didTapSave:(UIButton *)sender {
-    [APIManager unsave:self.savedRecipe.recipeId withCompletion: ^(NSArray *recipes, NSError *error){
+    [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSArray *recipes, NSError *error){
         if(recipes.count != 0)
         {
             // successfully unsaved recipe
@@ -90,7 +90,7 @@
             
         }else {
             // no recipe found, need to save
-            [APIManager postSavedRecipe:self.savedRecipe.name withId:self.savedRecipe.recipeId withImage:self.savedRecipe.image withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            [APIManager postSavedRecipeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if(error){
                     NSLog(@"Error posting recipe: %@", error.localizedDescription);
                 }

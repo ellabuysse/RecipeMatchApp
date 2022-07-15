@@ -6,13 +6,14 @@
 //
 
 #import "APIManager.h"
+#import "SavedRecipe.h"
 #import "LikedRecipe.h"
 @import Parse;
 
-/*@interface APIManager ()
+@interface APIManager ()
 @property (nonatomic, strong) NSString *app_id;
 @property (nonatomic, strong) NSString *app_key;
-@end*/
+@end
 
 @implementation APIManager
 
@@ -26,18 +27,24 @@
     return sharedManager;
 }
 
+- (instancetype)init {
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
+
+    self.app_id = [dict objectForKey: @"app_id"];
+    self.app_key = [dict objectForKey: @"app_key"];
+    
+    return self;
+}
+
+// get initial recipes for home feed
 - (void)getRecipes:( NSString * _Nullable )preferences withCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    NSString *app_id = [dict objectForKey: @"app_id"];
-    NSString *app_key = [dict objectForKey: @"app_key"];
-
     NSString *apiString = @"https://api.edamam.com/api/recipes/v2?type=public&q=fruit&app_id=";
-    apiString = [apiString stringByAppendingString:app_id];
+    apiString = [apiString stringByAppendingString:self.app_id];
     apiString = [apiString stringByAppendingString:@"&app_key="];
-    apiString = [apiString stringByAppendingString:app_key];
+    apiString = [apiString stringByAppendingString:self.app_key];
     if(preferences){
         apiString = [apiString stringByAppendingString: preferences];
     }
@@ -62,21 +69,16 @@
     [task resume];
 }
 
-+ (void)getIdRecipe:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
+// get specific recipe by id
+- (void)getIdRecipe:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-    NSString *app_id = [dict objectForKey: @"app_id"];
-    NSString *app_key = [dict objectForKey: @"app_key"];
-
     NSString *apiString = @"https://api.edamam.com/api/recipes/v2/";
     apiString = [apiString stringByAppendingString:recipeId];
     apiString = [apiString stringByAppendingString:@"?type=public&q=apple&app_id="];
-    apiString = [apiString stringByAppendingString:app_id];
+    apiString = [apiString stringByAppendingString:self.app_id];
     apiString = [apiString stringByAppendingString:@"&app_key="];
-    
-    NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:app_key]];
+    NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:self.app_key]];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:apiUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
@@ -95,15 +97,16 @@
     [task resume];
 }
 
-+ (void)unfavorite:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
-    PFQuery *recipeQuery = [LikedRecipe query];
+// remove recipe from saves
++ (void)unsave:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
+    PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
-    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
-        if (recipesFound) {
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound.count != 0) {
             // do something with the data fetched
             [PFObject deleteAllInBackground:recipesFound];
             completion(recipesFound, nil);
@@ -116,15 +119,53 @@
     }];
 }
 
-+ (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion{
+// remove recipe from likes if it exists, otherwise add it
++ (void)didTapLike:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound.count != 0) {
+            // delete recipe from likes
+            [PFObject deleteAllInBackground:recipesFound];
+            completion(nil, nil);
+        }
+        else {
+            // no recipe found, add it to likes
+            [[self shared] getIdRecipe:recipeId withCompletion:^(NSDictionary *recipe, NSError *error){
+                if(recipe){
+                    LikedRecipe *newRecipe = [LikedRecipe new];
+                    /*newRecipe.name = recipe.name;
+                    newRecipe.recipeId = recipe.recipeId;
+                    newRecipe.image = recipe.image;
+                    newRecipe.user = [PFUser currentUser];
+
+                    [newRecipe saveInBackgroundWithBlock: completion];
+                } else {
+                    
+                }*/
+                }
+            }];
+            
+            completion(nil, error);
+        }
+    }];
+}
+
+
+// add recipes to saves
++ (void)postSavedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
-    [self beforeSave:recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(succeeded == NO){
+    [self checkIfSaved:recipeId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
             NSLog(@"user already favorited");
             completion(NO, error);
         }
         else{
-            LikedRecipe *newRecipe = [LikedRecipe new];
+            SavedRecipe *newRecipe = [SavedRecipe new];
             newRecipe.name = title;
             newRecipe.recipeId = recipeId;
             newRecipe.image = image;
@@ -135,32 +176,34 @@
     }];
 }
 
-+(void)beforeSave:( NSString * _Nullable )recipeId withCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
-    PFQuery *recipeQuery = [LikedRecipe query];
+// check if current user saved recipe by id
++(void)checkIfSaved:( NSString * _Nullable )recipeId withCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
+    PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
-    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound.count != 0) {
             // do something with the data fetched
-            completion(NO, error);
+            completion(YES, nil);
         }
         else {
-            completion(YES, nil);
+            completion(NO, error);
         }
     }];
 }
 
-+ (void)fetchLikedRecipes:(void (^)(NSArray *recipes, NSError *error))completion{
-    PFQuery *recipeQuery = [LikedRecipe query];
+// get all saved recipes of current user
++ (void)fetchSavedRecipes:(void (^)(NSArray *recipes, NSError *error))completion{
+    PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     
     // fetch data asynchronously
-    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound) {
             // do something with the data fetched
             completion(recipesFound,nil);

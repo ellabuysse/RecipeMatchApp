@@ -167,7 +167,7 @@ static const float BTN_HEIGHT = 59;
     NSString *longId = (NSString *)c.recipeId;
     NSString *shortId = [longId substringFromIndex:51];
     
-    [APIManager postLikedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager postSavedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(error){
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }

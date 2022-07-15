@@ -6,6 +6,16 @@
 //
 
 #import "GridRecipeCell.h"
+#import "UIKit+AFNetworking.h"
 
 @implementation GridRecipeCell
+
+-(void)prepareForReuse{
+    [super prepareForReuse];
+    [self.imageView cancelImageDownloadTask];
+    self.imageView.image = NULL;
+    
+    self.recipeTitle.text = @"";
+}
+
 @end

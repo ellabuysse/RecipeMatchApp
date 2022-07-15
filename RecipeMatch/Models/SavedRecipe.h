@@ -1,8 +1,8 @@
 //
-//  LikedRecipe.h
+//  Recipe.h
 //  RecipeMatch
 //
-//  Created by ellabuysse on 7/15/22.
+//  Created by ellabuysse on 7/8/22.
 //
 
 #import <Foundation/Foundation.h>
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LikedRecipe : PFObject<PFSubclassing>
+@interface SavedRecipe : PFObject<PFSubclassing>
 @property (nonatomic, strong) NSString *recipeId;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic,strong)NSString *image;

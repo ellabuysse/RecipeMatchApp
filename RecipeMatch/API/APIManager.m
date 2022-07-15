@@ -119,8 +119,11 @@
     }];
 }
 
-// remove recipe from likes if it exists, otherwise add it
-+ (void)didTapLike:( NSString * _Nullable )recipeId withCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
+/* method runs when like button is tapped
+   if recipe exists in LikedRecipe Parse class remove it, otherwise add it
+   returns YES is recipe is liked, NO is recipe is unliked */
++ (void)manageLikeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
+    
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -129,28 +132,21 @@
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound.count != 0) {
-            // delete recipe from likes
+            // recipe found, delete from LikedRecipe Parse class
+            
             [PFObject deleteAllInBackground:recipesFound];
-            completion(nil, nil);
+            completion(NO, nil);
         }
         else {
-            // no recipe found, add it to likes
-            [[self shared] getRecipeWithId:recipeId andCompletion:^(NSDictionary *recipe, NSError *error){
-                if(recipe){
-                    LikedRecipe *newRecipe = [LikedRecipe new];
-                    /*newRecipe.name = recipe.name;
-                    newRecipe.recipeId = recipe.recipeId;
-                    newRecipe.image = recipe.image;
-                    newRecipe.user = [PFUser currentUser];
+            // no recipe found, add it to LikedRecipe Parse class
+            LikedRecipe *newRecipe = [LikedRecipe new];
+            newRecipe.name = title;
+            newRecipe.recipeId = recipeId;
+            newRecipe.image = image;
+            newRecipe.user = [PFUser currentUser];
 
-                    [newRecipe saveInBackgroundWithBlock: completion];
-                } else {
-                    
-                }*/
-                }
-            }];
-            
-            completion(nil, error);
+            [newRecipe saveInBackgroundWithBlock: completion];
+            completion(YES, nil);
         }
     }];
 }
@@ -172,6 +168,25 @@
             newRecipe.user = [PFUser currentUser];
 
             [newRecipe saveInBackgroundWithBlock: completion];
+        }
+    }];
+}
+
+// check if recipe is liked by current user in LikedRecipe Parse class
++(void)checkIfLikedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound.count != 0) {
+            // do something with the data fetched
+            completion(YES, nil);
+        }
+        else {
+            completion(NO, error);
         }
     }];
 }

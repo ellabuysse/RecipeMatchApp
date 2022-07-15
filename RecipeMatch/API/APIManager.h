@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion;
 + (void) fetchSavedRecipes:(void (^)(NSArray *, NSError *))completion;
 +(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion;
++ (void)manageLikeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion;
++(void)checkIfLikedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion;
 @end
 
 NS_ASSUME_NONNULL_END

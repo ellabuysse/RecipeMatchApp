@@ -32,8 +32,16 @@
     [self.saveBtn addTarget:self action:@selector(didTapSave:)
          forControlEvents:UIControlEventTouchUpInside];
     
-    [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+    // setup like button
+    [APIManager checkIfLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+        } else{
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+        }
+    }];
 
+    //setup save button
     [APIManager checkIfSavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
             [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
@@ -107,7 +115,15 @@
 - (void)didTapLike:(UIButton *)sender {
     [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
     
-    
+    [APIManager manageLikeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error){
+        if(succeeded)
+        {
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+            
+        }else {
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+        }
+    }];
 }
 
 

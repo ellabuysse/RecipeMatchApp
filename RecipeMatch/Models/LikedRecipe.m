@@ -12,7 +12,7 @@
 @dynamic recipeId;
 @dynamic name;
 @dynamic image;
-@dynamic user;
+@dynamic username;
 
 + (nonnull NSString *)parseClassName {
     return @"LikedRecipe";

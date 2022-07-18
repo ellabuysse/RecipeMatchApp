@@ -101,7 +101,7 @@
 + (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
@@ -126,7 +126,7 @@
     
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
@@ -143,7 +143,7 @@
             newRecipe.name = title;
             newRecipe.recipeId = recipeId;
             newRecipe.image = image;
-            newRecipe.user = [PFUser currentUser];
+            newRecipe.username = [[PFUser currentUser] username];
 
             [newRecipe saveInBackgroundWithBlock: completion];
             completion(YES, nil);
@@ -165,7 +165,7 @@
             newRecipe.name = title;
             newRecipe.recipeId = recipeId;
             newRecipe.image = image;
-            newRecipe.user = [PFUser currentUser];
+            newRecipe.username = [PFUser currentUser].username;
 
             [newRecipe saveInBackgroundWithBlock: completion];
         }
@@ -176,7 +176,7 @@
 +(void)checkIfLikedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
@@ -213,7 +213,7 @@
 +(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
     [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
 
     // fetch data asynchronously
@@ -233,7 +233,7 @@
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];
     [recipeQuery includeKey:@"user"];
-    [recipeQuery whereKey:@"user" equalTo:[PFUser currentUser]];
+    [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
     
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {

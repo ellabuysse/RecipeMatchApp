@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *recipeId;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic,strong)NSString *image;
-@property (nonatomic, strong) PFUser *user;
+@property (nonatomic,strong)NSString *username;
 @end
 
 NS_ASSUME_NONNULL_END

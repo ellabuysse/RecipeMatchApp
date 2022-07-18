@@ -41,7 +41,8 @@
 @synthesize servings;
 @synthesize overlayView;
 @synthesize detailsBtn;
-@synthesize likeBtn;
+@synthesize likeLabel;
+@synthesize likeCount;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -52,24 +53,26 @@
         
         self.backgroundColor = [UIColor whiteColor];
 #warning placeholder stuff, replace with card-specific information }
-        likeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        likeBtn.frame = CGRectMake(20, self.frame.size.height - 100, self.frame.size.width, 30);
-        [likeBtn setTitle:@"Likes" forState:UIControlStateNormal];
-        [likeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [likeBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
-        likeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        likeBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-        likeBtn.configuration.imagePadding = 15;
+        
+        likeCount = [[UILabel alloc]initWithFrame:CGRectMake(20, self.frame.size.height - 100, 15, 30)];
+        likeCount.textColor = [UIColor grayColor];
+        [likeCount setText:@"0"];
+        [[self likeCount] setFont:[UIFont systemFontOfSize:16]];
+        [self addSubview:likeCount];
 
-        [self addSubview:likeBtn];
-        
-        
+        likeLabel = [[UILabel alloc]initWithFrame:CGRectMake(35, self.frame.size.height - 100, self.frame.size.width, 30)];
+        likeLabel.textColor = [UIColor grayColor];
+        [likeLabel setText:@"LIKES"];
+        [[self likeLabel] setFont:[UIFont systemFontOfSize:16]];
+        [self addSubview:likeLabel];
+
         title = [[UILabel alloc]initWithFrame:CGRectMake(20, self.frame.size.height - 80, self.frame.size.width, 60)];
         title.lineBreakMode = NSLineBreakByWordWrapping;
         title.numberOfLines = 0;
         title.textColor = [UIColor blackColor];
         [[self title] setFont:[UIFont systemFontOfSize:18]];
-            
+        [self addSubview:title];
+
         int imgSize = 300;
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width-imgSize)/2,10,imgSize,imgSize)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
@@ -89,7 +92,6 @@
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         
         [self addGestureRecognizer:panGestureRecognizer];
-        [self addSubview:title];
         
         overlayView = [[OverlayView alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 0, 100, 100)];
         overlayView.alpha = 0;

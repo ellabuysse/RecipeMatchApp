@@ -191,6 +191,24 @@
     }];
 }
 
+// check if recipe is liked by current user in LikedRecipe Parse class
++(void)countLikesWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(int likes, NSError *error))completion{
+    PFQuery *recipeQuery = [LikedRecipe query];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if(recipesFound){
+            completion((int)recipesFound.count, nil);
+        }
+        else{
+            completion(nil, error);
+        }
+    }];
+}
+
+
 // check if recipe is saved by current user in SavedRecipe Parse class
 +(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];

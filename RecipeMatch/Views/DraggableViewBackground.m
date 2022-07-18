@@ -55,6 +55,7 @@ static const float BTN_HEIGHT = 60;
             [self getCards];
             DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
             [self updateHeartBtn:nextCard];
+            [self updateLikeCount:nextCard];
         } else {
             NSLog(@"😫😫😫 Error getting recipes: %@", error.localizedDescription);
         }
@@ -145,6 +146,19 @@ static const float BTN_HEIGHT = 60;
     }
 }
 
+
+// update heart button for each card to show like status
+-(void)updateLikeCount:(DraggableView *)card{
+    NSString *shortId = [(NSString *)card.recipeId substringFromIndex:51];
+    [APIManager countLikesWithId:shortId andCompletion:^(int likes, NSError * _Nullable error) {
+        if(likes){
+            card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
+        } else{
+            card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+        }
+    }];
+}
+
 // update heart button for each card to show like status
 -(void)updateHeartBtn:(DraggableView *)nextCard{
     NSString *shortId = [(NSString *)nextCard.recipeId substringFromIndex:51];
@@ -172,6 +186,7 @@ static const float BTN_HEIGHT = 60;
         
         DraggableView *nextCard = [loadedCards objectAtIndex:0];
         [self updateHeartBtn:nextCard];
+        [self updateLikeCount:nextCard];
     }
 }
 
@@ -193,7 +208,6 @@ static const float BTN_HEIGHT = 60;
         }
     }];
     
-    
     [loadedCards removeObjectAtIndex:0]; //%%% card was swiped, so it's no longer a "loaded card"
     
     if (cardsLoadedIndex < [allCards count]) { //%%% if we haven't reached the end of all cards, put another into the loaded cards
@@ -204,6 +218,7 @@ static const float BTN_HEIGHT = 60;
     
     DraggableView *nextCard = [loadedCards objectAtIndex:0];
     [self updateHeartBtn:nextCard];
+    [self updateLikeCount:nextCard];
 }
 
 -(void)tapLike:(id)sender{
@@ -214,9 +229,10 @@ static const float BTN_HEIGHT = 60;
         if(succeeded)
         {
             [sender setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
-            
+            [self updateLikeCount:card];
         }else {
             [sender setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+            [self updateLikeCount:card];
         }
     }];
 }

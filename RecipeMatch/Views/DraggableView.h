@@ -58,6 +58,7 @@
 @property (nonatomic,strong)UILabel* time;
 @property (nonatomic,strong)UILabel* servings;
 @property (nonatomic,strong)UIButton* detailsBtn;
+@property (nonatomic,strong)UIButton* likeBtn;
 
 -(void)leftClickAction;
 -(void)rightClickAction;

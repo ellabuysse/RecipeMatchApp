@@ -16,6 +16,7 @@
 
 
 #import "DraggableView.h"
+#import "APIManager.h"
 
 @interface DraggableView ()
 
@@ -40,6 +41,7 @@
 @synthesize servings;
 @synthesize overlayView;
 @synthesize detailsBtn;
+@synthesize likeBtn;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -50,14 +52,24 @@
         
         self.backgroundColor = [UIColor whiteColor];
 #warning placeholder stuff, replace with card-specific information }
+        likeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        likeBtn.frame = CGRectMake(20, self.frame.size.height - 100, self.frame.size.width, 30);
+        [likeBtn setTitle:@"Likes" forState:UIControlStateNormal];
+        [likeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [likeBtn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        likeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        likeBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        likeBtn.configuration.imagePadding = 15;
+
+        [self addSubview:likeBtn];
         
-        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 80, self.frame.size.width, 60)];
+        
+        title = [[UILabel alloc]initWithFrame:CGRectMake(20, self.frame.size.height - 80, self.frame.size.width, 60)];
         title.lineBreakMode = NSLineBreakByWordWrapping;
         title.numberOfLines = 0;
-        [title setTextAlignment:NSTextAlignmentCenter];
         title.textColor = [UIColor blackColor];
-        [[self title] setFont:[UIFont systemFontOfSize:16]];
-        
+        [[self title] setFont:[UIFont systemFontOfSize:18]];
+            
         int imgSize = 300;
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width-imgSize)/2,10,imgSize,imgSize)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;

@@ -13,7 +13,6 @@
 #import "APIManager.h"
 
 @interface DraggableViewBackground ()
-@property BOOL *getRequestReturned;
 @property NSArray *recipes;
 @end
 
@@ -25,16 +24,15 @@
     UIButton* messageButton;
     UIButton* checkButton;
     UIButton* xButton;
-    
+    UIButton* heartButton;
 }
 //this makes it so only two cards are loaded at a time to
 //avoid performance and memory costs
 static const int MAX_BUFFER_SIZE = 2; //%%% max number of cards loaded at any given time, must be greater than 1
 static const float CARD_HEIGHT = 425; //%%% height of the draggable card
 static const float CARD_WIDTH = 325; //%%% width of the draggable card
-static const float BTN_HEIGHT = 59;
+static const float BTN_HEIGHT = 60;
 
-@synthesize exampleCardLabels; //%%% all the labels I'm using as example data at the moment
 @synthesize allCards;//%%% all the cards
 
 - (id)initWithFrame:(CGRect)frame
@@ -47,18 +45,22 @@ static const float BTN_HEIGHT = 59;
     }
     return self;
 }
+
+// get recipes from API
 -(void)fetchRecipes{
-    
     [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
         if(recipes)
         {
             self.recipes = recipes;
             [self getCards];
+            DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
+            [self updateHeartBtn:nextCard];
         } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            NSLog(@"😫😫😫 Error getting recipes: %@", error.localizedDescription);
         }
     }];
 }
+
 -(void)getCards
 {
     [self setupView];
@@ -68,19 +70,23 @@ static const float BTN_HEIGHT = 59;
     [self loadCards];
 }
 
-
 //%%% sets up the extra buttons on the screen
 -(void)setupView
 {
     xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 630, BTN_HEIGHT, BTN_HEIGHT)];
-    [xButton setImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
+    [xButton setImage:[UIImage imageNamed:@"x-btn"] forState:UIControlStateNormal];
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
     
+    heartButton = [[UIButton alloc]initWithFrame:CGRectMake(155, 620, BTN_HEIGHT+20, BTN_HEIGHT+20)];
+    [heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+    [heartButton addTarget:self action:@selector(tapLike:) forControlEvents:UIControlEventTouchUpInside];
+    
     checkButton = [[UIButton alloc]initWithFrame:CGRectMake(270, 630, BTN_HEIGHT, BTN_HEIGHT)];
-    [checkButton setImage:[UIImage imageNamed:@"checkButton.png"] forState:UIControlStateNormal];
+    [checkButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
     [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:xButton];
+    [self addSubview:heartButton];
     [self addSubview:checkButton];
 }
 
@@ -89,8 +95,8 @@ static const float BTN_HEIGHT = 59;
 // to get rid of it (eg: if you are building cards from data from the internet)
 -(DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index
 {
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT-20)/2, CARD_WIDTH, CARD_HEIGHT)];
+    
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
     draggableView.recipeId = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
     draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
@@ -104,7 +110,7 @@ static const float BTN_HEIGHT = 59;
     draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     
     draggableView.delegate = self;
-        
+    
     return draggableView;
 }
 
@@ -139,9 +145,19 @@ static const float BTN_HEIGHT = 59;
     }
 }
 
-#warning include own action here!
-//%%% action called when the card goes to the left.
-// This should be customized with your own action
+// update heart button for each card to show like status
+-(void)updateHeartBtn:(DraggableView *)nextCard{
+    NSString *shortId = [(NSString *)nextCard.recipeId substringFromIndex:51];
+    [APIManager checkIfLikedWithId:shortId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            [self->heartButton setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
+        } else{
+            [self->heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+        }
+    }];
+}
+
+// action called when the card goes to the left.
 -(void)cardSwipedLeft:(UIView *)card;
 {
     //do whatever you want with the card that was swiped
@@ -153,12 +169,13 @@ static const float BTN_HEIGHT = 59;
         [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
         cardsLoadedIndex++;//%%% loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
+        
+        DraggableView *nextCard = [loadedCards objectAtIndex:0];
+        [self updateHeartBtn:nextCard];
     }
 }
 
-#warning include own action here!
-//%%% action called when the card goes to the right.
-// This should be customized with your own action
+// action called when the card goes to the right.
 -(void)cardSwipedRight:(UIView *)card
 {
     //do whatever you want with the card that was swiped
@@ -172,7 +189,6 @@ static const float BTN_HEIGHT = 59;
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }
         else{
-            //[self.delegate didTweet:tweet];
             NSLog(@"Post recipe success!");
         }
     }];
@@ -185,7 +201,24 @@ static const float BTN_HEIGHT = 59;
         cardsLoadedIndex++;//%%% loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
+    
+    DraggableView *nextCard = [loadedCards objectAtIndex:0];
+    [self updateHeartBtn:nextCard];
+}
 
+-(void)tapLike:(id)sender{
+    DraggableView *card = [loadedCards firstObject];
+    NSString *shortId = [(NSString *)card.recipeId substringFromIndex:51];
+    
+    [APIManager manageLikeWithTitle:(NSString *)card.title.text andId:shortId andImage:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error){
+        if(succeeded)
+        {
+            [sender setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
+            
+        }else {
+            [sender setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+        }
+    }];
 }
 
 //%%% when you hit the right button, this is called and substitutes the swipe

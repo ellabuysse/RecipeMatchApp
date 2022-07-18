@@ -39,6 +39,7 @@
 @synthesize time;
 @synthesize servings;
 @synthesize overlayView;
+@synthesize detailsBtn;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -50,18 +51,29 @@
         self.backgroundColor = [UIColor whiteColor];
 #warning placeholder stuff, replace with card-specific information }
         
-        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 60, self.frame.size.width, 20)];
-        title.text = @"no info given";
+        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 80, self.frame.size.width, 60)];
+        title.lineBreakMode = NSLineBreakByWordWrapping;
+        title.numberOfLines = 0;
         [title setTextAlignment:NSTextAlignmentCenter];
         title.textColor = [UIColor blackColor];
         [[self title] setFont:[UIFont systemFontOfSize:16]];
         
-        int imgSize = 260;
+        int imgSize = 300;
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width-imgSize)/2,10,imgSize,imgSize)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
         [recipeImage setContentMode:UIViewContentModeScaleAspectFit];
+        recipeImage.layer.masksToBounds = YES;
+        recipeImage.layer.cornerRadius = 15;
         [self addSubview:recipeImage];
         
+        /*detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, self.frame.size.width * (2/3), self.frame.size.width/3, 20)];
+        [detailsBtn setTitle:@"details" forState:UIControlStateNormal];
+        [detailsBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [detailsBtn addTarget:self
+                     action:@selector(detailsPressed)
+           forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:detailsBtn];*/
+
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         
         [self addGestureRecognizer:panGestureRecognizer];
@@ -72,6 +84,10 @@
         [self addSubview:overlayView];
     }
     return self;
+}
+
+-(void)detailsPressed{
+    //[self. performSegueWithIdentifier:@"detailsSegue" sender:sender];
 }
 
 -(void)setupView
@@ -152,7 +168,7 @@
         overlayView.mode = GGOverlayViewModeLeft;
     }
     
-    overlayView.alpha = MIN(fabsf(distance)/100, 0.4);
+    overlayView.alpha = MIN(fabs(distance)/100, 0.4);
 }
 
 //%%% called when the card is let go
@@ -167,8 +183,8 @@
                          animations:^{
                              self.center = self.originalPoint;
                              self.transform = CGAffineTransformMakeRotation(0);
-                             overlayView.alpha = 0;
-                         }];
+                            self->overlayView.alpha = 0;
+        }];
     }
 }
 
@@ -235,7 +251,5 @@
     
     NSLog(@"NO");
 }
-
-
 
 @end

@@ -12,6 +12,7 @@
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UIButton *login;
 
 @end
 
@@ -20,12 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    //FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    //loginButton.center = self.view.center;
-    //[self.view addSubview:loginButton];
-    
-    
+    self.login.layer.borderWidth = 0.5;
+    self.login.layer.borderColor = [UIColor blackColor].CGColor;
+    self.login.layer.cornerRadius = 10;
 }
 
 
@@ -39,7 +37,6 @@
 }
 - (IBAction)loginBtn:(id)sender {
     [self loginUser];
-    
 }
 
 - (void)registerUser {
@@ -70,8 +67,6 @@
 
             [self presentViewController:signupSuccess animated:YES completion:^{
             }];
-            // manually segue to logged in view
-         
         }
     }];
 }
@@ -100,46 +95,18 @@
 }
 
 - (void)loginWithFacebook{
-    
     [PFFacebookUtils logInInBackgroundWithReadPermissions:@[@"public_profile", @"email"] block:^(PFUser *user, NSError *error) {
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
             
         } else if (user.isNew) {
             [self performSegueWithIdentifier:@"mainSegue" sender:nil];
-
-            // Save user to Parse
-           // [self fetchUserInfo];
             
         } else {
             NSLog(@"User logged in through Facebook!");
             [self performSegueWithIdentifier:@"mainSegue" sender:nil];
         }
-        
     }];
-}
-
--(void)fetchUserInfo {
-
-    if ([FBSDKAccessToken currentAccessToken]) {
-
-    NSLog(@"Token is available");
-
-    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil]
-     startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-         if (!error) {
-             NSLog(@"Fetched User Information:%@", result);
-             
-         }
-         else {
-             NSLog(@"Error %@",error);
-         }
-     }];
-
-    } else {
-
-        NSLog(@"User is not Logged in");
-    }
 }
 
 /*

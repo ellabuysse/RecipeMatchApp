@@ -30,8 +30,8 @@
 //this makes it so only two cards are loaded at a time to
 //avoid performance and memory costs
 static const int MAX_BUFFER_SIZE = 2; //%%% max number of cards loaded at any given time, must be greater than 1
-static const float CARD_HEIGHT = 400; //%%% height of the draggable card
-static const float CARD_WIDTH = 290; //%%% width of the draggable card
+static const float CARD_HEIGHT = 425; //%%% height of the draggable card
+static const float CARD_WIDTH = 325; //%%% width of the draggable card
 static const float BTN_HEIGHT = 59;
 
 @synthesize exampleCardLabels; //%%% all the labels I'm using as example data at the moment
@@ -43,20 +43,22 @@ static const float BTN_HEIGHT = 59;
     
     if (self) {
         [super layoutSubviews];
-        
-        [[APIManager shared] getRecipes:^(NSArray *recipes, NSError *error) {
-            if(recipes)
-            {
-                self.recipes = recipes;
-                [self getCards];
-            } else {
-                NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-            }
-        }];
+    
     }
     return self;
 }
-
+-(void)fetchRecipes{
+    
+    [[APIManager shared] getRecipes:self.preferences withCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes)
+        {
+            self.recipes = recipes;
+            [self getCards];
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+    }];
+}
 -(void)getCards
 {
     [self setupView];
@@ -66,16 +68,10 @@ static const float BTN_HEIGHT = 59;
     [self loadCards];
 }
 
+
 //%%% sets up the extra buttons on the screen
 -(void)setupView
 {
-#warning customize all of this.  These are just place holders to make it look pretty
-    /*menuButton = [[UIButton alloc]initWithFrame:CGRectMake(17, 34, 22, 15)];
-    [menuButton setImage:[UIImage imageNamed:@"menuButton"] forState:UIControlStateNormal];
-    
-    messageButton = [[UIButton alloc]initWithFrame:CGRectMake(284, 34, 18, 18)];
-    [messageButton setImage:[UIImage imageNamed:@"messageButton"] forState:UIControlStateNormal];*/
-    
     xButton = [[UIButton alloc]initWithFrame:CGRectMake(60, 630, BTN_HEIGHT, BTN_HEIGHT)];
     [xButton setImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
@@ -84,13 +80,10 @@ static const float BTN_HEIGHT = 59;
     [checkButton setImage:[UIImage imageNamed:@"checkButton.png"] forState:UIControlStateNormal];
     [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
     
-    /*[self addSubview:menuButton];
-    [self addSubview:messageButton];*/
     [self addSubview:xButton];
     [self addSubview:checkButton];
 }
 
-#warning include own card customization here!
 //%%% creates a card and returns it.  This should be customized to fit your needs.
 // use "index" to indicate where the information should be pulled.  If this doesn't apply to you, feel free
 // to get rid of it (eg: if you are building cards from data from the internet)
@@ -146,7 +139,6 @@ static const float BTN_HEIGHT = 59;
     }
 }
 
-
 #warning include own action here!
 //%%% action called when the card goes to the left.
 // This should be customized with your own action
@@ -172,8 +164,10 @@ static const float BTN_HEIGHT = 59;
     //do whatever you want with the card that was swiped
     
     DraggableView *c = (DraggableView *)card;
+    NSString *longId = (NSString *)c.recipeId;
+    NSString *shortId = [longId substringFromIndex:51];
     
-    [LikedRecipe postLikedRecipe:c.title.text withId:c.recipeId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager postLikedRecipe:c.title.text withId:shortId withImage:c.imageUrl withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(error){
             NSLog(@"Error posting recipe: %@", error.localizedDescription);
         }

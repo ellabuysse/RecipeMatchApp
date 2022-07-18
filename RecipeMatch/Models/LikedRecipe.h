@@ -15,9 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic,strong)NSString *image;
 @property (nonatomic, strong) PFUser *user;
-
-+ (void)postLikedRecipe:( NSString * _Nullable )title withId: ( NSString * _Nullable )recipeId withImage: (NSString * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion;
-  
 @end
 
 NS_ASSUME_NONNULL_END

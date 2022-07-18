@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getRecipesWithPreferences:( NSString * _Nullable )preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion;
 - (void)getRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion;
-+ (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSArray *recipes, NSError *error))completion;
++ (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion;
 + (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion;
 + (void) fetchSavedRecipes:(void (^)(NSArray *, NSError *))completion;
 +(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion;

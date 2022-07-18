@@ -97,23 +97,22 @@
 
 @synthesize delegate;
 - (void)viewWillDisappear:(BOOL)animated {
-    NSLog(@"viewWillDisappear() called");
     [super viewWillDisappear:animated];
-    NSString *finalRequest = [[NSString alloc] init];
+    NSString *preferences = [[NSString alloc] init];
     
     if(self.cuisineLabel && ![self.cuisineLabel isEqualToString:@"no preference"]){
-        finalRequest = [finalRequest stringByAppendingString:self.cuisineLabel];
+        preferences = [preferences stringByAppendingString:self.cuisineLabel];
     }
     if(self.healthLabel && ![self.healthLabel isEqualToString:@"no preference"]){
-        finalRequest = [finalRequest stringByAppendingString:self.healthLabel];
+        preferences = [preferences stringByAppendingString:self.healthLabel];
     }
     if(self.dietLabel && ![self.dietLabel isEqualToString:@"no preference"]){
-        finalRequest = [finalRequest stringByAppendingString:self.dietLabel];
+        preferences = [preferences stringByAppendingString:self.dietLabel];
     }
     if(self.mealLabel && ![self.mealLabel isEqualToString:@"no preference"]){
-        finalRequest = [finalRequest stringByAppendingString:self.mealLabel];
+        preferences = [preferences stringByAppendingString:self.mealLabel];
     }
-    [delegate sendData:finalRequest];
+    [delegate sendData:preferences];
 }
 
 

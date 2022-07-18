@@ -108,12 +108,13 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    
-    DetailsViewController *detailsController = [segue destinationViewController];
-    UICollectionViewCell *tappedCell = sender;
-    NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
-    SavedRecipe *recipe = self.recipes[indexPath.row];
-    detailsController.savedRecipe = recipe;
+    if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+        DetailsViewController *detailsController = [segue destinationViewController];
+        UICollectionViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
+        SavedRecipe *recipe = self.recipes[indexPath.row];
+        detailsController.savedRecipe = recipe;
+    }
 }
 
 

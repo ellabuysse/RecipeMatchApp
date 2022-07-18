@@ -10,10 +10,12 @@
 #import "LoginViewController.h"
 #import "SceneDelegate.h"
 #import "DraggableViewBackground.h"
+#import "APIManager.h"
 
 @interface StreamViewController()
 @property (nonatomic, strong) NSString *preferences;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;
+@property NSMutableArray *recipes;
 @end
 
 @implementation StreamViewController
@@ -21,39 +23,46 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-    // add centered logo
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
     UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)];
     imageView.frame = titleView.bounds;
     [titleView addSubview:imageView];
-
     self.navigationItem.titleView = titleView;
     
+    [self setupCards];
+}
+
+-(void)setupCards{
+    // show spinner when waiting for recipes to load
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
     spinner.tag = 12;
     [self.view addSubview:spinner];
     [spinner startAnimating];
     
-    [self showCards];
+    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes)
+        {
+            self.recipes = recipes;
+            self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
+            self.draggableBackground.recipes = self.recipes;
+            [self.draggableBackground loadCards];
+            [self.view addSubview:self.draggableBackground];
+        } else {
+            NSLog(@"😫😫😫 Error getting recipes: %@", error.localizedDescription);
+        }
+    }];
 }
 
--(void)showCards{
-    self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
-    self.draggableBackground.preferences = self.preferences;
-    [self.draggableBackground fetchRecipes];
-    
-    [self.view addSubview:self.draggableBackground];
-}
-
+// method to be called by Preferences delegate to get user preferences
 -(void)sendData:(NSString *)prefRequest{
+    // check that preferences aren't empty
     if(prefRequest != (id)[NSNull null] && prefRequest.length != 0){
         self.preferences = prefRequest;
         [self.draggableBackground removeFromSuperview];
-        [self viewDidLoad];
+        [self setupCards];
     }
 }
 
@@ -61,10 +70,10 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    PreferencesViewController *preferencesController = [segue destinationViewController];
-    preferencesController.delegate = self; // Set the second view controller's
+    if ([[segue identifier] isEqualToString:@"preferencesViewSegue"]) {
+        PreferencesViewController *preferencesController = [segue destinationViewController];
+        preferencesController.delegate = self;
+    }
 }
 
 

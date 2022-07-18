@@ -39,10 +39,8 @@
 //methods called in DraggableView
 -(void)cardSwipedLeft:(UIView *)card;
 -(void)cardSwipedRight:(UIView *)card;
--(void)fetchRecipes;
+-(void)loadCards;
 
-@property (retain,nonatomic)NSArray* exampleCardLabels; //%%% the labels the cards
 @property (retain,nonatomic)NSMutableArray* allCards; //%%% the labels the cards
-@property (nonatomic, strong) NSString* preferences;
-
+@property NSArray *recipes;
 @end

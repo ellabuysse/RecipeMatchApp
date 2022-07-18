@@ -13,7 +13,6 @@
 #import "APIManager.h"
 
 @interface DraggableViewBackground ()
-@property NSArray *recipes;
 @end
 
 @implementation DraggableViewBackground{
@@ -41,34 +40,21 @@ static const float BTN_HEIGHT = 60;
     
     if (self) {
         [super layoutSubviews];
-    
     }
     return self;
 }
 
-// get recipes from API
--(void)fetchRecipes{
-    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
-        if(recipes)
-        {
-            self.recipes = recipes;
-            [self getCards];
-            DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
-            [self updateHeartBtn:nextCard];
-            [self updateLikeCount:nextCard];
-        } else {
-            NSLog(@"😫😫😫 Error getting recipes: %@", error.localizedDescription);
-        }
-    }];
-}
-
--(void)getCards
-{
+// load cards after recipes are loaded from StreamViewController
+-(void)loadCards{
     [self setupView];
     loadedCards = [[NSMutableArray alloc] init];
     allCards = [[NSMutableArray alloc] init];
     cardsLoadedIndex = 0;
     [self loadCards];
+
+    DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
+    [self updateHeartBtn:nextCard];
+    [self updateLikeCount:nextCard];
 }
 
 //%%% sets up the extra buttons on the screen

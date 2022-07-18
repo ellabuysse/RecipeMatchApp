@@ -12,8 +12,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface StreamViewController : UIViewController <PreferencesViewControllerDelegate>
-@property NSMutableArray *recipes;
-
 @end
 
 

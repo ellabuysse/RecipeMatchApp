@@ -38,6 +38,7 @@
 }
 
 // get initial array of recipes for home feed from recipe API
+// return recipes on success, nil on failure
 - (void)getRecipesWithPreferences:( NSString * _Nullable )preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
     
@@ -56,13 +57,10 @@
            if (error != nil) {
                NSLog(@"%@", [error localizedDescription]);
                completion(nil, error);
-
            }
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-
                NSMutableArray *recipes = dataDictionary[@"hits"];
-   
                completion(recipes, nil);
            };
 }];
@@ -70,9 +68,9 @@
 }
 
 // get specific recipe by id from recipe API
+// return recipe on success, nil on failure
 - (void)getRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSDictionary *recipe, NSError *error))completion{
     //Do any additional setup after loading the view.
-    
     NSString *apiString = @"https://api.edamam.com/api/recipes/v2/";
     apiString = [apiString stringByAppendingString:recipeId];
     apiString = [apiString stringByAppendingString:@"?type=public&q=apple&app_id="];
@@ -86,11 +84,9 @@
            if (error != nil) {
                NSLog(@"%@", [error localizedDescription]);
                completion(nil, error);
-               
            }
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-
                completion(dataDictionary[@"recipe"], nil);
            };
     }];
@@ -98,7 +94,8 @@
 }
 
 // remove recipe from SavedRecipe Parse class
-+ (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(NSArray *recipes, NSError *error))completion{
+// return YES is recipe was unsaved, NO if encountered error
++ (void)unsaveRecipeWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
     [recipeQuery whereKey:@"username" equalTo:[[PFUser currentUser] username]];
@@ -109,19 +106,19 @@
         if (recipesFound.count != 0) {
             // do something with the data fetched
             [PFObject deleteAllInBackground:recipesFound];
-            completion(recipesFound, nil);
+            completion(YES, nil);
         }
         else {
             // handle error
             NSLog(@"%@", error.localizedDescription);
-            completion(nil, error);
+            completion(NO, error);
         }
     }];
 }
 
-/* method runs when like button is tapped
-   if recipe exists in LikedRecipe Parse class remove it, otherwise add it
-   returns YES is recipe is liked, NO is recipe is unliked */
+// method runs when like button is tapped
+// if recipe exists in LikedRecipe Parse class remove it, otherwise add it
+// return YES is recipe is liked, NO is recipe is unliked
 + (void)manageLikeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
     PFQuery *recipeQuery = [LikedRecipe query];
@@ -132,27 +129,25 @@
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound.count != 0) {
-            // recipe found, delete from LikedRecipe Parse class
-            
+            // recipe found -> delete from LikedRecipe Parse class
             [PFObject deleteAllInBackground:recipesFound];
             completion(NO, nil);
         }
         else {
-            // no recipe found, add it to LikedRecipe Parse class
+            // no recipe found -> add it to LikedRecipe Parse class
             LikedRecipe *newRecipe = [LikedRecipe new];
             newRecipe.name = title;
             newRecipe.recipeId = recipeId;
             newRecipe.image = image;
             newRecipe.username = [[PFUser currentUser] username];
-
             [newRecipe saveInBackgroundWithBlock: completion];
             completion(YES, nil);
         }
     }];
 }
 
-
 // add recipe to SavedRecipe Parse class
+// return YES on success, NO on failure
 + (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
     [self checkIfSavedWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
@@ -173,6 +168,7 @@
 }
 
 // check if recipe is liked by current user in LikedRecipe Parse class
+// return YES if recipe is liked, NO if recipe is not liked
 +(void)checkIfLikedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery includeKey:@"user"];
@@ -191,7 +187,8 @@
     }];
 }
 
-// check if recipe is liked by current user in LikedRecipe Parse class
+// count number of times recipe is liked in LikedRecipe Parse class
+// return number of likes of recipe
 +(void)countLikesWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(int likes, NSError *error))completion{
     PFQuery *recipeQuery = [LikedRecipe query];
     [recipeQuery includeKey:@"user"];
@@ -203,13 +200,14 @@
             completion((int)recipesFound.count, nil);
         }
         else{
-            completion(nil, error);
+            completion(0, error);
         }
     }];
 }
 
 
 // check if recipe is saved by current user in SavedRecipe Parse class
+// return YES if recipe is saved, NO if recipe is not saved
 +(void)checkIfSavedWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(BOOL succeeded, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery includeKey:@"user"];
@@ -229,6 +227,7 @@
 }
 
 // get all saved recipes of current user from SavedRecipe Parse class
+// return recipes on success, nil on failure
 + (void)fetchSavedRecipes:(void (^)(NSArray *recipes, NSError *error))completion{
     PFQuery *recipeQuery = [SavedRecipe query];
     [recipeQuery orderByDescending:@"createdAt"];
@@ -244,7 +243,6 @@
         else {
             // handle error
             completion(nil,error);
-            NSLog(@"%@", error.localizedDescription);
         }
     }];
 }

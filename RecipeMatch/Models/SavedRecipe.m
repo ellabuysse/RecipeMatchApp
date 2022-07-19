@@ -1,21 +1,21 @@
 //
-//  LikedRecipe.m
+//  Recipe.m
 //  RecipeMatch
 //
-//  Created by ellabuysse on 7/15/22.
+//  Created by ellabuysse on 7/8/22.
 //
 
-#import "LikedRecipe.h"
+#import "SavedRecipe.h"
 @import Parse;
 
-@implementation LikedRecipe
+@implementation SavedRecipe
 @dynamic recipeId;
 @dynamic name;
 @dynamic image;
 @dynamic user;
 
 + (nonnull NSString *)parseClassName {
-    return @"LikedRecipe";
+    return @"SavedRecipe";
 }
 
 @end

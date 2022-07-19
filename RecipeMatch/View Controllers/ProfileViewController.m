@@ -10,7 +10,7 @@
 #import "LoginViewController.h"
 #import "SceneDelegate.h"
 #import "GridRecipeCell.h"
-#import "LikedRecipe.h"
+#import "SavedRecipe.h"
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
@@ -27,9 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.recipesCollectionView.dataSource = self;
-    self.recipesCollectionView.delegate = self;
-
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
     self.recipesCollectionView.refreshControl = self.refreshControl;
@@ -50,7 +47,7 @@
 }
 
 - (void) fetchRecipes{
-    [APIManager fetchLikedRecipes:^(NSArray *recipes, NSError *error) {
+    [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
         if(recipes){
             self.recipes = recipes;
             [self.recipesCollectionView reloadData];
@@ -115,8 +112,8 @@
     DetailsViewController *detailsController = [segue destinationViewController];
     UICollectionViewCell *tappedCell = sender;
     NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
-    LikedRecipe *recipe = self.recipes[indexPath.row];
-    detailsController.likedRecipe = recipe;
+    SavedRecipe *recipe = self.recipes[indexPath.row];
+    detailsController.savedRecipe = recipe;
 }
 
 

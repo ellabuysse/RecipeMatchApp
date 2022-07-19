@@ -11,11 +11,12 @@
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
-@property (weak, nonatomic) IBOutlet UILabel *totalTime;
 @property (weak, nonatomic) IBOutlet UILabel *yield;
 @property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property (weak, nonatomic) IBOutlet UIButton *source;
 @property (strong, nonatomic) NSString *recipeUrl;
+@property (weak, nonatomic) IBOutlet UIButton *likeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property NSDictionary *fullRecipe;
 @end
 
@@ -24,12 +25,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
     [self fetchRecipeInfo];
+
+    [self.likeBtn addTarget:self action:@selector(didTapLike:)
+         forControlEvents:UIControlEventTouchUpInside];
+    [self.saveBtn addTarget:self action:@selector(didTapSave:)
+         forControlEvents:UIControlEventTouchUpInside];
+    
+    // setup like button
+    [APIManager checkIfLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+        } else{
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+        }
+    }];
+
+    //setup save button
+    [APIManager checkIfSavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
+        } else{
+            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
+        }
+    }];
 }
 
 -(void)fetchRecipeInfo{
-    [APIManager getIdRecipe:self.likedRecipe.recipeId withCompletion: ^(NSDictionary *recipe, NSError *error){
+    [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSDictionary *recipe, NSError *error){
         if(recipe)
         {
             self.fullRecipe = recipe;
@@ -40,9 +63,7 @@
             [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
             
             self.recipeUrl = recipe[@"url"];
-            NSString *time = [NSString stringWithFormat:@"%@", recipe[@"totalTime"]];
-            self.totalTime.text = [time stringByAppendingString:@"m"];
-            
+          
             NSArray *ingrArray = recipe[@"ingredientLines"];
             NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
             self.ingredients.text = [@"• " stringByAppendingString:ingrString];
@@ -63,22 +84,49 @@
     UIApplication *application = [UIApplication sharedApplication];
     NSURL *URL = [NSURL URLWithString:self.recipeUrl];
     [application openURL:URL options:@{} completionHandler:nil];
-    
 }
 
 
-- (IBAction)didUnfavorite:(id)sender {
-    [APIManager unfavorite:self.likedRecipe.recipeId withCompletion: ^(NSArray *recipes, NSError *error){
-        if(recipes)
+
+- (void)didTapSave:(UIButton *)sender {
+    [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSArray *recipes, NSError *error){
+        if(recipes.count != 0)
         {
-            NSLog(@"Successfully unfavorited");
-            [self performSegueWithIdentifier:@"returnToProfile" sender:nil];
+            // successfully unsaved recipe
+            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
+           // [self performSegueWithIdentifier:@"returnToProfile" sender:nil];
             
         }else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+            // no recipe found, need to save
+            [APIManager postSavedRecipeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                if(error){
+                    NSLog(@"Error posting recipe: %@", error.localizedDescription);
+                }
+                else{
+                    //[self.delegate didTweet:tweet];
+                    NSLog(@"Post recipe success!");
+                }
+            }];
+            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
         }
     }];
 }
+
+- (void)didTapLike:(UIButton *)sender {
+    [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+    
+    [APIManager manageLikeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error){
+        if(succeeded)
+        {
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+            
+        }else {
+            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+        }
+    }];
+}
+
+
 
 /*
 #pragma mark - Navigation

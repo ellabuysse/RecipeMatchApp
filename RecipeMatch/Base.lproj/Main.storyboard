@@ -153,11 +153,11 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EDP-kq-ef7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BD7-3U-4Vo">
-                                <rect key="frame" x="10" y="56" width="404" height="757"/>
+                                <rect key="frame" x="10" y="44" width="404" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QqC-zg-VSy">
                                     <size key="itemSize" width="170" height="190"/>
@@ -203,6 +203,10 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="OHe-CW-FeY" id="UOZ-DB-cyU"/>
+                                    <outlet property="delegate" destination="OHe-CW-FeY" id="5sr-ug-8Y7"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uxu-3A-Csv"/>
@@ -292,10 +296,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K5V-di-0KL">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="900"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" misplaced="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbP-eR-5yc">
-                                                <rect key="frame" x="10" y="10" width="374" height="62"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbP-eR-5yc">
+                                                <rect key="frame" x="10" y="0.0" width="374" height="79.5"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="pqq-Mc-dK3"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="pqq-Mc-dK3"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                 <nil key="textColor"/>
@@ -314,8 +318,8 @@
                                                 <color key="textColor" systemColor="systemGrayColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MF-1s-Eal">
-                                                <rect key="frame" x="10" y="563.5" width="384" height="30"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MF-1s-Eal">
+                                                <rect key="frame" x="10" y="554.5" width="384" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="wVr-fs-qas"/>
                                                 </constraints>
@@ -323,8 +327,8 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredients" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAz-KC-JgT">
-                                                <rect key="frame" x="10" y="523.5" width="90.5" height="20"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ingredients:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAz-KC-JgT">
+                                                <rect key="frame" x="10" y="514.5" width="95.5" height="20"/>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="RB2-aL-kCC"/>
@@ -337,17 +341,14 @@
                                                 <rect key="frame" x="185.5" y="434.5" width="43" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="bookmark.fill" catalog="system" title=""/>
-                                                <connections>
-                                                    <action selector="didUnfavorite:" destination="3d8-s9-noU" eventType="touchUpInside" id="9eW-9F-nie"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I1u-if-3wD">
-                                                <rect key="frame" x="-2" y="79.5" width="76" height="20"/>
+                                                <rect key="frame" x="-2" y="79.5" width="24" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="jnj-lH-z4b"/>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Source">
+                                                <buttonConfiguration key="configuration" style="plain" title="">
                                                     <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
                                                 </buttonConfiguration>
                                             </button>
@@ -357,15 +358,15 @@
                                                     <constraint firstAttribute="height" constant="31" id="m1m-ml-P09"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system" title=""/>
+                                                <buttonConfiguration key="configuration" style="plain" image="favor" title=""/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwr-Eg-5ca">
                                                 <rect key="frame" x="327" y="434.5" width="47" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.right.fill" catalog="system" title=""/>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IGK-Yg-w0M">
-                                                <rect key="frame" x="66" y="485.5" width="37.5" height="18"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IGK-Yg-w0M">
+                                                <rect key="frame" x="66" y="494.5" width="0.0" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -373,6 +374,7 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="mbP-eR-5yc" firstAttribute="top" secondItem="K5V-di-0KL" secondAttribute="top" id="0iT-0j-eAJ"/>
                                             <constraint firstAttribute="trailing" secondItem="mbP-eR-5yc" secondAttribute="trailing" constant="30" id="0lJ-Og-tzI"/>
                                             <constraint firstItem="vwr-Eg-5ca" firstAttribute="centerY" secondItem="K5V-di-0KL" secondAttribute="centerY" id="0xA-A3-Sk6"/>
                                             <constraint firstItem="mRd-xE-qLP" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" id="40B-0Q-13H"/>
@@ -397,7 +399,6 @@
                                             <constraint firstItem="0MF-1s-Eal" firstAttribute="top" secondItem="mAz-KC-JgT" secondAttribute="bottom" constant="20" id="nrd-WS-hIF"/>
                                             <constraint firstItem="MUn-1a-CGF" firstAttribute="centerY" secondItem="VDb-H6-E0X" secondAttribute="centerY" id="p6R-Ek-WRj"/>
                                             <constraint firstAttribute="trailing" secondItem="0MF-1s-Eal" secondAttribute="trailing" constant="20" id="qoM-5I-zkB"/>
-                                            <constraint firstItem="mbP-eR-5yc" firstAttribute="top" secondItem="K5V-di-0KL" secondAttribute="top" id="rFf-vT-uvu"/>
                                             <constraint firstItem="mAz-KC-JgT" firstAttribute="top" secondItem="IGK-Yg-w0M" secondAttribute="bottom" constant="20" id="xcG-82-gLd"/>
                                         </constraints>
                                     </view>
@@ -419,8 +420,10 @@
                     <navigationItem key="navigationItem" id="E2B-aG-N1U"/>
                     <connections>
                         <outlet property="ingredients" destination="0MF-1s-Eal" id="HOB-Eq-1Q9"/>
+                        <outlet property="likeBtn" destination="VDb-H6-E0X" id="W7H-Ad-nwh"/>
                         <outlet property="recipeImage" destination="mRd-xE-qLP" id="0DY-Cd-F3K"/>
                         <outlet property="recipeTitle" destination="mbP-eR-5yc" id="U5o-7Y-liq"/>
+                        <outlet property="saveBtn" destination="MUn-1a-CGF" id="YGH-YX-mGx"/>
                         <outlet property="source" destination="I1u-if-3wD" id="SqV-zm-BYh"/>
                         <outlet property="yield" destination="IGK-Yg-w0M" id="i0F-pH-J8K"/>
                         <segue destination="OHe-CW-FeY" kind="show" identifier="returnToProfile" id="aok-Jv-uoA"/>
@@ -468,13 +471,13 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="iFt-Us-QNR"/>
+        <segue reference="oXq-lS-4qU"/>
         <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowshape.turn.up.right.fill" catalog="system" width="128" height="106"/>
         <image name="bookmark.fill" catalog="system" width="112" height="128"/>
-        <image name="heart" catalog="system" width="128" height="109"/>
+        <image name="favor" width="128" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="line.horizontal.3.circle" catalog="system" width="128" height="121"/>
         <image name="logo.png" width="225" height="75"/>

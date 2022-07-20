@@ -12,6 +12,9 @@
 #import "APIManager.h"
 #import "StreamViewController.h"
 
+@interface DraggableViewBackground ()
+@end
+
 @implementation DraggableViewBackground{
     NSInteger cardsLoadedIndex; // the index of the last card loaded into the loadedCards array
     NSMutableArray *loadedCards; // the array of card loaded
@@ -80,6 +83,7 @@ static const float ID_INDEX = 51;
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
+
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
     draggableView.recipeId = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
     draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
@@ -137,9 +141,9 @@ static const float ID_INDEX = 51;
 // updates heart button for each card to show like status
 - (void)updateHeartBtn:(DraggableView *)nextCard{
     [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error){
-        if(succeeded == YES){
+        if(succeeded){
             [self->heartButton setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
-        } else{
+        } else {
             [self->heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
         }
     }];
@@ -187,7 +191,7 @@ static const float ID_INDEX = 51;
 - (void)cardSwipedRight:(UIView *)cardSwiped{
     DraggableView *card = (DraggableView *)cardSwiped;
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
-    
+
     [delegate checkSaveStatusFromDraggableViewBackground:card withCompletion:^(BOOL saved, NSError * _Nullable error){
         if(!saved){
             [self.delegate postSavedRecipeFromDraggableViewBackgroundWithId:shortId title:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error){}];

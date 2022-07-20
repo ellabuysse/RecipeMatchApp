@@ -130,7 +130,7 @@ NSString* const APP_KEY = @"app_key";
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound.count != 0) {
-            // recipe found -> delete from LikedRecipe Parse class
+            // do something with the data fetched
             [PFObject deleteAllInBackground:recipesFound];
             completion(YES, nil);
         }
@@ -177,8 +177,6 @@ NSString* const APP_KEY = @"app_key";
             newRecipe.recipeId = recipeId;
             newRecipe.image = image;
             newRecipe.username = [PFUser currentUser].username;
-
-            [newRecipe saveInBackgroundWithBlock: completion];
         }
     }];
 }

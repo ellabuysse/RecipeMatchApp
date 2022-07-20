@@ -24,7 +24,6 @@ static const float TITLE_HEIGHT = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     // setup top nav bar
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -34,7 +33,6 @@ static const float TITLE_HEIGHT = 40;
     self.navigationItem.titleView = titleView;
     [self setupCards];
 }
-
 
 -(void)setupCards{
     // show spinner when waiting for recipes to load
@@ -90,7 +88,7 @@ static const float TITLE_HEIGHT = 40;
 - (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
     [APIManager postLikedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded){
-            completion(YES, nil);
+            completion(YES,nil);
         } else{
             completion(NO, error);
         }

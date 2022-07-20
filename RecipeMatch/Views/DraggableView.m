@@ -60,7 +60,7 @@ static const float FONT_SIZE = 16;
     if (self) {
         [self setupView];
         self.backgroundColor = [UIColor whiteColor];
-        
+
         likeCount = [[UILabel alloc]initWithFrame:CGRectMake(LABEL_X_OFFSET, self.frame.size.height - SUBTITLE_Y_OFFSET, SHORT_LABEL_WIDTH, LABEL_HEIGHT)];
         likeCount.textColor = [UIColor grayColor];
         [likeCount setText:@"0"];
@@ -104,7 +104,7 @@ static const float FONT_SIZE = 16;
         [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle"] forState:UIControlStateNormal];
         detailsBtn.tintColor = [UIColor whiteColor];
         detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];
+        //[detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:detailsBtn];
 
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];

@@ -35,6 +35,7 @@
 
 @protocol DraggableViewBackgroundDelegate <NSObject>
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *_Nullable)card withCompletion:(void (^_Nullable)(BOOL liked, NSError *_Nullable error))completion;
+- (void)checkSaveStatusFromDraggableViewBackground:(DraggableView *_Nullable)card withCompletion:(void (^_Nullable)(BOOL liked, NSError *_Nullable error))completion;
 - (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:(NSString * _Nullable)title image:(NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;

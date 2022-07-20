@@ -44,7 +44,7 @@ static const float ID_INDEX = 51;
     return self;
 }
 
-// load cards after recipes are loaded from StreamViewController
+// loads cards after recipes are loaded from StreamViewController
 - (void)reload{
     [self setupView];
     loadedCards = [[NSMutableArray alloc] init];
@@ -161,8 +161,8 @@ static const float ID_INDEX = 51;
     DraggableView *card = (DraggableView *)cardSwiped;
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
     
-    [delegate checkLikeStatusFromDraggableViewBackground:card withCompletion:^(BOOL liked, NSError * _Nullable error){
-        if(!liked){
+    [delegate checkSaveStatusFromDraggableViewBackground:card withCompletion:^(BOOL saved, NSError * _Nullable error){
+        if(!saved){
             [self.delegate postSavedRecipeFromDraggableViewBackgroundWithId:shortId title:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error){}];
         }
     }];

@@ -38,6 +38,9 @@ static const float LABEL_WIDTH = 50;
 static const float IMAGE_X_OFFSET = 10;
 static const float SHORT_LABEL_WIDTH = 15;
 static const float FONT_SIZE = 16;
+static const float DETAILS_BTN_SIZE = 25;
+static const float DETAILS_X_OFFSET = 48;
+static const float DETAILS_Y_OFFSET = 20;
 
 @synthesize delegate; // delegate is instance of DraggableViewBackground
 @synthesize panGestureRecognizer;
@@ -101,8 +104,8 @@ static const float FONT_SIZE = 16;
         recipeImage.layer.cornerRadius = CORNER_RADIUS;
         [self addSubview:recipeImage];
         
-        detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-48, 20, 25, 25)];
-        [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle"] forState:UIControlStateNormal];
+        detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-DETAILS_X_OFFSET, DETAILS_Y_OFFSET, DETAILS_BTN_SIZE, DETAILS_BTN_SIZE)];
+        [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle.fill"] forState:UIControlStateNormal];
         detailsBtn.tintColor = [UIColor whiteColor];
         detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];

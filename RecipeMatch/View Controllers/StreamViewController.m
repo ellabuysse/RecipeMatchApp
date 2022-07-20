@@ -36,7 +36,12 @@ static const float ID_INDEX = 51;
     [self setupCards];
 }
 
--(void)setupCards{
+// called after returning from PreferencesViewController
+- (void)viewDidAppear:(BOOL)animated{
+    [self.draggableBackground updateValues];
+}
+
+- (void)setupCards{
     // show spinner when waiting for recipes to load
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
@@ -135,6 +140,7 @@ static const float ID_INDEX = 51;
         preferencesController.delegate = self;
     }
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+        // make saved recipe object (but don't save) for DetailsViewController
         SavedRecipe *newRecipe = [SavedRecipe new];
         DraggableView *recipe = (DraggableView *)sender;
         newRecipe.name = recipe.title.text;

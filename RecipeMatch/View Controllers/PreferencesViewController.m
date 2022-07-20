@@ -116,7 +116,6 @@ static const float DROPDOWN_HEIGHT = 37;
     if(self.mealLabel){
         preferences = [preferences stringByAppendingString:self.mealLabel];
     }
-    
     [delegate sendData:preferences];
 }
 @end

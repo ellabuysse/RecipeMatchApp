@@ -58,11 +58,14 @@ NSString * const SAVE_IMG = @"save-btn";
     allCards = [[NSMutableArray alloc] init];
     cardsLoadedIndex = 0;
     [self loadCards];
-    DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
-    [self updateHeartBtn:nextCard];
-    [self updateLikeCount:nextCard];
-    [self updateSaveBtn:nextCard];
-    [self updateSaveCount:nextCard];
+    [self updateValues];
+}
+
+- (void)updateValues{
+    [self updateHeartBtn];
+    [self updateLikeCount];
+    [self updateSaveBtn];
+    [self updateSaveCount];
 }
 
 // sets up the extra buttons on the screen
@@ -130,7 +133,8 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // updates like count for each card
-- (void)updateLikeCount:(DraggableView *)card{
+- (void)updateLikeCount{
+    DraggableView *card = [self->loadedCards objectAtIndex:0];
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
     [delegate countLikesFromDraggableViewBackgroundWithId:shortId andCompletion:^(int likes, NSError * _Nullable error){
         if(likes){
@@ -142,7 +146,8 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // updates heart button for each card to show like status
-- (void)updateHeartBtn:(DraggableView *)nextCard{
+- (void)updateHeartBtn{
+    DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
     [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error){
         if(succeeded){
             [self->heartButton setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
@@ -153,7 +158,8 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // updates save count for each card
--(void)updateSaveCount:(DraggableView *)card{
+- (void)updateSaveCount{
+    DraggableView *card = [self->loadedCards objectAtIndex:0];
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:51];
     [delegate countSavesFromDraggableViewBackgroundWithId:shortId andCompletion:^(int saves, NSError * _Nullable error) {
         if(saves){
@@ -165,7 +171,8 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // updates save button for each card to show save status
--(void)updateSaveBtn:(DraggableView *)nextCard{
+- (void)updateSaveBtn{
+    DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
     [delegate checkSaveStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
             [self->saveButton setImage:[UIImage imageNamed:SAVE_FILL_IMG] forState:UIControlStateNormal];
@@ -182,11 +189,7 @@ NSString * const SAVE_IMG = @"save-btn";
         [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
         cardsLoadedIndex++;//%%% loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
-        DraggableView *nextCard = [loadedCards objectAtIndex:0];
-        [self updateHeartBtn:nextCard];
-        [self updateLikeCount:nextCard];
-        [self updateSaveBtn:nextCard];
-        [self updateSaveCount:nextCard];
+        [self updateValues];
     }
 }
 
@@ -194,7 +197,6 @@ NSString * const SAVE_IMG = @"save-btn";
 - (void)cardSwipedRight:(UIView *)cardSwiped{
     DraggableView *card = (DraggableView *)cardSwiped;
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
-
     [delegate checkSaveStatusFromDraggableViewBackground:card withCompletion:^(BOOL saved, NSError * _Nullable error){
         if(!saved){
             [self.delegate postSavedRecipeFromDraggableViewBackgroundWithId:shortId title:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error){}];
@@ -206,31 +208,26 @@ NSString * const SAVE_IMG = @"save-btn";
         cardsLoadedIndex++; // loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
-    DraggableView *nextCard = [loadedCards objectAtIndex:0];
-    [self updateHeartBtn:nextCard];
-    [self updateLikeCount:nextCard];
-    [self updateSaveBtn:nextCard];
-    [self updateSaveCount:nextCard];
+    [self updateValues];
 }
 
 // called when like button is tapped
 - (void)tapLike:(id)sender{
     DraggableView *card = [loadedCards firstObject];
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
-    
     [delegate checkLikeStatusFromDraggableViewBackground:card withCompletion:^(BOOL liked, NSError * _Nullable error){
         if(liked){
             [self.delegate unlikeRecipeFromDraggableViewBackgroundWithId:shortId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if(succeeded){
                     [sender setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
-                    [self updateLikeCount:card];
+                    [self updateLikeCount];
                 }
             }];
         } else{
             [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:shortId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error){
                 if(succeeded){
                     [sender setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
-                    [self updateLikeCount:card];
+                    [self updateLikeCount];
                 }
             }];
         }

@@ -46,6 +46,7 @@
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>
 - (void)reload;
+- (void)updateValues;
 
 @property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;
 @property (retain,nonatomic)NSMutableArray* _Nullable allCards;

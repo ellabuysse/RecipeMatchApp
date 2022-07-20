@@ -162,6 +162,26 @@ NSString* const APP_KEY = @"app_key";
     [newRecipe saveInBackgroundWithBlock: completion];
 }
 
+// add recipe to SavedRecipe Parse class
++ (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
+    
+    [self checkIfRecipeIsAlreadySavedWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            NSLog(@"user already favorited");
+            completion(NO, error);
+        }
+        else{
+            SavedRecipe *newRecipe = [SavedRecipe new];
+            newRecipe.name = title;
+            newRecipe.recipeId = recipeId;
+            newRecipe.image = image;
+            newRecipe.username = [PFUser currentUser].username;
+
+            [newRecipe saveInBackgroundWithBlock: completion];
+        }
+    }];
+}
+
 // checks if recipe is liked by current user in LikedRecipe Parse class
 // returns YES if recipe is liked, NO if recipe is not liked
 + (void)checkIfRecipeIsAlreadyLikedWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion{

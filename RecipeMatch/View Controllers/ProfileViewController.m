@@ -22,47 +22,49 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
-@implementation ProfileViewController
+static const float CORNER_RADIUS = 15;
+static const float MIN_LINE_SPACING = 10;
+static const float HEIGHT_FACTOR = 1.2;
 
+@implementation ProfileViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // setup scroll refresh
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
     self.recipesCollectionView.refreshControl = self.refreshControl;
     
+    // setup logout button
     UIBarButtonItem *logout = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Logout"
                                    style:UIBarButtonItemStylePlain
                                    target:self
                                    action:@selector(logoutBtn:)];
     self.navigationItem.leftBarButtonItem = logout;
-
     [self fetchRecipes];
 }
 
+// called after returning from PreferencesViewController
 -(void)viewWillAppear{
     [super viewDidLoad];
     [self fetchRecipes];
 }
 
-- (void) fetchRecipes{
+- (void)fetchRecipes{
     [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
         if(recipes){
             self.recipes = recipes;
             [self.recipesCollectionView reloadData];
             [self.refreshControl endRefreshing];
-        } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
 }
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    self.flowLayout.minimumLineSpacing = 10;
+    self.flowLayout.minimumLineSpacing = MIN_LINE_SPACING;
     self.flowLayout.minimumInteritemSpacing = 0;
     self.flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
 }
@@ -72,13 +74,11 @@
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     NSDictionary *recipe = self.recipes[indexPath.row];
-    
     NSString *imageUrl = recipe[@"image"];
     [cell.imageView setImageWithURL:[NSURL URLWithString:imageUrl]];
-    cell.imageView.layer.cornerRadius = 15;
+    cell.imageView.layer.cornerRadius = CORNER_RADIUS;
     cell.recipeTitle.text = recipe[@"name"];
     return cell;
 }
@@ -87,14 +87,12 @@
     int totalwidth = self.recipesCollectionView.bounds.size.width;
     int numberOfCellsPerRow = 2;
     int widthDimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
-    int heightDimensions = widthDimensions * 1.2;
+    int heightDimensions = widthDimensions * HEIGHT_FACTOR;
     return CGSizeMake(widthDimensions, heightDimensions);
 }
 
 - (IBAction)logoutBtn:(id)sender {
     [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-        // PFUser.current() will now be nil
-        NSLog(@"Successfully logged out");
     }];
     SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -104,10 +102,7 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
         DetailsViewController *detailsController = [segue destinationViewController];
         UICollectionViewCell *tappedCell = sender;
@@ -116,6 +111,4 @@
         detailsController.savedRecipe = recipe;
     }
 }
-
-
 @end

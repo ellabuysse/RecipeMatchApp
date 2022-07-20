@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol PreferencesViewControllerDelegate <NSObject>
 @required
--(void)sendData:(NSString *)request;
+- (void)sendData:(NSString *)request;
 @end
 
 @interface PreferencesViewController : UIViewController

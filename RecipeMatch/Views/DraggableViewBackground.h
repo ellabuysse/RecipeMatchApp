@@ -33,14 +33,20 @@
 #import <UIKit/UIKit.h>
 #import "DraggableView.h"
 
+@protocol DraggableViewBackgroundDelegate <NSObject>
+- (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *_Nullable)card withCompletion:(void (^_Nullable)(BOOL liked, NSError *_Nullable error))completion;
+- (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:(NSString * _Nullable)title image:(NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
+- (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
+- (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
+@end
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>
+- (void)cardSwipedLeft:(UIView *_Nonnull)card;
+- (void)cardSwipedRight:(UIView *_Nonnull)card;
+- (void)reload;
 
-//methods called in DraggableView
--(void)cardSwipedLeft:(UIView *)card;
--(void)cardSwipedRight:(UIView *)card;
--(void)loadCards;
-
-@property (retain,nonatomic)NSMutableArray* allCards; //%%% the labels the cards
-@property NSArray *recipes;
+@property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;
+@property (retain,nonatomic)NSMutableArray* _Nullable allCards;
+@property NSArray * _Nullable recipes;
 @end

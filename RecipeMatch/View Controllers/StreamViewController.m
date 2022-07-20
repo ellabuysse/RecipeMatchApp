@@ -19,45 +19,42 @@
 @end
 
 @implementation StreamViewController
+static const float TITLE_WIDTH = 100;
+static const float TITLE_HEIGHT = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    // setup top nav bar
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
-
-    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 60)];
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, TITLE_WIDTH, TITLE_HEIGHT)];
     imageView.frame = titleView.bounds;
     [titleView addSubview:imageView];
     self.navigationItem.titleView = titleView;
-    
     [self setupCards];
 }
 
--(void)setupCards{
+- (void)setupCards{
     // show spinner when waiting for recipes to load
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
-    spinner.tag = 12;
     [self.view addSubview:spinner];
     [spinner startAnimating];
     
     [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
-        if(recipes)
-        {
+        if(recipes){
             self.recipes = recipes;
             self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
+            self.draggableBackground.delegate = self;
             self.draggableBackground.recipes = self.recipes;
-            [self.draggableBackground loadCards];
+            [self.draggableBackground reload];
             [self.view addSubview:self.draggableBackground];
-        } else {
-            NSLog(@"😫😫😫 Error getting recipes: %@", error.localizedDescription);
         }
     }];
 }
 
-// method to be called by Preferences delegate to get user preferences
--(void)sendData:(NSString *)prefRequest{
+// called by PreferencesViewController to get user preferences
+- (void)sendData:(NSString *)prefRequest{
     // check that preferences aren't empty
     if(prefRequest != (id)[NSNull null] && prefRequest.length != 0){
         self.preferences = prefRequest;
@@ -66,15 +63,55 @@
     }
 }
 
+- (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
+    NSString *shortId = [(NSString *)nextCard.recipeId substringFromIndex:51];
+    [APIManager checkIfRecipeIsAlreadyLikedWithId:shortId andCompletion:^(BOOL liked, NSError * _Nullable error) {
+        if(liked == YES){
+            completion(YES, nil);
+            //
+        } else{
+            completion(NO, nil);
+        }
+    }];
+}
+
+- (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
+    [APIManager postLikedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded){
+            completion(YES,nil);
+        } else{
+            completion(NO, error);
+        }
+    }];
+}
+
+- (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion{
+    [APIManager unlikeRecipeWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
+        if(succeeded){
+            completion(YES, nil);
+        } else{
+            completion(NO, error);
+        }
+    }];
+}
+
+- (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:( NSString * _Nullable )title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
+    [APIManager postSavedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {}];
+}
+
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
+    
+    [APIManager countLikesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+        completion(likes, nil);
+    }];
+}
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"preferencesViewSegue"]) {
         PreferencesViewController *preferencesController = [segue destinationViewController];
         preferencesController.delegate = self;
     }
 }
-
-
 @end

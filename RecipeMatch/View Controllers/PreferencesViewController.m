@@ -13,7 +13,6 @@
 @property (nonatomic, strong) ManaDropDownMenu *healthMenu;
 @property (nonatomic, strong) ManaDropDownMenu *dietMenu;
 @property (nonatomic, strong) ManaDropDownMenu *mealMenu;
-
 @property (nonatomic, strong) NSString *cuisineLabel;
 @property (nonatomic, strong) NSString *healthLabel;
 @property (nonatomic, strong) NSString *dietLabel;
@@ -21,85 +20,90 @@
 @property int selectedIndex;
 @end
 
+static const float ROW_HEIGHT = 30;
+static const float MENU_OFFSET = 80;
+static const float TITLE_WIDTH = 100;
+static const float TITLE_HEIGHT = 40;
+static const float DROPDOWN_X_OFFSET = 220;
+static const float DROPDOWN_Y_POS = 133;
+static const float DROPDOWN_WIDTH = 200;
+static const float DROPDOWN_HEIGHT = 37;
+
 @implementation PreferencesViewController
+@synthesize delegate; // delegate is instance of StreamViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // setup top nav bar
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
-
-    // add centered logo
     UILabel* title = [[UILabel alloc] init];
     title.text = @"Preferences";
     title.contentMode = UIViewContentModeScaleAspectFit;
-
-    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, TITLE_WIDTH, TITLE_HEIGHT)];
     title.frame = titleView.bounds;
     [title setFont:[UIFont boldSystemFontOfSize:16]];
     [titleView addSubview:title];
-
     self.navigationItem.titleView = titleView;
-
-    CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-220), 133, 200, 37);
     
+    [self setupView];
+}
+
+- (void)setupView{
+    CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
     self.cuisineMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
     self.cuisineMenu.numberOfRows = 19;
     self.cuisineMenu.textOfRows = @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
     self.cuisineMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.cuisineMenu.heightOfRows = 30;
+    self.cuisineMenu.heightOfRows = ROW_HEIGHT;
     self.cuisineMenu.delegate = self;
     [self.view addSubview:self.cuisineMenu];
     
-    
-    self.healthMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, 80) title:@"no preference"];
+    self.healthMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET) title:@"no preference"];
     self.healthMenu.numberOfRows = 10;
     self.healthMenu.textOfRows = @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
     self.healthMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.healthMenu.heightOfRows = 30;
+    self.healthMenu.heightOfRows = ROW_HEIGHT;
     self.healthMenu.delegate = self;
     [self.view addSubview:self.healthMenu];
 
-    self.dietMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame,0,160) title:@"no preference"];
+    self.dietMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET * 2) title:@"no preference"];
     self.dietMenu.numberOfRows = 7;
     self.dietMenu.textOfRows = @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
     self.dietMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.dietMenu.heightOfRows = 30;
+    self.dietMenu.heightOfRows = ROW_HEIGHT;
     self.dietMenu.delegate = self;
     [self.view addSubview:self.dietMenu];
     
-    self.mealMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, 240) title:@"no preference"];
+    self.mealMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET * 3) title:@"no preference"];
     self.mealMenu.numberOfRows = 6;
     self.mealMenu.textOfRows = @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
     self.mealMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.mealMenu.heightOfRows = 30;
+    self.mealMenu.heightOfRows = ROW_HEIGHT;
     self.mealMenu.delegate = self;
     [self.view addSubview:self.mealMenu];
 }
 
+// called when drop down item is selected
 - (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
     if (dropDownMenu == self.cuisineMenu) {
         self.cuisineLabel = @"&cuisineType=";
         self.cuisineLabel = [self.cuisineLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    }
-    if (dropDownMenu == self.healthMenu) {
+    } else if (dropDownMenu == self.healthMenu) {
         self.healthLabel = @"&health=";
         self.healthLabel = [self.healthLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    }
-    if (dropDownMenu == self.dietMenu) {
+    } else if (dropDownMenu == self.dietMenu) {
         self.dietLabel = @"&diet=";
         self.dietLabel = [self.dietLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    }
-    if (dropDownMenu == self.mealMenu) {
+    } else if (dropDownMenu == self.mealMenu) {
         self.mealLabel = @"&mealType=";
         self.mealLabel = [self.mealLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
     }
 }
 
-@synthesize delegate;
+//called when back button is pressed
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     NSString *preferences = [[NSString alloc] init];
-    
     if(self.cuisineLabel && ![self.cuisineLabel isEqualToString:@"no preference"]){
         preferences = [preferences stringByAppendingString:self.cuisineLabel];
     }
@@ -114,19 +118,4 @@
     }
     [delegate sendData:preferences];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
-    
-}
-*/
-
-
 @end

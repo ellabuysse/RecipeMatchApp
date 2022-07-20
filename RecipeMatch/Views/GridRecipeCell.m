@@ -9,13 +9,11 @@
 #import "UIKit+AFNetworking.h"
 
 @implementation GridRecipeCell
-
-// clear image and title of cell
--(void)prepareForReuse{
+// clears image and title of cell
+- (void)prepareForReuse{
     [super prepareForReuse];
     [self.imageView cancelImageDownloadTask];
     self.imageView.image = NULL;
     self.recipeTitle.text = @"";
 }
-
 @end

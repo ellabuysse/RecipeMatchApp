@@ -17,5 +17,4 @@
 + (nonnull NSString *)parseClassName {
     return @"LikedRecipe";
 }
-
 @end

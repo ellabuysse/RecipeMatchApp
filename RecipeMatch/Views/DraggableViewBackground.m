@@ -35,6 +35,10 @@ static const float LEFT_BTN_XPOS = 40;
 static const float MIDDLE_BTN_XPOS = 155;
 static const float RIGHT_BTN_XPOS = 290;
 static const float ID_INDEX = 51;
+NSString* const HEART_FILL_IMG = @"heart-btn-filled";
+NSString * const HEART_IMG = @"heart-btn";
+NSString* const SAVE_FILL_IMG = @"save-btn-filled";
+NSString * const SAVE_IMG = @"save-btn";
 
 @synthesize allCards;
 @synthesize delegate;
@@ -68,11 +72,11 @@ static const float ID_INDEX = 51;
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
     
     heartButton = [[UIButton alloc]initWithFrame:CGRectMake(MIDDLE_BTN_XPOS, BTN_YPOS-MIDDLE_BTN_OFFSET/2, BTN_HEIGHT + MIDDLE_BTN_OFFSET, BTN_HEIGHT + MIDDLE_BTN_OFFSET)];
-    [heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+    [heartButton setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
     [heartButton addTarget:self action:@selector(tapLike:) forControlEvents:UIControlEventTouchUpInside];
     
     saveButton = [[UIButton alloc]initWithFrame:CGRectMake(RIGHT_BTN_XPOS, BTN_YPOS, BTN_HEIGHT, BTN_HEIGHT)];
-    [saveButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
+    [saveButton setImage:[UIImage imageNamed:SAVE_IMG] forState:UIControlStateNormal];
     [saveButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
 
     [self addSubview:xButton];
@@ -141,9 +145,9 @@ static const float ID_INDEX = 51;
 - (void)updateHeartBtn:(DraggableView *)nextCard{
     [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error){
         if(succeeded){
-            [self->heartButton setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
+            [self->heartButton setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
         } else {
-            [self->heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+            [self->heartButton setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
         }
     }];
 }
@@ -164,9 +168,9 @@ static const float ID_INDEX = 51;
 -(void)updateSaveBtn:(DraggableView *)nextCard{
     [delegate checkSaveStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
-            [self->saveButton setImage:[UIImage imageNamed:@"save-btn-filled"] forState:UIControlStateNormal];
+            [self->saveButton setImage:[UIImage imageNamed:SAVE_FILL_IMG] forState:UIControlStateNormal];
         } else{
-            [self->saveButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
+            [self->saveButton setImage:[UIImage imageNamed:SAVE_IMG] forState:UIControlStateNormal];
         }
     }];
 }
@@ -218,14 +222,14 @@ static const float ID_INDEX = 51;
         if(liked){
             [self.delegate unlikeRecipeFromDraggableViewBackgroundWithId:shortId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if(succeeded){
-                    [sender setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+                    [sender setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount:card];
                 }
             }];
         } else{
             [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:shortId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error){
                 if(succeeded){
-                    [sender setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
+                    [sender setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount:card];
                 }
             }];

@@ -16,7 +16,7 @@
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
-NSString* const BASE_API_PARAMS = @"?type=public&q=&health=alcohol-free";
+NSString* const BASE_API_PARAMS = @"?type=public&random=true&q=&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";

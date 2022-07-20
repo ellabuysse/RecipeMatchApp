@@ -84,18 +84,19 @@ static const float DROPDOWN_HEIGHT = 37;
 
 // called when drop down item is selected
 - (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
-    if (dropDownMenu == self.cuisineMenu) {
+    NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
+    if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
         self.cuisineLabel = @"&cuisineType=";
-        self.cuisineLabel = [self.cuisineLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.healthMenu) {
+        self.cuisineLabel = [self.cuisineLabel stringByAppendingString:title];
+    } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
         self.healthLabel = @"&health=";
-        self.healthLabel = [self.healthLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.dietMenu) {
+        self.healthLabel = [self.healthLabel stringByAppendingString:title];
+    } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
         self.dietLabel = @"&diet=";
-        self.dietLabel = [self.dietLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.mealMenu) {
+        self.dietLabel = [self.dietLabel stringByAppendingString:title];
+    } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
         self.mealLabel = @"&mealType=";
-        self.mealLabel = [self.mealLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
+        self.mealLabel = [self.mealLabel stringByAppendingString:title];
     }
 }
 
@@ -103,18 +104,19 @@ static const float DROPDOWN_HEIGHT = 37;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     NSString *preferences = [[NSString alloc] init];
-    if(self.cuisineLabel && ![self.cuisineLabel isEqualToString:@"no preference"]){
+    if(self.cuisineLabel){
         preferences = [preferences stringByAppendingString:self.cuisineLabel];
     }
-    if(self.healthLabel && ![self.healthLabel isEqualToString:@"no preference"]){
+    if(self.healthLabel){
         preferences = [preferences stringByAppendingString:self.healthLabel];
     }
-    if(self.dietLabel && ![self.dietLabel isEqualToString:@"no preference"]){
+    if(self.dietLabel){
         preferences = [preferences stringByAppendingString:self.dietLabel];
     }
-    if(self.mealLabel && ![self.mealLabel isEqualToString:@"no preference"]){
+    if(self.mealLabel){
         preferences = [preferences stringByAppendingString:self.mealLabel];
     }
+    
     [delegate sendData:preferences];
 }
 @end

@@ -130,7 +130,7 @@ NSString* const APP_KEY = @"app_key";
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound.count != 0) {
-            // do something with the data fetched
+            // recipe found -> delete from LikedRecipe Parse class
             [PFObject deleteAllInBackground:recipesFound];
             completion(YES, nil);
         }
@@ -163,6 +163,7 @@ NSString* const APP_KEY = @"app_key";
 }
 
 // add recipe to SavedRecipe Parse class
+// return YES on success, NO on failure
 + (void)postSavedRecipeWithTitle:( NSString * _Nullable )title andId: ( NSString * _Nullable )recipeId andImage: (NSString * _Nullable )image andCompletion: (PFBooleanResultBlock  _Nullable)completion{
     
     [self checkIfRecipeIsAlreadySavedWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {

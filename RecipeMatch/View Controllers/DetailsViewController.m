@@ -112,7 +112,6 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     }
 }
 
-// saves recipe to LikedRecipe Parse class
 - (void)didTapLike:(UIButton *)sender {
     if(self.liked){
         [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){

@@ -24,6 +24,7 @@ static const float TITLE_HEIGHT = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     // setup top nav bar
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -34,7 +35,8 @@ static const float TITLE_HEIGHT = 40;
     [self setupCards];
 }
 
-- (void)setupCards{
+
+-(void)setupCards{
     // show spinner when waiting for recipes to load
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);

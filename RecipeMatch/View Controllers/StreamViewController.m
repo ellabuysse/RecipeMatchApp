@@ -118,6 +118,13 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
+    
+    [APIManager countSavesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+        completion(likes, nil);
+    }];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

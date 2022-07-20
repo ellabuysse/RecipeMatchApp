@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)checkIfRecipeIsAlreadyLikedWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion;
 + (void)countLikesWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(int likes, NSError *error))completion;
 + (void)postLikedRecipeWithId:recipeId title:(NSString * _Nullable)title image: (NSString * _Nullable )image andCompletion:(PFBooleanResultBlock  _Nullable)completion;
++(void)countSavesWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(int likes, NSError *error))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

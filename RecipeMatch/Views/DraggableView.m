@@ -25,13 +25,15 @@
     CGFloat yFromCenter;
 }
 
-static const float SUBTITLE_Y_OFFSET = 100;
+static const float SUBTITLE_Y_OFFSET = 120;
 static const float TITLE_Y_OFFSET = 80;
-static const float IMAGE_SIZE = 300;
+static const float IMAGE_SIZE = 325;
 static const float CORNER_RADIUS = 15;
 static const float OVERLAY_SIZE = 100;
 static const float LABEL_HEIGHT = 30;
 static const float LABEL_X_OFFSET = 20;
+static const float SAVES_X_OFFSET = 85;
+static const float LABEL_WIDTH = 50;
 static const float IMAGE_X_OFFSET = 10;
 static const float SHORT_LABEL_WIDTH = 15;
 static const float FONT_SIZE = 16;
@@ -50,32 +52,47 @@ static const float FONT_SIZE = 16;
 @synthesize detailsBtn;
 @synthesize likeLabel;
 @synthesize likeCount;
+@synthesize saveLabel;
+@synthesize saveCount;
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         [self setupView];
         self.backgroundColor = [UIColor whiteColor];
-      
+        
         likeCount = [[UILabel alloc]initWithFrame:CGRectMake(LABEL_X_OFFSET, self.frame.size.height - SUBTITLE_Y_OFFSET, SHORT_LABEL_WIDTH, LABEL_HEIGHT)];
         likeCount.textColor = [UIColor grayColor];
         [likeCount setText:@"0"];
         [[self likeCount] setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:likeCount];
 
-        likeLabel = [[UILabel alloc]initWithFrame:CGRectMake(LABEL_X_OFFSET + 15, self.frame.size.height - SUBTITLE_Y_OFFSET, self.frame.size.width, LABEL_HEIGHT)];
+        likeLabel = [[UILabel alloc]initWithFrame:CGRectMake(LABEL_X_OFFSET + 15, self.frame.size.height - SUBTITLE_Y_OFFSET, LABEL_WIDTH, LABEL_HEIGHT)];
         likeLabel.textColor = [UIColor grayColor];
         [likeLabel setText:@"LIKES"];
         [[self likeLabel] setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:likeLabel];
 
-        title = [[UILabel alloc]initWithFrame:CGRectMake(LABEL_X_OFFSET, self.frame.size.height - TITLE_Y_OFFSET, self.frame.size.width, LABEL_HEIGHT * 2)];
+        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - TITLE_Y_OFFSET, self.frame.size.width, LABEL_HEIGHT * 2)];
         title.lineBreakMode = NSLineBreakByWordWrapping;
         title.numberOfLines = 0;
         title.textColor = [UIColor blackColor];
         [[self title] setFont:[UIFont systemFontOfSize:FONT_SIZE+2]];
+        title.textAlignment = NSTextAlignmentCenter;
         [self addSubview:title];
 
+        saveCount = [[UILabel alloc]initWithFrame:CGRectMake(self.frame.size.width - SAVES_X_OFFSET, self.frame.size.height - SUBTITLE_Y_OFFSET, SHORT_LABEL_WIDTH, LABEL_HEIGHT)];
+        saveCount.textColor = [UIColor grayColor];
+        [saveCount setText:@"0"];
+        [[self saveCount] setFont:[UIFont systemFontOfSize:16]];
+        [self addSubview:saveCount];
+
+        saveLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.frame.size.width - SAVES_X_OFFSET + 15, self.frame.size.height - SUBTITLE_Y_OFFSET, LABEL_WIDTH, LABEL_HEIGHT)];
+        saveLabel.textColor = [UIColor grayColor];
+        [saveLabel setText:@"SAVES"];
+        [[self saveLabel] setFont:[UIFont systemFontOfSize:16]];
+        [self addSubview:saveLabel];
+        
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width - IMAGE_SIZE)/2, IMAGE_X_OFFSET, IMAGE_SIZE, IMAGE_SIZE)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
         [recipeImage setContentMode:UIViewContentModeScaleAspectFit];

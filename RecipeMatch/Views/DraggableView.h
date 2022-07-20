@@ -55,6 +55,8 @@
 @property (nonatomic,strong)UIButton* detailsBtn;
 @property (nonatomic,strong)UILabel* likeLabel;
 @property (nonatomic,strong)UILabel* likeCount;
+@property (nonatomic,strong)UILabel* saveLabel;
+@property (nonatomic,strong)UILabel* saveCount;
 
 - (void)leftClickAction;
 - (void)rightClickAction;

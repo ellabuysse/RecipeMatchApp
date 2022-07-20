@@ -201,6 +201,24 @@ NSString* const APP_KEY = @"app_key";
     }];
 }
 
+// count number of times recipe is saved in SavedRecipe Parse class
+// return number of saves of recipe
++(void)countSavesWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(int likes, NSError *error))completion{
+    PFQuery *recipeQuery = [SavedRecipe query];
+    [recipeQuery includeKey:@"user"];
+    [recipeQuery whereKey:@"recipeId" equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if(recipesFound){
+            completion((int)recipesFound.count, nil);
+        }
+        else{
+            completion(0, error);
+        }
+    }];
+}
+
 // check if recipe is saved by current user in SavedRecipe Parse class
 // return YES if recipe is saved, NO if recipe is not saved
 + (void)checkIfRecipeIsAlreadySavedWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion{

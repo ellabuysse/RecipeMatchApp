@@ -17,20 +17,20 @@
     NSMutableArray *loadedCards; // the array of card loaded
     UIButton* menuButton;
     UIButton* messageButton;
-    UIButton* checkButton;
+    UIButton* saveButton;
     UIButton* xButton;
     UIButton* heartButton;
 }
 
-static const int MAX_BUFFER_SIZE = 2; // max number of cards loaded at any given time
-static const float CARD_HEIGHT = 425; // height of the draggable card
-static const float CARD_WIDTH = 325; // width of the draggable card
+static const int MAX_BUFFER_SIZE = 2; // max number of cards loaded at any given time, must be greater than 1
+static const float CARD_HEIGHT = 465; // height of the draggable card
+static const float CARD_WIDTH = 350; // width of the draggable card
 static const float BTN_HEIGHT = 60;
 static const float MIDDLE_BTN_OFFSET = 20;
-static const float BTN_YPOS = CARD_HEIGHT + 225;
-static const float LEFT_BTN_XPOS = 60;
+static const float BTN_YPOS = 650;
+static const float LEFT_BTN_XPOS = 40;
 static const float MIDDLE_BTN_XPOS = 155;
-static const float RIGHT_BTN_XPOS = 270;
+static const float RIGHT_BTN_XPOS = 290;
 static const float ID_INDEX = 51;
 
 @synthesize allCards;
@@ -54,6 +54,8 @@ static const float ID_INDEX = 51;
     DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
     [self updateHeartBtn:nextCard];
     [self updateLikeCount:nextCard];
+    [self updateSaveBtn:nextCard];
+    [self updateSaveCount:nextCard];
 }
 
 // sets up the extra buttons on the screen
@@ -66,18 +68,18 @@ static const float ID_INDEX = 51;
     [heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
     [heartButton addTarget:self action:@selector(tapLike:) forControlEvents:UIControlEventTouchUpInside];
     
-    checkButton = [[UIButton alloc]initWithFrame:CGRectMake(RIGHT_BTN_XPOS, BTN_YPOS, BTN_HEIGHT, BTN_HEIGHT)];
-    [checkButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
-    [checkButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
-    
+    saveButton = [[UIButton alloc]initWithFrame:CGRectMake(RIGHT_BTN_XPOS, BTN_YPOS, BTN_HEIGHT, BTN_HEIGHT)];
+    [saveButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
+    [saveButton addTarget:self action:@selector(swipeRight) forControlEvents:UIControlEventTouchUpInside];
+
     [self addSubview:xButton];
     [self addSubview:heartButton];
-    [self addSubview:checkButton];
+    [self addSubview:saveButton];
 }
 
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - MIDDLE_BTN_OFFSET)/2, CARD_WIDTH, CARD_HEIGHT)];
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
     draggableView.recipeId = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
     draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
@@ -135,10 +137,33 @@ static const float ID_INDEX = 51;
 // updates heart button for each card to show like status
 - (void)updateHeartBtn:(DraggableView *)nextCard{
     [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error){
-        if(succeeded){
+        if(succeeded == YES){
             [self->heartButton setImage:[UIImage imageNamed:@"heart-btn-filled"] forState:UIControlStateNormal];
-        } else {
+        } else{
             [self->heartButton setImage:[UIImage imageNamed:@"heart-btn"] forState:UIControlStateNormal];
+        }
+    }];
+}
+
+// update save button for each card to show like status
+-(void)updateSaveCount:(DraggableView *)card{
+    NSString *shortId = [(NSString *)card.recipeId substringFromIndex:51];
+    [delegate countSavesFromDraggableViewBackgroundWithId:shortId andCompletion:^(int saves, NSError * _Nullable error) {
+        if(saves){
+            card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
+        } else{
+            card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+        }
+    }];
+}
+
+// update heart button for each card to show like status
+-(void)updateSaveBtn:(DraggableView *)nextCard{
+    [delegate checkSaveStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if(succeeded == YES){
+            [self->saveButton setImage:[UIImage imageNamed:@"save-btn-filled"] forState:UIControlStateNormal];
+        } else{
+            [self->saveButton setImage:[UIImage imageNamed:@"save-btn"] forState:UIControlStateNormal];
         }
     }];
 }
@@ -153,6 +178,8 @@ static const float ID_INDEX = 51;
         DraggableView *nextCard = [loadedCards objectAtIndex:0];
         [self updateHeartBtn:nextCard];
         [self updateLikeCount:nextCard];
+        [self updateSaveBtn:nextCard];
+        [self updateSaveCount:nextCard];
     }
 }
 
@@ -175,6 +202,8 @@ static const float ID_INDEX = 51;
     DraggableView *nextCard = [loadedCards objectAtIndex:0];
     [self updateHeartBtn:nextCard];
     [self updateLikeCount:nextCard];
+    [self updateSaveBtn:nextCard];
+    [self updateSaveCount:nextCard];
 }
 
 // called when like button is tapped

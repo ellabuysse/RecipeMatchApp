@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSString *recipeUrl;
 @property (weak, nonatomic) IBOutlet UIButton *likeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
+@property (weak, nonatomic) IBOutlet UILabel *likeCount;
+@property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property NSDictionary *fullRecipe;
 @property BOOL saved;
 @property BOOL liked;
@@ -58,6 +60,8 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             self.saved = NO;
         }
     }];
+    [self updateLikeCount];
+    [self updateSaveCount];
 }
 
 // gets recipe details from recipe API
@@ -96,6 +100,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             if(succeeded){
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
                 self.saved = NO;
+                [self updateSaveCount];
             } else{
                 //TODO: Add failure support
             }
@@ -105,11 +110,34 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             if(succeeded){
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
                 self.saved = YES;
+                [self updateSaveCount];
             } else{
                 //TODO: Add failure support
             }
         }];
     }
+}
+
+// get save count
+-(void)updateSaveCount{
+    [APIManager countSavesWithId:self.savedRecipe.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
+        if(saves){
+            self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
+        } else{
+            self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+        }
+    }];
+}
+
+// get like count
+-(void)updateLikeCount{
+    [APIManager countLikesWithId:self.savedRecipe.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+        if(likes){
+            self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
+        } else{
+            self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+        }
+    }];
 }
 
 - (void)didTapLike:(UIButton *)sender {
@@ -118,6 +146,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             if(succeeded){
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
                 self.liked = NO;
+                [self updateLikeCount];
             } else{
                 //TODO: Add failure support
             }
@@ -127,6 +156,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             if(succeeded){
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
                 self.liked = YES;
+                [self updateLikeCount];
             } else{
                 //TODO: Add failure support
             }

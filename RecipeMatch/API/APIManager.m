@@ -211,7 +211,7 @@ NSString* const APP_KEY = @"app_key";
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if(recipesFound){
-            completion((int)recipesFound.count, nil);
+            completion(recipesFound.count, nil);
         }
         else{
             completion(0, error);

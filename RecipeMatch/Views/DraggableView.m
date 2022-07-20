@@ -100,6 +100,13 @@ static const float FONT_SIZE = 16;
         recipeImage.layer.cornerRadius = CORNER_RADIUS;
         [self addSubview:recipeImage];
         
+        detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-48, 20, 25, 25)];
+        [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle"] forState:UIControlStateNormal];
+        detailsBtn.tintColor = [UIColor whiteColor];
+        detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:detailsBtn];
+
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         [self addGestureRecognizer:panGestureRecognizer];
         

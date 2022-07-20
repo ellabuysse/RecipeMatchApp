@@ -24,6 +24,11 @@
 
 @implementation DetailsViewController
 
+NSString* const HEART_FILL_KEY = @"heart.fill";
+NSString * const HEART_KEY = @"heart";
+NSString* const BOOKMARK_FILL_KEY = @"bookmark.fill";
+NSString * const BOOKMARK_KEY = @"bookmark";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self fetchRecipeInfo];
@@ -35,10 +40,10 @@
     // setups like button
     [APIManager checkIfRecipeIsAlreadyLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+            [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
             self.liked = YES;
         } else{
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+            [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
             self.liked = NO;
         }
     }];
@@ -46,10 +51,10 @@
     //setups save button
     [APIManager checkIfRecipeIsAlreadySavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
+            [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
             self.saved = YES;
         } else{
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
+            [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
             self.saved = NO;
         }
     }];
@@ -89,15 +94,19 @@
     if(self.saved){
         [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if(succeeded){
-                [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
+                [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
                 self.saved = NO;
+            } else{
+                //TODO: Add failure support
             }
         }];
     } else {
         [APIManager postSavedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if(succeeded){
-                [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
+                [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
                 self.saved = YES;
+            } else{
+                //TODO: Add failure support
             }
         }];
     }
@@ -108,15 +117,19 @@
     if(self.liked){
         [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if(succeeded){
-                [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+                [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
                 self.liked = NO;
+            } else{
+                //TODO: Add failure support
             }
         }];
     } else {
         [APIManager postLikedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if(succeeded){
-                [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+                [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
                 self.liked = YES;
+            } else{
+                //TODO: Add failure support
             }
         }];
     }

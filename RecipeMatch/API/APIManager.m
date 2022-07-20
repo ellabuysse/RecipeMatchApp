@@ -15,13 +15,14 @@
 @property (nonatomic, strong) NSString *app_key;
 @end
 
-NSString* const FULL_API_STRING = @"https://api.edamam.com/api/recipes/v2?type=public&q=&health=alcohol-free&app_id=";
-NSString* const API_STRING_BEFORE_ID = @"https://api.edamam.com/api/recipes/v2/";
-NSString* const API_STRING_AFTER_ID = @"?type=public&q=&diet=alcohol-free&app_id=";
+NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
+NSString* const BASE_API_PARAMS = @"?type=public&q=&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
 NSString* const APP_ID_KEY = @"app_id";
+NSString* const APP_ID_PARAM = @"&app_id=";
+NSString* const APP_KEY_PARAM = @"&app_key=";
 NSString* const APP_KEY = @"app_key";
 
 @implementation APIManager
@@ -46,9 +47,10 @@ NSString* const APP_KEY = @"app_key";
 // gets initial array of recipes for home feed from recipe API
 // returns recipes on success, nil on failure
 - (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
-    NSString *apiString = FULL_API_STRING;
+    NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+    apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
-    apiString = [apiString stringByAppendingString:@"&app_key="];
+    apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
     apiString = [apiString stringByAppendingString:self.app_key];
     if(preferences){
         apiString = [apiString stringByAppendingString: preferences];
@@ -73,11 +75,13 @@ NSString* const APP_KEY = @"app_key";
 // gets specific recipe by id from recipe API
 // returns recipe on success, nil on failure
 - (void)getRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(NSDictionary *recipe, NSError *error))completion{
-    NSString *apiString = API_STRING_BEFORE_ID;
+    NSString *apiString = BASE_API_URL;
+    apiString = [apiString stringByAppendingString:@"/"];
     apiString = [apiString stringByAppendingString:recipeId];
-    apiString = [apiString stringByAppendingString:API_STRING_AFTER_ID];
+    apiString = [apiString stringByAppendingString:BASE_API_PARAMS];
+    apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
-    apiString = [apiString stringByAppendingString:@"&app_key="];
+    apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
     NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:self.app_key]];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:apiUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];

@@ -57,6 +57,9 @@ static const float HEIGHT_FACTOR = 1.2;
             self.recipes = recipes;
             [self.recipesCollectionView reloadData];
             [self.refreshControl endRefreshing];
+        } else{
+            [self.refreshControl endRefreshing];
+            //TODO: Add failure support
         }
     }];
 }

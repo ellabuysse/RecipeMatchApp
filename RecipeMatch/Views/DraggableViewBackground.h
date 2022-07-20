@@ -43,8 +43,6 @@
 @end
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>
-- (void)cardSwipedLeft:(UIView *_Nonnull)card;
-- (void)cardSwipedRight:(UIView *_Nonnull)card;
 - (void)reload;
 
 @property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;

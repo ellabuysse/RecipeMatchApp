@@ -83,7 +83,6 @@ static const float ID_INDEX = 51;
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
     draggableView.recipeId = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
     draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
@@ -126,7 +125,7 @@ static const float ID_INDEX = 51;
     }
 }
 
-// updates heart button for each card to show like status
+// updates like count for each card
 - (void)updateLikeCount:(DraggableView *)card{
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:ID_INDEX];
     [delegate countLikesFromDraggableViewBackgroundWithId:shortId andCompletion:^(int likes, NSError * _Nullable error){
@@ -149,7 +148,7 @@ static const float ID_INDEX = 51;
     }];
 }
 
-// update save button for each card to show like status
+// updates save count for each card
 -(void)updateSaveCount:(DraggableView *)card{
     NSString *shortId = [(NSString *)card.recipeId substringFromIndex:51];
     [delegate countSavesFromDraggableViewBackgroundWithId:shortId andCompletion:^(int saves, NSError * _Nullable error) {
@@ -161,7 +160,7 @@ static const float ID_INDEX = 51;
     }];
 }
 
-// update heart button for each card to show like status
+// updates save button for each card to show save status
 -(void)updateSaveBtn:(DraggableView *)nextCard{
     [delegate checkSaveStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
@@ -232,6 +231,11 @@ static const float ID_INDEX = 51;
             }];
         }
     }];
+}
+
+- (void)detailsAction{
+    DraggableView *card = [loadedCards firstObject];
+    [(StreamViewController *)delegate showDetails:card];
 }
 
 // when you hit the right button, this is called and substitutes the swipe

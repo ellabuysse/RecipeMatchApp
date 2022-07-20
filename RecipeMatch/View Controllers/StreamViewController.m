@@ -11,6 +11,7 @@
 #import "SceneDelegate.h"
 #import "DraggableViewBackground.h"
 #import "APIManager.h"
+#import "DetailsViewController.h"
 
 @interface StreamViewController()
 @property (nonatomic, strong) NSString *preferences;
@@ -21,6 +22,7 @@
 @implementation StreamViewController
 static const float TITLE_WIDTH = 100;
 static const float TITLE_HEIGHT = 40;
+static const float ID_INDEX = 51;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -110,17 +112,19 @@ static const float TITLE_HEIGHT = 40;
 }
 
 - (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
-    
     [APIManager countLikesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
 
 - (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
-    
     [APIManager countSavesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
+}
+
+- (void)showDetails:(DraggableView *_Nonnull)card{
+    [self performSegueWithIdentifier:@"detailsViewSegue" sender:card];
 }
 
 #pragma mark - Navigation
@@ -129,6 +133,16 @@ static const float TITLE_HEIGHT = 40;
     if ([[segue identifier] isEqualToString:@"preferencesViewSegue"]) {
         PreferencesViewController *preferencesController = [segue destinationViewController];
         preferencesController.delegate = self;
+    }
+    if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+        SavedRecipe *newRecipe = [SavedRecipe new];
+        DraggableView *recipe = (DraggableView *)sender;
+        newRecipe.name = recipe.title.text;
+        newRecipe.recipeId = [(NSString*)recipe.recipeId substringFromIndex:ID_INDEX];
+        newRecipe.image = recipe.imageUrl;
+        newRecipe.username = [PFUser currentUser].username;
+        DetailsViewController *detailsController = [segue destinationViewController];
+        detailsController.savedRecipe = newRecipe;
     }
 }
 @end

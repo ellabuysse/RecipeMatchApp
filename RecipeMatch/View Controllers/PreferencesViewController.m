@@ -44,7 +44,6 @@ static const float DROPDOWN_HEIGHT = 37;
     [title setFont:[UIFont boldSystemFontOfSize:16]];
     [titleView addSubview:title];
     self.navigationItem.titleView = titleView;
-    
     [self setupView];
 }
 

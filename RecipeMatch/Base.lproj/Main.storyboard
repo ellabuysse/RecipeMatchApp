@@ -255,7 +255,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="3d8-s9-noU" kind="show" id="iFt-Us-QNR"/>
+                        <segue destination="3d8-s9-noU" kind="show" identifier="detailsViewSegue" id="iFt-Us-QNR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1bm-fw-YIS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

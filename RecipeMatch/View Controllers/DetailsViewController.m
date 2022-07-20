@@ -33,6 +33,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
     [self fetchRecipeInfo];
     [self.likeBtn addTarget:self action:@selector(didTapLike:)
          forControlEvents:UIControlEventTouchUpInside];
@@ -93,7 +94,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [application openURL:URL options:@{} completionHandler:nil];
 }
 
-// saves recipe to SavedRecipe Parse class
+// if recipy is already saved, removes from Parse, otherwise adds it
 - (void)didTapSave:(UIButton *)sender {
     if(self.saved){
         [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
@@ -140,6 +141,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     }];
 }
 
+// if recipy is already liked, removes from Parse, otherwise adds it
 - (void)didTapLike:(UIButton *)sender {
     if(self.liked){
         [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){

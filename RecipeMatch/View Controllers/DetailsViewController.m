@@ -18,124 +18,120 @@
 @property (weak, nonatomic) IBOutlet UIButton *likeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property NSDictionary *fullRecipe;
+@property BOOL saved;
+@property BOOL liked;
 @end
 
 @implementation DetailsViewController
 
+NSString* const HEART_FILL_KEY = @"heart.fill";
+NSString * const HEART_KEY = @"heart";
+NSString* const BOOKMARK_FILL_KEY = @"bookmark.fill";
+NSString * const BOOKMARK_KEY = @"bookmark";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self fetchRecipeInfo];
-
     [self.likeBtn addTarget:self action:@selector(didTapLike:)
          forControlEvents:UIControlEventTouchUpInside];
     [self.saveBtn addTarget:self action:@selector(didTapSave:)
          forControlEvents:UIControlEventTouchUpInside];
     
-    // setup like button
-    [APIManager checkIfLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    // setups like button
+    [APIManager checkIfRecipeIsAlreadyLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
+            [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
+            self.liked = YES;
         } else{
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
+            [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
+            self.liked = NO;
         }
     }];
 
-    //setup save button
-    [APIManager checkIfSavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    //setups save button
+    [APIManager checkIfRecipeIsAlreadySavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded == YES){
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
+            [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
+            self.saved = YES;
         } else{
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
+            [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
+            self.saved = NO;
         }
     }];
 }
 
--(void)fetchRecipeInfo{
+// gets recipe details from recipe API
+- (void)fetchRecipeInfo{
     [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSDictionary *recipe, NSError *error){
-        if(recipe)
-        {
+        if(recipe){
             self.fullRecipe = recipe;
             self.recipeTitle.text = recipe[@"label"];
             [self.source setTitle:recipe[@"source"] forState:UIControlStateNormal];
             [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
-           
             [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
-            
             self.recipeUrl = recipe[@"url"];
-          
             NSArray *ingrArray = recipe[@"ingredientLines"];
             NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
             self.ingredients.text = [@"• " stringByAppendingString:ingrString];
             self.yield.text = [NSString stringWithFormat:@"%@", recipe[@"yield"]];
-            
             NSString *imageUrl = recipe[@"image"];
             NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
             self.recipeImage.image = [UIImage imageWithData: imageData];
-            
             [self.view setNeedsDisplay];
-        } else {
-            NSLog(@"😫😫😫 Error getting recipe info: %@", error.localizedDescription);
         }
     }];
 }
 
+// called when recipe source is tapped to redirect to recipe site
 - (void)didTapSource:(UIButton *)sender {
     UIApplication *application = [UIApplication sharedApplication];
     NSURL *URL = [NSURL URLWithString:self.recipeUrl];
     [application openURL:URL options:@{} completionHandler:nil];
 }
 
-
-
+// saves recipe to SavedRecipe Parse class
 - (void)didTapSave:(UIButton *)sender {
-    [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSArray *recipes, NSError *error){
-        if(recipes.count != 0)
-        {
-            // successfully unsaved recipe
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark"] forState:UIControlStateNormal];
-           // [self performSegueWithIdentifier:@"returnToProfile" sender:nil];
-            
-        }else {
-            // no recipe found, need to save
-            [APIManager postSavedRecipeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-                if(error){
-                    NSLog(@"Error posting recipe: %@", error.localizedDescription);
-                }
-                else{
-                    //[self.delegate didTweet:tweet];
-                    NSLog(@"Post recipe success!");
-                }
-            }];
-            [self.saveBtn setImage:[UIImage systemImageNamed:@"bookmark.fill"] forState:UIControlStateNormal];
-        }
-    }];
+    if(self.saved){
+        [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
+            if(succeeded){
+                [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
+                self.saved = NO;
+            } else{
+                //TODO: Add failure support
+            }
+        }];
+    } else {
+        [APIManager postSavedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if(succeeded){
+                [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
+                self.saved = YES;
+            } else{
+                //TODO: Add failure support
+            }
+        }];
+    }
 }
 
+// saves recipe to LikedRecipe Parse class
 - (void)didTapLike:(UIButton *)sender {
-    [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
-    
-    [APIManager manageLikeWithTitle:self.savedRecipe.name andId:self.savedRecipe.recipeId andImage:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error){
-        if(succeeded)
-        {
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart.fill"] forState:UIControlStateNormal];
-            
-        }else {
-            [self.likeBtn setImage:[UIImage systemImageNamed:@"heart"] forState:UIControlStateNormal];
-        }
-    }];
+    if(self.liked){
+        [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
+            if(succeeded){
+                [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
+                self.liked = NO;
+            } else{
+                //TODO: Add failure support
+            }
+        }];
+    } else {
+        [APIManager postLikedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if(succeeded){
+                [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
+                self.liked = YES;
+            } else{
+                //TODO: Add failure support
+            }
+        }];
+    }
 }
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

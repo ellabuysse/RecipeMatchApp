@@ -12,8 +12,7 @@
 @implementation OverlayView
 @synthesize imageView;
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
@@ -23,14 +22,11 @@
     return self;
 }
 
--(void)setMode:(GGOverlayViewMode)mode
-{
+- (void)setMode:(GGOverlayViewMode)mode{
     if (_mode == mode) {
         return;
     }
-    
     _mode = mode;
-    
     if(mode == GGOverlayViewModeLeft) {
         imageView.image = [UIImage imageNamed:@"noButton"];
     } else {
@@ -38,19 +34,8 @@
     }
 }
 
--(void)layoutSubviews
-{
+- (void)layoutSubviews{
     [super layoutSubviews];
     imageView.frame = CGRectMake(50, 50, 100, 100);
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
 @end

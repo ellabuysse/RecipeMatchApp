@@ -10,11 +10,7 @@
 #import "DraggableViewBackground.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface StreamViewController : UIViewController <PreferencesViewControllerDelegate>
-@property NSMutableArray *recipes;
-
+@interface StreamViewController : UIViewController <PreferencesViewControllerDelegate, DraggableViewBackgroundDelegate>
 @end
-
 
 NS_ASSUME_NONNULL_END

@@ -153,11 +153,11 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EDP-kq-ef7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BD7-3U-4Vo">
-                                <rect key="frame" x="10" y="44" width="404" height="818"/>
+                                <rect key="frame" x="10" y="56" width="404" height="757"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QqC-zg-VSy">
                                     <size key="itemSize" width="170" height="190"/>
@@ -199,7 +199,7 @@
                                         <connections>
                                             <outlet property="imageView" destination="GdD-Su-h9j" id="Fk3-0M-AT9"/>
                                             <outlet property="recipeTitle" destination="SZ4-n3-lAy" id="7EU-5J-fPp"/>
-                                            <segue destination="3d8-s9-noU" kind="show" identifier="DetailsViewSegue" id="oXq-lS-4qU"/>
+                                            <segue destination="3d8-s9-noU" kind="show" identifier="detailsViewSegue" id="oXq-lS-4qU"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -249,7 +249,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="line.horizontal.3.circle" catalog="system"/>
                                 <connections>
-                                    <segue destination="f37-ou-fth" kind="show" id="dRs-q0-jaO"/>
+                                    <segue destination="f37-ou-fth" kind="show" identifier="preferencesViewSegue" id="dRs-q0-jaO"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -471,7 +471,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="oXq-lS-4qU"/>
+        <segue reference="iFt-Us-QNR"/>
         <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
     <resources>

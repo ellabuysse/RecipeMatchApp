@@ -12,11 +12,6 @@
 #import "APIManager.h"
 #import "StreamViewController.h"
 
-@interface DraggableViewBackground ()
-@property BOOL liked;
-@property BOOL saved;
-@end
-
 @implementation DraggableViewBackground{
     NSInteger cardsLoadedIndex; // the index of the last card loaded into the loadedCards array
     NSMutableArray *loadedCards; // the array of card loaded

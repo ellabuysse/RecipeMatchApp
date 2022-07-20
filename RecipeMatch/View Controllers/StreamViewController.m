@@ -68,9 +68,8 @@ static const float TITLE_HEIGHT = 40;
     [APIManager checkIfRecipeIsAlreadyLikedWithId:shortId andCompletion:^(BOOL liked, NSError * _Nullable error) {
         if(liked == YES){
             completion(YES, nil);
-            //
         } else{
-            completion(NO, nil);
+            completion(NO, error);
         }
     }];
 }
@@ -78,7 +77,7 @@ static const float TITLE_HEIGHT = 40;
 - (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
     [APIManager postLikedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if(succeeded){
-            completion(YES,nil);
+            completion(YES, nil);
         } else{
             completion(NO, error);
         }

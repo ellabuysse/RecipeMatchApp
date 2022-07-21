@@ -29,12 +29,11 @@ static const float HEIGHT_FACTOR = 1.2;
 @implementation ProfileViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // setup scroll refresh
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
     self.recipesCollectionView.refreshControl = self.refreshControl;
-    
+
     // setup logout button
     UIBarButtonItem *logout = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Logout"
@@ -46,8 +45,8 @@ static const float HEIGHT_FACTOR = 1.2;
 }
 
 // called after returning from PreferencesViewController
--(void)viewWillAppear{
-    [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self fetchRecipes];
 }
 

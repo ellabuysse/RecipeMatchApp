@@ -16,7 +16,7 @@
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
-NSString* const BASE_API_PARAMS = @"?type=public&q=&health=alcohol-free";
+NSString* const BASE_API_PARAMS = @"?type=public&random=true&q=&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
@@ -176,6 +176,24 @@ NSString* const APP_KEY = @"app_key";
         }
         else {
             completion(NO, error);
+        }
+    }];
+}
+
+// count number of times recipe is saved in SavedRecipe Parse class
+// return number of saves of recipe
++(void)countSavesWithId:( NSString * _Nullable )recipeId andCompletion: (void (^)(int likes, NSError *error))completion{
+    PFQuery *recipeQuery = [SavedRecipe query];
+    [recipeQuery includeKey:USER_KEY];
+    [recipeQuery whereKey:ID_KEY equalTo:recipeId];
+
+    // fetch data asynchronously
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if(recipesFound){
+            completion(recipesFound.count, nil);
+        }
+        else{
+            completion(0, error);
         }
     }];
 }

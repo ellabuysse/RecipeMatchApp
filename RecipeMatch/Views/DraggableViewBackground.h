@@ -34,16 +34,20 @@
 #import "DraggableView.h"
 
 @protocol DraggableViewBackgroundDelegate <NSObject>
+@required
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *_Nullable)card withCompletion:(void (^_Nullable)(BOOL liked, NSError *_Nullable error))completion;
 - (void)checkSaveStatusFromDraggableViewBackground:(DraggableView *_Nullable)card withCompletion:(void (^_Nullable)(BOOL liked, NSError *_Nullable error))completion;
 - (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:(NSString * _Nullable)title image:(NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
 - (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
+- (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card;
 @end
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>
 - (void)reload;
+- (void)updateValues;
 
 @property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;
 @property (retain,nonatomic)NSMutableArray* _Nullable allCards;

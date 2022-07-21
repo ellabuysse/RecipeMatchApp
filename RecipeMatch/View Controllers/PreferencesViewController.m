@@ -44,7 +44,6 @@ static const float DROPDOWN_HEIGHT = 37;
     [title setFont:[UIFont boldSystemFontOfSize:16]];
     [titleView addSubview:title];
     self.navigationItem.titleView = titleView;
-    
     [self setupView];
 }
 
@@ -85,18 +84,15 @@ static const float DROPDOWN_HEIGHT = 37;
 
 // called when drop down item is selected
 - (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
-    if (dropDownMenu == self.cuisineMenu) {
-        self.cuisineLabel = @"&cuisineType=";
-        self.cuisineLabel = [self.cuisineLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.healthMenu) {
-        self.healthLabel = @"&health=";
-        self.healthLabel = [self.healthLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.dietMenu) {
-        self.dietLabel = @"&diet=";
-        self.dietLabel = [self.dietLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
-    } else if (dropDownMenu == self.mealMenu) {
-        self.mealLabel = @"&mealType=";
-        self.mealLabel = [self.mealLabel stringByAppendingString:((ManaDropDownMenu *)dropDownMenu).title];
+    NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
+    if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
+        self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
+    } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
+        self.cuisineLabel = [NSString stringWithFormat:@"&health=%@", title];
+    } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
+        self.cuisineLabel = [NSString stringWithFormat:@"&diet=%@", title];
+    } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
+        self.cuisineLabel = [NSString stringWithFormat:@"&mealType=%@", title];
     }
 }
 
@@ -104,16 +100,16 @@ static const float DROPDOWN_HEIGHT = 37;
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     NSString *preferences = [[NSString alloc] init];
-    if(self.cuisineLabel && ![self.cuisineLabel isEqualToString:@"no preference"]){
+    if(self.cuisineLabel){
         preferences = [preferences stringByAppendingString:self.cuisineLabel];
     }
-    if(self.healthLabel && ![self.healthLabel isEqualToString:@"no preference"]){
+    if(self.healthLabel){
         preferences = [preferences stringByAppendingString:self.healthLabel];
     }
-    if(self.dietLabel && ![self.dietLabel isEqualToString:@"no preference"]){
+    if(self.dietLabel){
         preferences = [preferences stringByAppendingString:self.dietLabel];
     }
-    if(self.mealLabel && ![self.mealLabel isEqualToString:@"no preference"]){
+    if(self.mealLabel){
         preferences = [preferences stringByAppendingString:self.mealLabel];
     }
     [delegate sendData:preferences];

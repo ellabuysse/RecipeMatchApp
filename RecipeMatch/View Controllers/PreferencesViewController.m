@@ -49,37 +49,31 @@ static const float DROPDOWN_HEIGHT = 37;
 
 - (void)setupView{
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
-    self.cuisineMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
-    self.cuisineMenu.textOfRows = @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
-    self.cuisineMenu.numberOfRows = [self.cuisineMenu.textOfRows count];
-    self.cuisineMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.cuisineMenu.heightOfRows = ROW_HEIGHT;
-    self.cuisineMenu.delegate = self;
+    self.cuisineMenu = [self getDropDownMenuWithFrame:frame items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
     [self.view addSubview:self.cuisineMenu];
-    
-    self.healthMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET) title:@"no preference"];
-    self.healthMenu.textOfRows = @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
-    self.healthMenu.numberOfRows = [self.healthMenu.textOfRows count];
-    self.healthMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.healthMenu.heightOfRows = ROW_HEIGHT;
-    self.healthMenu.delegate = self;
+
+    frame = CGRectOffset(frame, 0, MENU_OFFSET);
+    self.healthMenu = [self getDropDownMenuWithFrame:frame items:@[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"]];
     [self.view addSubview:self.healthMenu];
 
-    self.dietMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET * 2) title:@"no preference"];
-    self.dietMenu.textOfRows = @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
-    self.dietMenu.numberOfRows = [self.dietMenu.textOfRows count];
-    self.dietMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.dietMenu.heightOfRows = ROW_HEIGHT;
-    self.dietMenu.delegate = self;
+    frame = CGRectOffset(frame, 0, MENU_OFFSET);
+    self.dietMenu = [self getDropDownMenuWithFrame:frame items:@[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"]];
     [self.view addSubview:self.dietMenu];
     
-    self.mealMenu = [[ManaDropDownMenu alloc] initWithFrame:CGRectOffset(frame, 0, MENU_OFFSET * 3) title:@"no preference"];
-    self.mealMenu.textOfRows = @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
-    self.mealMenu.numberOfRows = [self.mealMenu.textOfRows count];
-    self.mealMenu.activeColor = UIColorFromRGB(0x80CB99);
-    self.mealMenu.heightOfRows = ROW_HEIGHT;
-    self.mealMenu.delegate = self;
+    frame = CGRectOffset(frame, 0, MENU_OFFSET);
+    self.mealMenu = [self getDropDownMenuWithFrame:frame items:@[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"]];
     [self.view addSubview:self.mealMenu];
+}
+
+// creates and returns a dropdown menu
+- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame items:(NSArray *)items{
+    ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
+    dropDownMenu.textOfRows = items;
+    dropDownMenu.numberOfRows = [dropDownMenu.textOfRows count];
+    dropDownMenu.activeColor = UIColorFromRGB(0x80CB99);
+    dropDownMenu.heightOfRows = ROW_HEIGHT;
+    dropDownMenu.delegate = self;
+    return dropDownMenu;
 }
 
 // called when drop down item is selected

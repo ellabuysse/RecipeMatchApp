@@ -35,9 +35,10 @@
 #import "OverlayView.h"
 
 @protocol DraggableViewDelegate <NSObject>
-- (void)cardSwipedLeft:(UIView *)card;
-- (void)cardSwipedRight:(UIView *)card;
-- (void)detailsAction;
+@required
+- (void)draggableViewCardSwipedLeft:(UIView *)card;
+- (void)draggableViewCardSwipedRight:(UIView *)card;
+- (void)draggableViewDidTapOnDetails;
 @end
 
 @interface DraggableView : UIView
@@ -46,7 +47,7 @@
 @property (nonatomic)CGPoint originalPoint;
 @property (nonatomic,strong)OverlayView* overlayView;
 @property (nonatomic,strong)UILabel* title;
-@property (nonatomic,strong)UILabel* recipeId;
+@property (nonatomic,strong)NSString* recipeId;
 @property (nonatomic,strong)UIImageView* recipeImage;
 @property (nonatomic,strong)NSString* imageUrl;
 @property (nonatomic,strong)UILabel* url;

@@ -122,7 +122,7 @@ static const float DETAILS_Y_OFFSET = 20;
 }
 
 -(void)didTapDetails{
-    [(DraggableViewBackground *)delegate detailsAction];
+    [delegate draggableViewDidTapOnDetails];
 }
 
 - (void)setupView{
@@ -219,7 +219,7 @@ static const float DETAILS_Y_OFFSET = 20;
                          [self removeFromSuperview];
                      }];
     
-    [delegate cardSwipedRight:self];
+    [delegate draggableViewCardSwipedRight:self];
 }
 
 // called when a swip exceeds the ACTION_MARGIN to the left
@@ -232,7 +232,7 @@ static const float DETAILS_Y_OFFSET = 20;
                          [self removeFromSuperview];
                      }];
     
-    [delegate cardSwipedLeft:self];
+    [delegate draggableViewCardSwipedLeft:self];
 }
 
 - (void)rightClickAction{
@@ -245,7 +245,7 @@ static const float DETAILS_Y_OFFSET = 20;
                          [self removeFromSuperview];
                      }];
     
-    [delegate cardSwipedRight:self];
+    [delegate draggableViewCardSwipedRight:self];
 }
 
 - (void)leftClickAction{
@@ -258,6 +258,6 @@ static const float DETAILS_Y_OFFSET = 20;
                          [self removeFromSuperview];
                      }];
     
-    [delegate cardSwipedLeft:self];
+    [delegate draggableViewCardSwipedLeft:self];
 }
 @end

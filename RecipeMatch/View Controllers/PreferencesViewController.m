@@ -86,17 +86,13 @@ static const float DROPDOWN_HEIGHT = 37;
 - (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
     NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
     if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = @"&cuisineType=";
-        self.cuisineLabel = [self.cuisineLabel stringByAppendingString:title];
+        self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
     } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
-        self.healthLabel = @"&health=";
-        self.healthLabel = [self.healthLabel stringByAppendingString:title];
+        self.cuisineLabel = [NSString stringWithFormat:@"&health=%@", title];
     } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
-        self.dietLabel = @"&diet=";
-        self.dietLabel = [self.dietLabel stringByAppendingString:title];
+        self.cuisineLabel = [NSString stringWithFormat:@"&diet=%@", title];
     } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
-        self.mealLabel = @"&mealType=";
-        self.mealLabel = [self.mealLabel stringByAppendingString:title];
+        self.cuisineLabel = [NSString stringWithFormat:@"&mealType=%@", title];
     }
 }
 

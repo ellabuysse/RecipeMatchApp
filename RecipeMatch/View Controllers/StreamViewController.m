@@ -22,7 +22,6 @@
 @implementation StreamViewController
 static const float TITLE_WIDTH = 100;
 static const float TITLE_HEIGHT = 40;
-static const float ID_INDEX = 51;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,8 +70,7 @@ static const float ID_INDEX = 51;
 }
 
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
-    NSString *shortId = [(NSString *)nextCard.recipeId substringFromIndex:51];
-    [APIManager checkIfRecipeIsAlreadyLikedWithId:shortId andCompletion:^(BOOL liked, NSError * _Nullable error) {
+    [APIManager checkIfRecipeIsAlreadyLikedWithId:nextCard.recipeId andCompletion:^(BOOL liked, NSError * _Nullable error) {
         if(liked == YES){
             completion(YES, nil);
         } else{
@@ -82,8 +80,7 @@ static const float ID_INDEX = 51;
 }
 
 - (void)checkSaveStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
-    NSString *shortId = [(NSString *)nextCard.recipeId substringFromIndex:51];
-    [APIManager checkIfRecipeIsAlreadySavedWithId:shortId andCompletion:^(BOOL saved, NSError * _Nullable error) {
+    [APIManager checkIfRecipeIsAlreadySavedWithId:nextCard.recipeId andCompletion:^(BOOL saved, NSError * _Nullable error) {
         if(saved == YES){
             completion(YES, nil);
         } else{
@@ -128,7 +125,7 @@ static const float ID_INDEX = 51;
     }];
 }
 
-- (void)showDetails:(DraggableView *_Nonnull)card{
+- (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card{
     [self performSegueWithIdentifier:@"detailsViewSegue" sender:card];
 }
 
@@ -144,7 +141,7 @@ static const float ID_INDEX = 51;
         SavedRecipe *newRecipe = [SavedRecipe new];
         DraggableView *recipe = (DraggableView *)sender;
         newRecipe.name = recipe.title.text;
-        newRecipe.recipeId = [(NSString*)recipe.recipeId substringFromIndex:ID_INDEX];
+        newRecipe.recipeId = recipe.recipeId;
         newRecipe.image = recipe.imageUrl;
         newRecipe.username = [PFUser currentUser].username;
         DetailsViewController *detailsController = [segue destinationViewController];

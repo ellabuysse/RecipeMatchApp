@@ -91,13 +91,10 @@ NSString * const SAVE_IMG = @"save-btn";
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
-    draggableView.recipeId = [[self.recipes objectAtIndex:index][@"recipe"][@"uri"] substringFromIndex:ID_INDEX];
-    draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
-    draggableView.ingredients = [self.recipes objectAtIndex:index][@"recipe"][@"ingredientLines"];
-    draggableView.time = [self.recipes objectAtIndex:index][@"recipe"][@"totalTime"];
-    draggableView.servings = [self.recipes objectAtIndex:index][@"recipe"][@"yield"];
+    NSString *recipeUri = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
+    draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
-    draggableView.imageUrl = imageUrl;
+    //draggableView.imageUrl = imageUrl;
     NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
     draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     draggableView.delegate = self;

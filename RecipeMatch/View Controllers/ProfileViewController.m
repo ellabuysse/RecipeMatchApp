@@ -50,6 +50,7 @@ static const float HEIGHT_FACTOR = 1.2;
     [self fetchRecipes];
 }
 
+// fetch all saved recipe from user in APIManager
 - (void)fetchRecipes{
     [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
         if(recipes){
@@ -62,6 +63,17 @@ static const float HEIGHT_FACTOR = 1.2;
         }
     }];
 }
+
+- (IBAction)logoutBtn:(id)sender {
+    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+    }];
+    SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    myDelegate.window.rootViewController = loginViewController;
+}
+
+#pragma mark - UICollectionViewDelegate
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
@@ -91,15 +103,6 @@ static const float HEIGHT_FACTOR = 1.2;
     int widthDimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
     int heightDimensions = widthDimensions * HEIGHT_FACTOR;
     return CGSizeMake(widthDimensions, heightDimensions);
-}
-
-- (IBAction)logoutBtn:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
-    }];
-    SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    myDelegate.window.rootViewController = loginViewController;
 }
 
 #pragma mark - Navigation

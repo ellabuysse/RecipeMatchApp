@@ -94,7 +94,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [application openURL:URL options:@{} completionHandler:nil];
 }
 
-// if recipy is already saved, removes from Parse, otherwise adds it
+// if recipe is already saved, removes from Parse, otherwise adds it
 - (void)didTapSave:(UIButton *)sender {
     if(self.saved){
         [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
@@ -141,7 +141,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     }];
 }
 
-// if recipy is already liked, removes from Parse, otherwise adds it
+// if recipe is already liked, removes from Parse, otherwise adds it
 - (void)didTapLike:(UIButton *)sender {
     if(self.liked){
         [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){

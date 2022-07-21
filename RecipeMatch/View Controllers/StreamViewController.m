@@ -68,6 +68,7 @@ static const float TITLE_HEIGHT = 40;
         [self setupCards];
     }
 }
+#pragma mark - StreamViewDelegate methods
 
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
     [APIManager checkIfRecipeIsAlreadyLikedWithId:nextCard.recipeId andCompletion:^(BOOL liked, NSError * _Nullable error) {

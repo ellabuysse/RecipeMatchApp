@@ -205,6 +205,8 @@ static const float DETAILS_Y_OFFSET = 20;
     }
 }
 
+#pragma mark - DraggableViewDelegate
+
 // called when a swipe exceeds the ACTION_MARGIN to the right
 - (void)rightAction{
     CGPoint finishPoint = CGPointMake(500, 2*yFromCenter +self.originalPoint.y);

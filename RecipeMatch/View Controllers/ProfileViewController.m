@@ -90,8 +90,19 @@ static const float HEIGHT_FACTOR = 1.2;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     NSDictionary *recipe = self.recipes[indexPath.row];
+  
     NSString *imageUrl = recipe[@"image"];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:imageUrl]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // get recipe image in background thread
+        NSURL *url = [NSURL URLWithString:imageUrl];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        UIImage *img = [[UIImage alloc] initWithData:data];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+             // set cell image on main thread
+            [cell.imageView setImage:img];
+        });
+    });
+
     cell.imageView.layer.cornerRadius = CORNER_RADIUS;
     cell.recipeTitle.text = recipe[@"name"];
     return cell;

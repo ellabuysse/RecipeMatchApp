@@ -95,7 +95,7 @@ static const float DETAILS_Y_OFFSET = 20;
         
         recipeImage = [[UIImageView alloc] initWithFrame:CGRectMake((self.frame.size.width - IMAGE_SIZE)/2, IMAGE_X_OFFSET, IMAGE_SIZE, IMAGE_SIZE)];
         recipeImage.translatesAutoresizingMaskIntoConstraints = NO;
-        [recipeImage setContentMode:UIViewContentModeScaleAspectFit];
+        [recipeImage setContentMode:UIViewContentModeScaleAspectFill];
         recipeImage.layer.masksToBounds = YES;
         recipeImage.layer.cornerRadius = CORNER_RADIUS;
         [self addSubview:recipeImage];

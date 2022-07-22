@@ -56,6 +56,6 @@
 @property (nonatomic,strong)UILabel* saveLabel;
 @property (nonatomic,strong)UILabel* saveCount;
 
-- (void)leftClickAction;
-- (void)rightClickAction;
+- (void)leftClickAction:(void (^)(BOOL succeeded, NSError *error))completion;
+- (void)rightClickAction:(void (^)(BOOL succeeded, NSError *error))completion;
 @end

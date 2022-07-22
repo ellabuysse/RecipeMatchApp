@@ -233,7 +233,7 @@ static const float DETAILS_Y_OFFSET = 20;
     [delegate draggableViewCardSwipedLeft:self];
 }
 
-- (void)rightClickAction{
+- (void)rightClickAction:(void (^)(BOOL succeeded, NSError *error))completion{
     CGPoint finishPoint = CGPointMake(600, self.center.y);
     [UIView animateWithDuration:0.3
                      animations:^{
@@ -241,12 +241,12 @@ static const float DETAILS_Y_OFFSET = 20;
                          self.transform = CGAffineTransformMakeRotation(1);
                      }completion:^(BOOL complete){
                          [self removeFromSuperview];
+                         completion(YES, nil);
                      }];
-    
     [delegate draggableViewCardSwipedRight:self];
 }
 
-- (void)leftClickAction{
+- (void)leftClickAction:(void (^)(BOOL succeeded, NSError *error))completion{
     CGPoint finishPoint = CGPointMake(-600, self.center.y);
     [UIView animateWithDuration:0.3
                      animations:^{
@@ -254,8 +254,8 @@ static const float DETAILS_Y_OFFSET = 20;
                          self.transform = CGAffineTransformMakeRotation(-1);
                      }completion:^(BOOL complete){
                          [self removeFromSuperview];
+                         completion(YES, nil);
                      }];
-    
     [delegate draggableViewCardSwipedLeft:self];
 }
 @end

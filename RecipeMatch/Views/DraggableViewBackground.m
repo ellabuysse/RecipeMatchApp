@@ -18,6 +18,7 @@
 @implementation DraggableViewBackground{
     NSInteger cardsLoadedIndex; // the index of the last card loaded into the loadedCards array
     NSMutableArray *loadedCards; // the array of card loaded
+    NSInteger allCardsIndex; // index of current card out of all cards
     UIButton* menuButton;
     UIButton* messageButton;
     UIButton* saveButton;
@@ -34,7 +35,6 @@ static const float BTN_YPOS = 650;
 static const float LEFT_BTN_XPOS = 40;
 static const float MIDDLE_BTN_XPOS = 155;
 static const float RIGHT_BTN_XPOS = 290;
-static const float ID_INDEX = 51;
 NSString* const HEART_FILL_IMG = @"heart-btn-filled";
 NSString * const HEART_IMG = @"heart-btn";
 NSString* const SAVE_FILL_IMG = @"save-btn-filled";
@@ -52,11 +52,16 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // loads cards after recipes are loaded from StreamViewController
-- (void)reload{
+- (void)reloadView{
     [self setupView];
+    [self setupCards];
+}
+
+- (void)setupCards{
     loadedCards = [[NSMutableArray alloc] init];
     allCards = [[NSMutableArray alloc] init];
     cardsLoadedIndex = 0;
+    allCardsIndex = 0;
     [self loadCards];
     [self updateValues];
 }
@@ -106,7 +111,7 @@ NSString * const SAVE_IMG = @"save-btn";
     if([self.recipes count] > 0) {
         NSInteger numLoadedCardsCap =(([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
         
-        // loops through the exampleCardsLabels array to create a card for each label
+        // loops through the recipes array to create a card for each recipe
         for (int i = 0; i<[self.recipes count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
             [allCards addObject:newCard];
@@ -136,7 +141,12 @@ NSString * const SAVE_IMG = @"save-btn";
     [UIView animateWithDuration:0.2 animations:^{
         dragView.overlayView.alpha = 1;
     }];
-    [dragView rightClickAction];
+    [dragView rightClickAction:^(BOOL succeeded, NSError *error){  // check index after card is dismissed from view
+        if(succeeded){
+            self->allCardsIndex++;
+            [self checkCardIndexStatus];
+        }
+    }];
 }
 
 // when you hit the left button, this is called and substitutes the swipe
@@ -146,7 +156,12 @@ NSString * const SAVE_IMG = @"save-btn";
     [UIView animateWithDuration:0.2 animations:^{
         dragView.overlayView.alpha = 1;
     }];
-    [dragView leftClickAction];
+    [dragView leftClickAction:^(BOOL succeeded, NSError *error){
+        if(succeeded){
+            self->allCardsIndex++;
+            [self checkCardIndexStatus];
+        }
+    }];
 }
 
 #pragma mark - DraggableViewBackgroundDelegate
@@ -199,6 +214,19 @@ NSString * const SAVE_IMG = @"save-btn";
     }];
 }
 
+// called after each card swipe
+- (void)checkCardIndexStatus{
+    if (allCardsIndex == [allCards count]){ // when all cards are swiped, get more cards
+        [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error){
+            if(succeeded){
+                [self setupCards];
+            } else{
+                //TODO: add failure support
+            }
+        }];
+    }
+}
+
 #pragma mark - DraggableViewDelegate methods
 
 // action called when the card goes to the left.
@@ -206,7 +234,7 @@ NSString * const SAVE_IMG = @"save-btn";
     [loadedCards removeObjectAtIndex:0]; // card was swiped, so it's no longer a "loaded card"
     if (cardsLoadedIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
         [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
-        cardsLoadedIndex++;//%%% loaded a card, so have to increment count
+        cardsLoadedIndex++;// loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
         [self updateValues];
     }

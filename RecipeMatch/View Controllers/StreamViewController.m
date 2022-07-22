@@ -16,7 +16,6 @@
 @interface StreamViewController()
 @property (nonatomic, strong) NSString *preferences;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;
-@property NSMutableArray *recipes;
 @end
 
 @implementation StreamViewController
@@ -46,15 +45,25 @@ static const float TITLE_HEIGHT = 40;
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
     [self.view addSubview:spinner];
     [spinner startAnimating];
-    
-    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+    [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError * _Nullable error){
         if(recipes){
-            self.recipes = recipes;
             self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
             self.draggableBackground.delegate = self;
-            self.draggableBackground.recipes = self.recipes;
-            [self.draggableBackground reload];
+            self.draggableBackground.recipes = (NSMutableArray *)recipes;
+            [self.draggableBackground reloadView];
             [self.view addSubview:self.draggableBackground];
+        } else{
+            //TODO: Add failure support
+        }
+    }];
+}
+
+- (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
+    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes){
+            completion(recipes, nil);
+        } else{
+            completion(nil, error);
         }
     }];
 }
@@ -68,7 +77,7 @@ static const float TITLE_HEIGHT = 40;
         [self setupCards];
     }
 }
-#pragma mark - StreamViewDelegate methods
+#pragma mark - DraggableViewBackground methods
 
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
     [APIManager checkIfRecipeIsAlreadyLikedWithId:nextCard.recipeId andCompletion:^(BOOL liked, NSError * _Nullable error) {
@@ -128,6 +137,17 @@ static const float TITLE_HEIGHT = 40;
 
 - (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card{
     [self performSegueWithIdentifier:@"detailsViewSegue" sender:card];
+}
+
+- (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion{
+    [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError * _Nullable error){
+        if(recipes){
+            self.draggableBackground.recipes = (NSMutableArray*)recipes;
+            completion(YES, nil);
+        } else{
+            completion(NO, error);
+        }
+    }];
 }
 
 #pragma mark - Navigation

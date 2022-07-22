@@ -26,6 +26,7 @@ NSString* const APP_KEY_PARAM = @"&app_key=";
 NSString* const APP_KEY = @"app_key";
 NSString* const LIKED_RECIPE_TYPE = @"LikedRecipe";
 NSString* const SAVED_RECIPE_TYPE = @"SavedRecipe";
+const int MIN_RECIPE_COUNT = 100;
 
 @implementation APIManager
 
@@ -94,7 +95,8 @@ NSString* const SAVED_RECIPE_TYPE = @"SavedRecipe";
     }
     NSURL *url = [NSURL URLWithString:apiString];
     [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        if(dataDictionary){
+        int count = (int)[dataDictionary[@"count"] integerValue];
+        if(count > MIN_RECIPE_COUNT){
             completion(dataDictionary[@"hits"], nil);
         } else{
             completion(nil, error);

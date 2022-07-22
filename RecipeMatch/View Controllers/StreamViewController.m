@@ -14,7 +14,7 @@
 #import "DetailsViewController.h"
 
 @interface StreamViewController()
-@property (nonatomic, strong) NSString *preferences;
+@property (nonatomic, strong) NSMutableArray *preferences;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;
 @end
 
@@ -58,8 +58,12 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
-- (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
-    [[APIManager shared] getRecipesWithPreferences:self.preferences andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+// called when there are not enought recipes from user preferences
+- (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
+    if([self.preferences count] > 0){
+        [self.preferences removeLastObject];
+    }
+    [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if(recipes){
             completion(recipes, nil);
         } else{
@@ -68,10 +72,28 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
+- (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
+    NSString *preferencesString = [self.preferences componentsJoinedByString:@""];
+    [[APIManager shared] getRecipesWithPreferences:preferencesString andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes){
+            completion(recipes, nil);
+        } else{
+            // not enough recipes with preferences
+            [self handlePreferencesWithCompletion:^(NSArray *recipes, NSError *error){
+                if(recipes){
+                    completion(recipes,nil);
+                } else{
+                    completion(nil, error);
+                }
+            }];
+        }
+    }];
+}
+
 // called by PreferencesViewController to get user preferences
-- (void)sendData:(NSString *)prefRequest{
+- (void)sendData:(NSMutableArray *)prefRequest{
     // check that preferences aren't empty
-    if(prefRequest != (id)[NSNull null] && prefRequest.length != 0){
+    if([prefRequest count] > 0){
         self.preferences = prefRequest;
         [self.draggableBackground removeFromSuperview];
         [self setupCards];

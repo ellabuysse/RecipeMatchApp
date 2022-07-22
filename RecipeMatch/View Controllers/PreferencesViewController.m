@@ -82,29 +82,30 @@ static const float DROPDOWN_HEIGHT = 37;
     if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
         self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
     } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = [NSString stringWithFormat:@"&health=%@", title];
+        self.healthLabel = [NSString stringWithFormat:@"&health=%@", title];
     } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = [NSString stringWithFormat:@"&diet=%@", title];
+        self.dietLabel = [NSString stringWithFormat:@"&diet=%@", title];
     } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = [NSString stringWithFormat:@"&mealType=%@", title];
+        self.mealLabel = [NSString stringWithFormat:@"&mealType=%@", title];
     }
 }
 
 //called when back button is pressed
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    NSString *preferences = [[NSString alloc] init];
+    NSMutableArray *preferences = [[NSMutableArray alloc] init];
+    
     if(self.cuisineLabel){
-        preferences = [preferences stringByAppendingString:self.cuisineLabel];
+        [preferences addObject:self.cuisineLabel];
     }
     if(self.healthLabel){
-        preferences = [preferences stringByAppendingString:self.healthLabel];
+        [preferences addObject:self.healthLabel];
     }
     if(self.dietLabel){
-        preferences = [preferences stringByAppendingString:self.dietLabel];
+        [preferences addObject:self.dietLabel];
     }
     if(self.mealLabel){
-        preferences = [preferences stringByAppendingString:self.mealLabel];
+        [preferences addObject:self.mealLabel];
     }
     [delegate sendData:preferences];
 }

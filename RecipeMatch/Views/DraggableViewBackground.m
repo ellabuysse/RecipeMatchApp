@@ -91,11 +91,8 @@ NSString * const SAVE_IMG = @"save-btn";
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
-    draggableView.recipeId = [[self.recipes objectAtIndex:index][@"recipe"][@"uri"] substringFromIndex:ID_INDEX];
-    draggableView.url = [self.recipes objectAtIndex:index][@"recipe"][@"url"];
-    draggableView.ingredients = [self.recipes objectAtIndex:index][@"recipe"][@"ingredientLines"];
-    draggableView.time = [self.recipes objectAtIndex:index][@"recipe"][@"totalTime"];
-    draggableView.servings = [self.recipes objectAtIndex:index][@"recipe"][@"yield"];
+    NSString *recipeUri = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
+    draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
     draggableView.imageUrl = imageUrl;
     NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
@@ -131,6 +128,28 @@ NSString * const SAVE_IMG = @"save-btn";
         }
     }
 }
+
+// when you hit the right button, this is called and substitutes the swipe
+- (void)swipeRight{
+    DraggableView *dragView = [loadedCards firstObject];
+    dragView.overlayView.mode = GGOverlayViewModeRight;
+    [UIView animateWithDuration:0.2 animations:^{
+        dragView.overlayView.alpha = 1;
+    }];
+    [dragView rightClickAction];
+}
+
+// when you hit the left button, this is called and substitutes the swipe
+- (void)swipeLeft{
+    DraggableView *dragView = [loadedCards firstObject];
+    dragView.overlayView.mode = GGOverlayViewModeLeft;
+    [UIView animateWithDuration:0.2 animations:^{
+        dragView.overlayView.alpha = 1;
+    }];
+    [dragView leftClickAction];
+}
+
+#pragma mark - DraggableViewBackgroundDelegate
 
 // updates like count for each card
 - (void)updateLikeCount{
@@ -179,6 +198,8 @@ NSString * const SAVE_IMG = @"save-btn";
         }
     }];
 }
+
+#pragma mark - DraggableViewDelegate methods
 
 // action called when the card goes to the left.
 - (void)draggableViewCardSwipedLeft:(UIView *)card;{
@@ -233,25 +254,5 @@ NSString * const SAVE_IMG = @"save-btn";
 - (void)draggableViewDidTapOnDetails{
     DraggableView *card = [loadedCards firstObject];
     [delegate showDetailsFromDraggableViewBackground:card];
-}
-
-// when you hit the right button, this is called and substitutes the swipe
-- (void)swipeRight{
-    DraggableView *dragView = [loadedCards firstObject];
-    dragView.overlayView.mode = GGOverlayViewModeRight;
-    [UIView animateWithDuration:0.2 animations:^{
-        dragView.overlayView.alpha = 1;
-    }];
-    [dragView rightClickAction];
-}
-
-// when you hit the left button, this is called and substitutes the swipe
-- (void)swipeLeft{
-    DraggableView *dragView = [loadedCards firstObject];
-    dragView.overlayView.mode = GGOverlayViewModeLeft;
-    [UIView animateWithDuration:0.2 animations:^{
-        dragView.overlayView.alpha = 1;
-    }];
-    [dragView leftClickAction];
 }
 @end

@@ -48,10 +48,6 @@ static const float DETAILS_Y_OFFSET = 20;
 @synthesize recipeId;
 @synthesize recipeImage;
 @synthesize imageUrl;
-@synthesize url;
-@synthesize ingredients;
-@synthesize time;
-@synthesize servings;
 @synthesize overlayView;
 @synthesize detailsBtn;
 @synthesize likeLabel;
@@ -208,6 +204,8 @@ static const float DETAILS_Y_OFFSET = 20;
         }];
     }
 }
+
+#pragma mark - DraggableViewDelegate
 
 // called when a swipe exceeds the ACTION_MARGIN to the right
 - (void)rightAction{

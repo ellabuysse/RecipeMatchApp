@@ -50,10 +50,6 @@
 @property (nonatomic,strong)NSString* recipeId;
 @property (nonatomic,strong)UIImageView* recipeImage;
 @property (nonatomic,strong)NSString* imageUrl;
-@property (nonatomic,strong)UILabel* url;
-@property (nonatomic,strong)NSArray* ingredients;
-@property (nonatomic,strong)UILabel* time;
-@property (nonatomic,strong)UILabel* servings;
 @property (nonatomic,strong)UIButton* detailsBtn;
 @property (nonatomic,strong)UILabel* likeLabel;
 @property (nonatomic,strong)UILabel* likeCount;

@@ -109,8 +109,9 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     }];
 }
 
-
-- (void)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
+// gets array of recipes with query from recipe API
+// returns recipes on success, nil on failure
+- (void)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipes, NSError *error))completion{
     NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
     apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
@@ -118,6 +119,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     apiString = [apiString stringByAppendingString:self.app_key];
     if(query){
         apiString = [apiString stringByAppendingString:@"&q="];
+        query = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLUserAllowedCharacterSet]]; // remove spaces and extra characters
         apiString = [apiString stringByAppendingString: query];
     }
     NSURL *url = [NSURL URLWithString:apiString];

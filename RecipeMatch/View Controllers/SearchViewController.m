@@ -17,8 +17,9 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) SearchCollectionReusableView *searchCollectionReusableView;
-@property (nonatomic, strong) NSArray *recipes;
+@property (nonatomic, strong) NSMutableArray *recipes;
 @property (nonatomic, strong) NSString *searchText;
+@property (strong, nonatomic) NSTimer * searchTimer;
 @end
 
 @implementation SearchViewController 
@@ -38,18 +39,41 @@ static const float HEIGHT_FACTOR = 1.2;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if (searchText.length % 3 == 0) {
-        self.searchText = searchText;
-        [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion: ^(NSMutableArray *recipes, NSError *error) {
-            if(recipes){
-                self.recipes = recipes;
-                [self.collectionView reloadData];
-            } else{
-                //TODO: add failure support
-            }
-        }];
-
+    self.searchText = searchText;
+    
+    // if a timer is already active, prevent it from firing
+    if (self.searchTimer != nil) {
+        [self.searchTimer invalidate];
+        self.searchTimer = nil;
     }
+    
+    // reschedule the search: in 0.5 second, call the reloadSearch: method on the new textfield content
+    self.searchTimer = [NSTimer scheduledTimerWithTimeInterval: 0.5
+                                target: self
+                                selector: @selector(reloadSearch)
+                                userInfo: nil
+                                repeats: NO];
+}
+
+- (void)reloadSearch{
+    [self getRecipes:^(NSMutableArray *recipes, NSError *error){
+        if(recipes){
+            self.recipes = recipes;
+            [self.collectionView reloadData];
+        } else{
+            //TODO: add failure support
+        }
+    }];
+}
+
+- (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion{
+    [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+        if(recipes){
+            completion(recipes, nil);
+        } else{
+            completion(nil, error);
+        }
+    }];
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -84,6 +108,17 @@ static const float HEIGHT_FACTOR = 1.2;
  
     cell.searchImageView.layer.cornerRadius = CORNER_RADIUS;
     cell.searchRecipeTitle.text = recipe[@"label"];
+    
+    if(indexPath.row == self.recipes.count-1) { // add more recipes to recipes array
+        [self getRecipes:^(NSArray *recipes, NSError *error){
+            if(recipes){
+                [self.recipes addObjectsFromArray:recipes];
+                [collectionView reloadData];
+            } else{
+                //TODO: add failure support
+            }
+        }];
+    }
     return cell;
 }
 

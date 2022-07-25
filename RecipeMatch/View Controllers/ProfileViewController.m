@@ -89,20 +89,25 @@ static const float HEIGHT_FACTOR = 1.2;
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
+    cell.imageView.image = nil; // set image to nil while waiting for image to load
     NSDictionary *recipe = self.recipes[indexPath.row];
-  
     NSString *imageUrl = recipe[@"image"];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // get recipe image in background thread
-        NSURL *url = [NSURL URLWithString:imageUrl];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *img = [[UIImage alloc] initWithData:data];
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-             // set cell image on main thread
-            [cell.imageView setImage:img];
-        });
-    });
-
+    NSURL *url = [NSURL URLWithString:imageUrl];
+    NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (data) {
+            // load image data asynchronously
+            UIImage *image = [UIImage imageWithData:data];
+            if (image) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // get correct cell for index path
+                    GridRecipeCell *updateCell = (id)[collectionView cellForItemAtIndexPath:indexPath];
+                    if (updateCell)
+                        updateCell.imageView.image = image;
+                });
+            }
+        }
+    }];
+    [task resume];
     cell.imageView.layer.cornerRadius = CORNER_RADIUS;
     cell.recipeTitle.text = recipe[@"name"];
     return cell;

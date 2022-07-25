@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GridRecipeCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) NSString *hasImage;
 @end
 
 NS_ASSUME_NONNULL_END

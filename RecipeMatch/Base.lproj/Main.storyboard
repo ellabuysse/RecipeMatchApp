@@ -153,11 +153,11 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EDP-kq-ef7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BD7-3U-4Vo">
-                                <rect key="frame" x="10" y="56" width="404" height="757"/>
+                                <rect key="frame" x="10" y="88" width="404" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QqC-zg-VSy">
                                     <size key="itemSize" width="170" height="190"/>
@@ -288,7 +288,7 @@
             <objects>
                 <viewController id="3d8-s9-noU" customClass="DetailsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sjy-Gl-Eqk">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3P7-4H-tHB">
@@ -451,7 +451,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z20-a3-bPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-142" y="2358"/>
+            <point key="canvasLocation" x="1086" y="2477"/>
         </scene>
         <!--Item-->
         <scene sceneID="s17-aq-Ep3">
@@ -585,6 +585,7 @@
                                         <connections>
                                             <outlet property="searchImageView" destination="1Vj-hI-Fkc" id="IIl-JH-bpG"/>
                                             <outlet property="searchRecipeTitle" destination="nuc-rt-wRn" id="Wyv-Ev-kja"/>
+                                            <segue destination="3d8-s9-noU" kind="show" identifier="detailsViewSegue" id="D7I-YF-KYW"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -638,8 +639,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="oXq-lS-4qU"/>
-        <segue reference="FR5-uq-MSm"/>
+        <segue reference="D7I-YF-KYW"/>
+        <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowshape.turn.up.right.fill" catalog="system" width="128" height="106"/>

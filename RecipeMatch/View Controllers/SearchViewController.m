@@ -10,6 +10,8 @@
 #import "UIImageView+AFNetworking.h"
 #import "GridRecipeCell.h"
 #import "APIManager.h"
+#import "DetailsViewController.h"
+#import "DraggableView.h"
 
 @interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -28,37 +30,14 @@ static const float HEIGHT_FACTOR = 1.2;
     [super viewDidLoad];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-
-    //[self fetchRecipes];
-   // self.flowLayout.headerReferenceSize = CGSizeMake(42, 42);
-
 }
 
-
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-        SearchCollectionReusableView *searchView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SearchView" forIndexPath:indexPath];
-
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    SearchCollectionReusableView *searchView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SearchView" forIndexPath:indexPath];
     return searchView;
 }
-/*
-// fetch all saved recipe from user in APIManager
-- (void)fetchRecipes{
-    [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
-        if(recipes){
-            self.recipes = recipes;
-            [self.collectionView reloadData];
-           
-        } else{
-          
-            //TODO: Add failure support
-        }
-    }];
-}*/
-
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
     if (searchText.length % 3 == 0) {
         self.searchText = searchText;
         [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion: ^(NSMutableArray *recipes, NSError *error) {
@@ -66,16 +45,11 @@ static const float HEIGHT_FACTOR = 1.2;
                 self.recipes = recipes;
                 [self.collectionView reloadData];
             } else{
-                // not enough recipes with preferences
-                //TODO: handle error
+                //TODO: add failure support
             }
         }];
 
     }
-    else {
-       // self.filteredData = self.data;
-    }
-    
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -121,14 +95,22 @@ static const float HEIGHT_FACTOR = 1.2;
     return CGSizeMake(widthDimensions, heightDimensions);
 }
 
-/*
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
+         DetailsViewController *detailsController = [segue destinationViewController];
+         UICollectionViewCell *tappedCell = sender;
+         NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
+         // save recipe data as SavedRecipe object to be accessed by DetailsViewController
+         NSDictionary *recipe = self.recipes[indexPath.row][@"recipe"];
+         SavedRecipe *newRecipe = [SavedRecipe new];
+         newRecipe.name = recipe[@"label"];
+         newRecipe.recipeId = [recipe[@"uri"] componentsSeparatedByString:@"#recipe_"][1];
+         newRecipe.image = recipe[@"image"];
+         newRecipe.username = [PFUser currentUser].username;
+         detailsController.savedRecipe = newRecipe;
+     }
+ }
 
 @end

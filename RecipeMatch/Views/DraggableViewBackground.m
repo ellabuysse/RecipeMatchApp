@@ -51,12 +51,13 @@ NSString * const SAVE_IMG = @"save-btn";
     return self;
 }
 
-// loads cards after recipes are loaded from StreamViewController
+// called after recipes are loaded initially from StreamViewController
 - (void)reloadView{
     [self setupView];
     [self setupCards];
 }
 
+// called initially and when new cards are added
 - (void)setupCards{
     loadedCards = [[NSMutableArray alloc] init];
     allCards = [[NSMutableArray alloc] init];
@@ -214,7 +215,7 @@ NSString * const SAVE_IMG = @"save-btn";
     }];
 }
 
-// called after each card swipe
+// called after each card swipe to determine if more cards are needed
 - (void)checkCardIndexStatus{
     if (allCardsIndex == [allCards count]){ // when all cards are swiped, get more cards
         [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error){

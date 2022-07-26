@@ -47,7 +47,7 @@ static const float DROPDOWN_HEIGHT = 37;
     [self setupView];
 }
 
-- (void)setupView{
+- (void)setupView {
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
     self.cuisineMenu = [self getDropDownMenuWithFrame:frame items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
     [self.view addSubview:self.cuisineMenu];
@@ -66,7 +66,7 @@ static const float DROPDOWN_HEIGHT = 37;
 }
 
 // creates and returns a dropdown menu
-- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame items:(NSArray *)items{
+- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame items:(NSArray *)items {
     ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
     dropDownMenu.textOfRows = items;
     dropDownMenu.numberOfRows = [dropDownMenu.textOfRows count];
@@ -77,7 +77,7 @@ static const float DROPDOWN_HEIGHT = 37;
 }
 
 // called when drop down item is selected
-- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index{
+- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index {
     NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
     if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
         self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
@@ -95,16 +95,16 @@ static const float DROPDOWN_HEIGHT = 37;
     [super viewWillDisappear:animated];
     NSMutableArray *preferences = [[NSMutableArray alloc] init];
     
-    if(self.cuisineLabel){
+    if(self.cuisineLabel) {
         [preferences addObject:self.cuisineLabel];
     }
-    if(self.healthLabel){
+    if(self.healthLabel) {
         [preferences addObject:self.healthLabel];
     }
-    if(self.dietLabel){
+    if(self.dietLabel) {
         [preferences addObject:self.dietLabel];
     }
-    if(self.mealLabel){
+    if(self.mealLabel) {
         [preferences addObject:self.mealLabel];
     }
     [delegate sendData:preferences];

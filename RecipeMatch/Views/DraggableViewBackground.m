@@ -15,10 +15,10 @@
 @interface DraggableViewBackground ()
 @end
 
-@implementation DraggableViewBackground{
-    NSInteger cardsLoadedIndex; // the index of the last card loaded into the loadedCards array
+@implementation DraggableViewBackground {
+    NSInteger loadedCardsIndex; // the index of the last card loaded into the loadedCards array
     NSMutableArray *loadedCards; // the array of card loaded
-    NSInteger allCardsIndex; // index of current card out of all cards
+    NSInteger currentCardIndex; // index of current card out of all cards
     UIButton* menuButton;
     UIButton* messageButton;
     UIButton* saveButton;
@@ -43,7 +43,7 @@ NSString * const SAVE_IMG = @"save-btn";
 @synthesize allCards;
 @synthesize delegate;
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [super layoutSubviews];
@@ -52,22 +52,22 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // called after recipes are loaded initially from StreamViewController
-- (void)reloadView{
+- (void)reloadView {
     [self setupView];
     [self setupCards];
 }
 
 // called initially and when new cards are added
-- (void)setupCards{
+- (void)setupCards {
     loadedCards = [[NSMutableArray alloc] init];
     allCards = [[NSMutableArray alloc] init];
-    cardsLoadedIndex = 0;
-    allCardsIndex = 0;
+    loadedCardsIndex = 0;
+    currentCardIndex = 0;
     [self loadCards];
     [self updateValues];
 }
 
-- (void)updateValues{
+- (void)updateValues {
     [self updateHeartBtn];
     [self updateLikeCount];
     [self updateSaveBtn];
@@ -75,7 +75,7 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // sets up the extra buttons on the screen
-- (void)setupView{
+- (void)setupView {
     xButton = [[UIButton alloc]initWithFrame:CGRectMake(LEFT_BTN_XPOS, BTN_YPOS, BTN_HEIGHT, BTN_HEIGHT)];
     [xButton setImage:[UIImage imageNamed:@"x-btn"] forState:UIControlStateNormal];
     [xButton addTarget:self action:@selector(swipeLeft) forControlEvents:UIControlEventTouchUpInside];
@@ -94,7 +94,7 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // creates a card and returns it
-- (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index{
+- (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
     draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
     NSString *recipeUri = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
@@ -108,9 +108,9 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // loads all the cards and puts the first x in the "loaded cards" array
-- (void)loadCards{
+- (void)loadCards {
     if([self.recipes count] > 0) {
-        NSInteger numLoadedCardsCap =(([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
+        NSInteger numLoadedCardsCap = (([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
         
         // loops through the recipes array to create a card for each recipe
         for (int i = 0; i<[self.recipes count]; i++) {
@@ -130,60 +130,80 @@ NSString * const SAVE_IMG = @"save-btn";
             } else {
                 [self addSubview:[loadedCards objectAtIndex:i]];
             }
-            cardsLoadedIndex++; // we loaded a card into loaded cards, so we have to increment
+            loadedCardsIndex++; // we loaded a card into loaded cards, so we have to increment
         }
     }
 }
 
 // when you hit the right button, this is called and substitutes the swipe
-- (void)swipeRight{
+- (void)swipeRight {
     DraggableView *dragView = [loadedCards firstObject];
     dragView.overlayView.mode = GGOverlayViewModeRight;
     [UIView animateWithDuration:0.2 animations:^{
         dragView.overlayView.alpha = 1;
     }];
-    [dragView rightClickAction:^(BOOL succeeded, NSError *error){  // check index after card is dismissed from view
-        if(succeeded){
-            self->allCardsIndex++;
-            [self checkCardIndexStatus];
-        }
-    }];
+    [self rightClickAction];
 }
 
 // when you hit the left button, this is called and substitutes the swipe
-- (void)swipeLeft{
+- (void)swipeLeft {
     DraggableView *dragView = [loadedCards firstObject];
     dragView.overlayView.mode = GGOverlayViewModeLeft;
     [UIView animateWithDuration:0.2 animations:^{
         dragView.overlayView.alpha = 1;
     }];
-    [dragView leftClickAction:^(BOOL succeeded, NSError *error){
-        if(succeeded){
-            self->allCardsIndex++;
-            [self checkCardIndexStatus];
-        }
-    }];
+    [self leftClickAction];
+}
+
+// swipe animation called on right click
+- (void)rightClickAction {
+    DraggableView *dragView = [loadedCards firstObject];
+    CGPoint finishPoint = CGPointMake(600, self.center.y);
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         dragView.center = finishPoint;
+                         dragView.transform = CGAffineTransformMakeRotation(1);
+                     } completion:^(BOOL complete) {
+                         [dragView removeFromSuperview];
+                     }];
+    
+    [self draggableViewCardSwipedRight:dragView];
+}
+
+// swipe animation called on left click
+- (void)leftClickAction {
+    DraggableView *dragView = [loadedCards firstObject];
+    CGPoint finishPoint = CGPointMake(-600, self.center.y);
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         dragView.center = finishPoint;
+                         dragView.transform = CGAffineTransformMakeRotation(-1);
+                     } completion:^(BOOL complete) {
+                         [dragView removeFromSuperview];
+                     }];
+
+    [self draggableViewCardSwipedLeft:dragView];
 }
 
 #pragma mark - DraggableViewBackgroundDelegate
 
 // updates like count for each card
-- (void)updateLikeCount{
+- (void)updateLikeCount {
     DraggableView *card = [self->loadedCards objectAtIndex:0];
-    [delegate countLikesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(int likes, NSError * _Nullable error){
-        if(likes){
+    [delegate countLikesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+        if (likes) {
             card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
-        } else{
+        } else {
             card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
     }];
 }
 
 // updates heart button for each card to show like status
-- (void)updateHeartBtn{
+- (void)updateHeartBtn {
     DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
-    [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error){
-        if(succeeded){
+    [delegate checkLikeStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
             [self->heartButton setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
         } else {
             [self->heartButton setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
@@ -192,36 +212,36 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // updates save count for each card
-- (void)updateSaveCount{
+- (void)updateSaveCount {
     DraggableView *card = [self->loadedCards objectAtIndex:0];
     [delegate countSavesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
-        if(saves){
+        if (saves) {
             card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
-        } else{
+        } else {
             card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
     }];
 }
 
 // updates save button for each card to show save status
-- (void)updateSaveBtn{
+- (void)updateSaveBtn {
     DraggableView *nextCard = [self->loadedCards objectAtIndex:0];
     [delegate checkSaveStatusFromDraggableViewBackground:nextCard withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(succeeded == YES){
+        if (succeeded) {
             [self->saveButton setImage:[UIImage imageNamed:SAVE_FILL_IMG] forState:UIControlStateNormal];
-        } else{
+        } else {
             [self->saveButton setImage:[UIImage imageNamed:SAVE_IMG] forState:UIControlStateNormal];
         }
     }];
 }
 
 // called after each card swipe to determine if more cards are needed
-- (void)checkCardIndexStatus{
-    if (allCardsIndex == [allCards count]){ // when all cards are swiped, get more cards
-        [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error){
-            if(succeeded){
+- (void)checkCardIndexStatus {
+    if (currentCardIndex == [allCards count]-2) { // when all cards are swiped, get more cards
+        [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
                 [self setupCards];
-            } else{
+            } else {
                 //TODO: add failure support
             }
         }];
@@ -231,47 +251,51 @@ NSString * const SAVE_IMG = @"save-btn";
 #pragma mark - DraggableViewDelegate methods
 
 // action called when the card goes to the left.
-- (void)draggableViewCardSwipedLeft:(UIView *)card;{
+- (void)draggableViewCardSwipedLeft:(UIView *)card {
     [loadedCards removeObjectAtIndex:0]; // card was swiped, so it's no longer a "loaded card"
-    if (cardsLoadedIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
-        [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
-        cardsLoadedIndex++;// loaded a card, so have to increment count
+    if (loadedCardsIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
+        [loadedCards addObject:[allCards objectAtIndex:loadedCardsIndex]];
+        loadedCardsIndex++;// loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
         [self updateValues];
     }
+    self->currentCardIndex++;
+    [self checkCardIndexStatus];
 }
 
 // action called when the card goes to the right.
-- (void)draggableViewCardSwipedRight:(UIView *)cardSwiped{
+- (void)draggableViewCardSwipedRight:(UIView *)cardSwiped {
     DraggableView *card = (DraggableView *)cardSwiped;
     [delegate checkSaveStatusFromDraggableViewBackground:card withCompletion:^(BOOL saved, NSError * _Nullable error){
-        if(!saved){
+        if (!saved) {
             [self.delegate postSavedRecipeFromDraggableViewBackgroundWithId:card.recipeId title:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nullable error){}];
         }
     }];
     [loadedCards removeObjectAtIndex:0]; // card was swiped, so it's no longer a "loaded card"
-    if (cardsLoadedIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
-        [loadedCards addObject:[allCards objectAtIndex:cardsLoadedIndex]];
-        cardsLoadedIndex++; // loaded a card, so have to increment count
+    if (loadedCardsIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
+        [loadedCards addObject:[allCards objectAtIndex:loadedCardsIndex]];
+        loadedCardsIndex++; // loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
     }
+    self->currentCardIndex++;
+    [self checkCardIndexStatus];
     [self updateValues];
 }
 
 // called when like button is tapped
-- (void)tapLike:(id)sender{
+- (void)tapLike:(id)sender {
     DraggableView *card = [loadedCards firstObject];
     [delegate checkLikeStatusFromDraggableViewBackground:card withCompletion:^(BOOL liked, NSError * _Nullable error){
-        if(liked){
+        if (liked) {
             [self.delegate unlikeRecipeFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
-                if(succeeded){
+                if (succeeded) {
                     [sender setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
             }];
-        } else{
-            [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:card.recipeId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error){
-                if(succeeded){
+        } else {
+            [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:card.recipeId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
+                if (succeeded) {
                     [sender setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
@@ -280,7 +304,7 @@ NSString * const SAVE_IMG = @"save-btn";
     }];
 }
 
-- (void)draggableViewDidTapOnDetails{
+- (void)draggableViewDidTapOnDetails {
     DraggableView *card = [loadedCards firstObject];
     [delegate showDetailsFromDraggableViewBackground:card];
 }

@@ -35,54 +35,55 @@ static const float TITLE_HEIGHT = 40;
 }
 
 // called after returning from PreferencesViewController
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated {
     [self.draggableBackground updateValues];
 }
 
-- (void)setupCards{
+- (void)setupCards {
     // show spinner when waiting for recipes to load
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
     spinner.center = CGPointMake(self.view.center.x, self.view.center.y);
     [self.view addSubview:spinner];
     [spinner startAnimating];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError * _Nullable error){
-        if(recipes){
+        if (recipes) {
             self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
             self.draggableBackground.delegate = self;
-            self.draggableBackground.recipes = (NSMutableArray *)recipes;
+            self.draggableBackground.recipes = recipes;
             [self.draggableBackground reloadView];
             [self.view addSubview:self.draggableBackground];
-        } else{
+        } else {
             //TODO: Add failure support
         }
     }];
 }
 
 // called when there are not enought recipes from user preferences
-- (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
-    if([self.preferences count] > 0){
+// removes preferences one by one until enough recipes are found
+- (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
+    if ([self.preferences count] > 0) {
         [self.preferences removeLastObject];
     }
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
-        if(recipes){
+        if (recipes) {
             completion(recipes, nil);
-        } else{
+        } else {
             completion(nil, error);
         }
     }];
 }
 
-- (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion{
+- (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
     NSString *preferencesString = [self.preferences componentsJoinedByString:@""];
     [[APIManager shared] getRecipesWithPreferences:preferencesString andCompletion: ^(NSMutableArray *recipes, NSError *error) {
-        if(recipes){
+        if (recipes) {
             completion(recipes, nil);
-        } else{
+        } else {
             // not enough recipes with preferences
             [self handlePreferencesWithCompletion:^(NSArray *recipes, NSError *error){
-                if(recipes){
+                if (recipes) {
                     completion(recipes,nil);
-                } else{
+                } else {
                     completion(nil, error);
                 }
             }];
@@ -91,9 +92,9 @@ static const float TITLE_HEIGHT = 40;
 }
 
 // called by PreferencesViewController to get user preferences
-- (void)sendData:(NSMutableArray *)prefRequest{
+- (void)sendData:(NSMutableArray *)prefRequest {
     // check that preferences aren't empty
-    if([prefRequest count] > 0){
+    if ([prefRequest count] > 0) {
         self.preferences = prefRequest;
         [self.draggableBackground removeFromSuperview];
         [self setupCards];
@@ -101,72 +102,72 @@ static const float TITLE_HEIGHT = 40;
 }
 #pragma mark - DraggableViewBackground methods
 
-- (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
+- (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion {
     [APIManager checkIfRecipeIsAlreadyLikedWithId:nextCard.recipeId andCompletion:^(BOOL liked, NSError * _Nullable error) {
-        if(liked == YES){
+        if (liked == YES) {
             completion(YES, nil);
-        } else{
+        } else {
             completion(NO, error);
         }
     }];
 }
 
-- (void)checkSaveStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion{
+- (void)checkSaveStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion {
     [APIManager checkIfRecipeIsAlreadySavedWithId:nextCard.recipeId andCompletion:^(BOOL saved, NSError * _Nullable error) {
-        if(saved == YES){
+        if (saved == YES) {
             completion(YES, nil);
-        } else{
+        } else {
             completion(NO, error);
         }
     }];
 }
 
-- (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
+- (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion {
     [APIManager postLikedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(succeeded){
+        if (succeeded) {
             completion(YES, nil);
-        } else{
+        } else {
             completion(NO, error);
         }
     }];
 }
 
-- (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion{
+- (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion {
     [APIManager unlikeRecipeWithId:recipeId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
-        if(succeeded){
+        if (succeeded) {
             completion(YES, nil);
-        } else{
+        } else {
             completion(NO, error);
         }
     }];
 }
 
-- (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:( NSString * _Nullable )title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion{
+- (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:( NSString * _Nullable )title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion {
     [APIManager postSavedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {}];
 }
 
-- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
     [APIManager countLikesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
 
-- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion{
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
     [APIManager countSavesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
 
-- (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card{
+- (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card {
     [self performSegueWithIdentifier:@"detailsViewSegue" sender:card];
 }
 
-- (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion{
+- (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion {
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError * _Nullable error){
-        if(recipes){
+        if (recipes) {
             self.draggableBackground.recipes = (NSMutableArray*)recipes;
             completion(YES, nil);
-        } else{
+        } else {
             completion(NO, error);
         }
     }];

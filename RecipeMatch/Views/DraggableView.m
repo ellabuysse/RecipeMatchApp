@@ -55,7 +55,7 @@ static const float DETAILS_Y_OFFSET = 20;
 @synthesize saveLabel;
 @synthesize saveCount;
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self setupView];
@@ -117,11 +117,11 @@ static const float DETAILS_Y_OFFSET = 20;
     return self;
 }
 
--(void)didTapDetails{
+-(void)didTapDetails {
     [delegate draggableViewDidTapOnDetails];
 }
 
-- (void)setupView{
+- (void)setupView {
     self.layer.cornerRadius = 4;
     self.layer.shadowRadius = 3;
     self.layer.shadowOpacity = 0.2;
@@ -130,7 +130,7 @@ static const float DETAILS_Y_OFFSET = 20;
 
 // called when you move your finger across the screen.
 // called many times a second
-- (void)beingDragged:(UIPanGestureRecognizer *)gestureRecognizer{
+- (void)beingDragged:(UIPanGestureRecognizer *)gestureRecognizer {
     // this extracts the coordinate data from your swipe movement. (i.e. How much did you move?)
     xFromCenter = [gestureRecognizer translationInView:self].x; // positive for right swipe, negative for left
     yFromCenter = [gestureRecognizer translationInView:self].y; // positive for up, negative for down
@@ -138,7 +138,7 @@ static const float DETAILS_Y_OFFSET = 20;
     //checks what state the gesture is in. (are you just starting, letting go, or in the middle of a swipe?)
     switch (gestureRecognizer.state) {
             // just started swiping
-        case UIGestureRecognizerStateBegan:{
+        case UIGestureRecognizerStateBegan: {
             self.originalPoint = self.center;
             break;
         };
@@ -180,7 +180,7 @@ static const float DETAILS_Y_OFFSET = 20;
 }
 
 // checks to see if you are moving right or left and applies the correct overlay image
-- (void)updateOverlay:(CGFloat)distance{
+- (void)updateOverlay:(CGFloat)distance {
     if (distance > 0) {
         overlayView.mode = GGOverlayViewModeRight;
     } else {
@@ -190,7 +190,7 @@ static const float DETAILS_Y_OFFSET = 20;
 }
 
 // called when the card is let go
-- (void)afterSwipeAction{
+- (void)afterSwipeAction {
     if (xFromCenter > ACTION_MARGIN) {
         [self rightAction];
     } else if (xFromCenter < -ACTION_MARGIN) {
@@ -200,7 +200,7 @@ static const float DETAILS_Y_OFFSET = 20;
                          animations:^{
                              self.center = self.originalPoint;
                              self.transform = CGAffineTransformMakeRotation(0);
-                            self->overlayView.alpha = 0;
+                             self->overlayView.alpha = 0;
         }];
     }
 }
@@ -208,7 +208,7 @@ static const float DETAILS_Y_OFFSET = 20;
 #pragma mark - DraggableViewDelegate
 
 // called when a swipe exceeds the ACTION_MARGIN to the right
-- (void)rightAction{
+- (void)rightAction {
     CGPoint finishPoint = CGPointMake(500, 2*yFromCenter +self.originalPoint.y);
     [UIView animateWithDuration:0.3
                      animations:^{
@@ -221,7 +221,7 @@ static const float DETAILS_Y_OFFSET = 20;
 }
 
 // called when a swip exceeds the ACTION_MARGIN to the left
-- (void)leftAction{
+- (void)leftAction {
     CGPoint finishPoint = CGPointMake(-500, 2*yFromCenter +self.originalPoint.y);
     [UIView animateWithDuration:0.3
                      animations:^{
@@ -230,32 +230,6 @@ static const float DETAILS_Y_OFFSET = 20;
                          [self removeFromSuperview];
                      }];
     
-    [delegate draggableViewCardSwipedLeft:self];
-}
-
-- (void)rightClickAction:(void (^)(BOOL succeeded, NSError *error))completion{
-    CGPoint finishPoint = CGPointMake(600, self.center.y);
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                         self.center = finishPoint;
-                         self.transform = CGAffineTransformMakeRotation(1);
-                     }completion:^(BOOL complete){
-                         [self removeFromSuperview];
-                         completion(YES, nil);
-                     }];
-    [delegate draggableViewCardSwipedRight:self];
-}
-
-- (void)leftClickAction:(void (^)(BOOL succeeded, NSError *error))completion{
-    CGPoint finishPoint = CGPointMake(-600, self.center.y);
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                         self.center = finishPoint;
-                         self.transform = CGAffineTransformMakeRotation(-1);
-                     }completion:^(BOOL complete){
-                         [self removeFromSuperview];
-                         completion(YES, nil);
-                     }];
     [delegate draggableViewCardSwipedLeft:self];
 }
 @end

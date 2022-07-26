@@ -10,7 +10,7 @@
 
 @implementation GridRecipeCell
 // clears image and title of cell
-- (void)prepareForReuse{
+- (void)prepareForReuse {
     [super prepareForReuse];
     [self.imageView cancelImageDownloadTask];
     self.imageView.image = NULL;

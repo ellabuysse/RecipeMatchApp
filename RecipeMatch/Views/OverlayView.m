@@ -12,7 +12,7 @@
 @implementation OverlayView
 @synthesize imageView;
 
-- (id)initWithFrame:(CGRect)frame{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
@@ -22,19 +22,19 @@
     return self;
 }
 
-- (void)setMode:(GGOverlayViewMode)mode{
+- (void)setMode:(GGOverlayViewMode)mode {
     if (_mode == mode) {
         return;
     }
     _mode = mode;
-    if(mode == GGOverlayViewModeLeft) {
+    if (mode == GGOverlayViewModeLeft) {
         imageView.image = [UIImage imageNamed:@"noButton"];
     } else {
         imageView.image = [UIImage imageNamed:@"yesButton"];
     }
 }
 
-- (void)layoutSubviews{
+- (void)layoutSubviews {
     [super layoutSubviews];
     imageView.frame = CGRectMake(50, 50, 100, 100);
 }

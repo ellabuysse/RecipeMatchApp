@@ -14,6 +14,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
+#import "SDWebImage/SDWebImage.h"
 
 @interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
@@ -87,38 +88,18 @@ static const float HEIGHT_FACTOR = 1.2;
     return self.recipes.count;
 }
 
-- (void)fetchRecipeImageWithUrl:(NSURL*)url andCompletion:(void (^_Nullable)(BOOL succeeded, UIImage *data))completion {
-    NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (data) {
-            // load image data asynchronously
-            UIImage *image = [UIImage imageWithData:data];
-            if (image) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(YES, image);
-                });
-            }
-        }
-    }];
-    [task resume];
-    completion(NO, nil);
+// called by cellForItemAtIndexPath to set up cell with image and title
+- (GridRecipeCell *)setupCell:(GridRecipeCell *)cell withRecipe:(SavedRecipe *)recipe {
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:[UIImage systemImageNamed:@"photo"]];
+    cell.imageView.layer.cornerRadius = CORNER_RADIUS;
+    cell.recipeTitle.text = recipe[@"name"];
+    return cell;
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     SavedRecipe *recipe = self.recipes[indexPath.row];
-    NSURL *url = [NSURL URLWithString:recipe[@"image"]];
-    
-    [self fetchRecipeImageWithUrl:url andCompletion:^(BOOL succeeded, UIImage *image) {
-        if (succeeded) {
-            // get cell at correct index path
-            GridRecipeCell *updateCell = (id)[collectionView cellForItemAtIndexPath:indexPath];
-            if (updateCell) {
-                updateCell.imageView.image = image;
-            }
-        }
-    }];
-    cell.imageView.layer.cornerRadius = CORNER_RADIUS;
-    cell.recipeTitle.text = recipe[@"name"];
+    cell = [self setupCell:cell withRecipe:recipe];
     return cell;
 }
 

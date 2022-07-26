@@ -12,6 +12,7 @@ target 'RecipeMatch' do
   pod 'AFNetworking'
   pod 'BDBOAuth1Manager'
   pod 'CCDropDownMenus'
+  pod 'SDWebImage'
 
   target 'RecipeMatchTests' do
     inherit! :search_paths

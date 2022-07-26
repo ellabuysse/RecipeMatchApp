@@ -26,7 +26,7 @@ NSString* const APP_KEY_PARAM = @"&app_key=";
 NSString* const APP_KEY = @"app_key";
 NSString* const LIKED_RECIPE_TYPE = @"LikedRecipe";
 NSString* const SAVED_RECIPE_TYPE = @"SavedRecipe";
-const int MIN_RECIPE_COUNT = 100; // minimum number of recipes were repetition is unlikely
+const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition is unlikely
 
 @implementation APIManager
 
@@ -96,7 +96,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes were repetition i
     NSURL *url = [NSURL URLWithString:apiString];
     [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         int count = [dataDictionary[@"count"] integerValue];
-        if (count > MIN_RECIPE_COUNT) {
+        if (count > MIN_RECIPE_COUNT) {  // if there are enough recipes, return them
             completion(dataDictionary[@"hits"], nil);
         } else {
             completion(nil, error);

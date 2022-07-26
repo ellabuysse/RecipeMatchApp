@@ -237,7 +237,7 @@ NSString * const SAVE_IMG = @"save-btn";
 
 // called after each card swipe to determine if more cards are needed
 - (void)checkCardIndexStatus {
-    if (currentCardIndex == [allCards count]-2) { // when all cards are swiped, get more cards
+    if (currentCardIndex == [allCards count]-1) { // when all cards are swiped, get more cards
         [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [self setupCards];

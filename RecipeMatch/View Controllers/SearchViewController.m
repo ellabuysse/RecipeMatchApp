@@ -33,7 +33,7 @@ static const float HEIGHT_FACTOR = 1.2;
     self.collectionView.dataSource = self;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     SearchCollectionReusableView *searchView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SearchView" forIndexPath:indexPath];
     return searchView;
 }
@@ -55,7 +55,7 @@ static const float HEIGHT_FACTOR = 1.2;
                                 repeats: NO];
 }
 
-- (void)reloadSearch{
+- (void)reloadSearch {
     [self getRecipes:^(NSMutableArray *recipes, NSError *error){
         if(recipes){
             self.recipes = recipes;
@@ -66,11 +66,11 @@ static const float HEIGHT_FACTOR = 1.2;
     }];
 }
 
-- (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion{
+- (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion {
     [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion: ^(NSMutableArray *recipes, NSError *error) {
-        if(recipes){
+        if (recipes) {
             completion(recipes, nil);
-        } else{
+        } else {
             completion(nil, error);
         }
     }];
@@ -78,7 +78,7 @@ static const float HEIGHT_FACTOR = 1.2;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)viewDidLayoutSubviews{
+- (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = MIN_LINE_SPACING;
@@ -147,5 +147,4 @@ static const float HEIGHT_FACTOR = 1.2;
          detailsController.savedRecipe = newRecipe;
      }
  }
-
 @end

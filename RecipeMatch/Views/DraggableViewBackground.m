@@ -109,9 +109,7 @@ NSString * const SAVE_IMG = @"save-btn";
     draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
     draggableView.imageUrl = imageUrl;
-    //NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
     [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage systemImageNamed:@"photo"]];
-    //draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     draggableView.delegate = self;
     return draggableView;
 }
@@ -128,7 +126,7 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // called initially when page loads to populate loadedCards array and show loaded cards
-- (void)showLoadedCards{
+- (void)showLoadedCards {
     // adds a small number of cards from allCards to be loaded
     NSInteger numLoadedCardsCap = (([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
     NSInteger cardIndex = 0;

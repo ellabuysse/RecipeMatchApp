@@ -14,7 +14,6 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
-#import "SDWebImage/SDWebImage.h"
 
 @interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
@@ -23,7 +22,6 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
-static const float CORNER_RADIUS = 15;
 static const float MIN_LINE_SPACING = 10;
 static const float HEIGHT_FACTOR = 1.2;
 
@@ -88,18 +86,10 @@ static const float HEIGHT_FACTOR = 1.2;
     return self.recipes.count;
 }
 
-// called by cellForItemAtIndexPath to set up cell with image and title
-- (GridRecipeCell *)setupCell:(GridRecipeCell *)cell withRecipe:(SavedRecipe *)recipe {
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:[UIImage systemImageNamed:@"photo"]];
-    cell.imageView.layer.cornerRadius = CORNER_RADIUS;
-    cell.recipeTitle.text = recipe[@"name"];
-    return cell;
-}
-
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     SavedRecipe *recipe = self.recipes[indexPath.row];
-    cell = [self setupCell:cell withRecipe:recipe];
+    [cell setupWithRecipe:recipe];
     return cell;
 }
 

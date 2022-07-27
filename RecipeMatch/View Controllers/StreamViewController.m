@@ -50,7 +50,7 @@ static const float TITLE_HEIGHT = 40;
         if (recipes) {
             self.draggableBackground = [[DraggableViewBackground alloc]initWithFrame:self.view.frame];
             self.draggableBackground.delegate = self;
-            self.draggableBackground.recipes = recipes;
+            self.draggableBackground.recipes = [NSMutableArray arrayWithArray:recipes];
             [self.draggableBackground reloadView];
             [self.view addSubview:self.draggableBackground];
         } else {

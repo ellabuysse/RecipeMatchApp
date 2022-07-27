@@ -85,23 +85,29 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 // gets initial array of recipes for home feed from recipe API
 // returns recipes on success, nil on failure
 - (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipe, NSError *error))completion {
-    NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
-    apiString = [apiString stringByAppendingString:APP_ID_PARAM];
-    apiString = [apiString stringByAppendingString:self.app_id];
-    apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
-    apiString = [apiString stringByAppendingString:self.app_key];
-    if (preferences) {
-        apiString = [apiString stringByAppendingString: preferences];
-    }
-    NSURL *url = [NSURL URLWithString:apiString];
-    [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        int count = [dataDictionary[@"count"] integerValue];
-        if (count > MIN_RECIPE_COUNT) {  // if there are enough recipes, return them
-            completion(dataDictionary[@"hits"], nil);
-        } else {
-            completion(nil, error);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+        apiString = [apiString stringByAppendingString:APP_ID_PARAM];
+        apiString = [apiString stringByAppendingString:self.app_id];
+        apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
+        apiString = [apiString stringByAppendingString:self.app_key];
+        if (preferences) {
+            apiString = [apiString stringByAppendingString: preferences];
         }
-    }];
+        NSURL *url = [NSURL URLWithString:apiString];
+        [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
+            int count = [dataDictionary[@"count"] integerValue];
+            if (count > MIN_RECIPE_COUNT) {  // if there are enough recipes, return them
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(dataDictionary[@"hits"], nil);
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(nil, error);
+                });
+            }
+        }];
+    });
 }
 
 // gets specific recipe by id from recipe API

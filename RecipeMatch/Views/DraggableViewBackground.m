@@ -11,13 +11,16 @@
 #import "OverlayView.h"
 #import "APIManager.h"
 #import "StreamViewController.h"
+#import "SDWebImage/SDWebImage.h"
 
 @interface DraggableViewBackground ()
 @end
 
 @implementation DraggableViewBackground {
     NSInteger loadedCardsIndex; // the index of the last card loaded into the loadedCards array
-    NSMutableArray *loadedCards; // the array of card loaded
+    NSMutableArray *loadedCards; // the array of cards loaded
+    NSMutableArray *allCards; // current cards being added to loadedCards to display on screen
+    NSMutableArray *preppedCards; // cards loaded and prepped to be added to allCards when it runs out of cards
     NSInteger currentCardIndex; // index of current card out of all cards
     UIButton* menuButton;
     UIButton* messageButton;
@@ -35,12 +38,12 @@ static const float BTN_YPOS = 650;
 static const float LEFT_BTN_XPOS = 40;
 static const float MIDDLE_BTN_XPOS = 155;
 static const float RIGHT_BTN_XPOS = 290;
+static const float LOAD_OFFSET = 7; // number of cards left in allCards when new cards begin loading
 NSString* const HEART_FILL_IMG = @"heart-btn-filled";
 NSString * const HEART_IMG = @"heart-btn";
 NSString* const SAVE_FILL_IMG = @"save-btn-filled";
 NSString * const SAVE_IMG = @"save-btn";
 
-@synthesize allCards;
 @synthesize delegate;
 
 - (id)initWithFrame:(CGRect)frame {
@@ -53,18 +56,23 @@ NSString * const SAVE_IMG = @"save-btn";
 
 // called after recipes are loaded initially from StreamViewController
 - (void)reloadView {
-    [self setupView];
-    [self setupCards];
-}
-
-// called initially and when new cards are added
-- (void)setupCards {
     loadedCards = [[NSMutableArray alloc] init];
     allCards = [[NSMutableArray alloc] init];
+    preppedCards = [[NSMutableArray alloc] init];
     loadedCardsIndex = 0;
     currentCardIndex = 0;
+    [self setupView];
     [self loadCards];
+    [self swapCards];
+    [self showLoadedCards];
     [self updateValues];
+}
+
+// called when recipe cards are needed on the screen
+// swaps cards from preppedCards to allCards
+- (void)swapCards {
+    [allCards addObjectsFromArray:preppedCards];
+    [preppedCards removeAllObjects];
 }
 
 - (void)updateValues {
@@ -101,8 +109,9 @@ NSString * const SAVE_IMG = @"save-btn";
     draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
     draggableView.imageUrl = imageUrl;
-    NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
-    draggableView.recipeImage.image = [UIImage imageWithData: imageData];
+    //NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
+    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage systemImageNamed:@"photo"]];
+    //draggableView.recipeImage.image = [UIImage imageWithData: imageData];
     draggableView.delegate = self;
     return draggableView;
 }
@@ -110,28 +119,33 @@ NSString * const SAVE_IMG = @"save-btn";
 // loads all the cards and puts the first x in the "loaded cards" array
 - (void)loadCards {
     if([self.recipes count] > 0) {
-        NSInteger numLoadedCardsCap = (([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
-        
         // loops through the recipes array to create a card for each recipe
         for (int i = 0; i<[self.recipes count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
-            [allCards addObject:newCard];
-            if (i<numLoadedCardsCap) {
-                // adds a small number of cards to be loaded
-                [loadedCards addObject:newCard];
-            }
+            [preppedCards addObject:newCard];
         }
-        
-        // displays the small number of loaded cards dictated by MAX_BUFFER_SIZE so that not all the cards
-        // are showing at once and clogging a ton of data
-        for (int i = 0; i<[loadedCards count]; i++) {
-            if (i>0) {
-                [self insertSubview:[loadedCards objectAtIndex:i] belowSubview:[loadedCards objectAtIndex:i-1]];
-            } else {
-                [self addSubview:[loadedCards objectAtIndex:i]];
-            }
-            loadedCardsIndex++; // we loaded a card into loaded cards, so we have to increment
+    }
+}
+
+// called initially when page loads to populate loadedCards array and show loaded cards
+- (void)showLoadedCards{
+    // adds a small number of cards from allCards to be loaded
+    NSInteger numLoadedCardsCap = (([self.recipes count] > MAX_BUFFER_SIZE)?MAX_BUFFER_SIZE:[self.recipes count]);
+    NSInteger cardIndex = 0;
+    while (cardIndex<numLoadedCardsCap) {
+        [loadedCards addObject:[allCards objectAtIndex:cardIndex]];
+        cardIndex++;
+    }
+    
+    // displays the small number of loaded cards dictated by MAX_BUFFER_SIZE so that not all the cards
+    // are showing at once and clogging a ton of data
+    for (int i = 0; i<[loadedCards count]; i++) {
+        if (i>0) {
+            [self insertSubview:[loadedCards objectAtIndex:i] belowSubview:[loadedCards objectAtIndex:i-1]];
+        } else {
+            [self addSubview:[loadedCards objectAtIndex:i]];
         }
+        loadedCardsIndex++; // we loaded a card into loaded cards, so we have to increment
     }
 }
 
@@ -237,14 +251,19 @@ NSString * const SAVE_IMG = @"save-btn";
 
 // called after each card swipe to determine if more cards are needed
 - (void)checkCardIndexStatus {
-    if (currentCardIndex == [allCards count]-1) { // when all cards are swiped, get more cards
+    if (currentCardIndex == [allCards count]-LOAD_OFFSET) { // start loading more cards into preppedCards
         [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                [self setupCards];
+                [self loadCards];
             } else {
-                //TODO: add failure support
+                // TODO: add failure support
             }
         }];
+    } else if (currentCardIndex == [allCards count]-1) { // no cards left -> reset indices and swap new cards in
+        loadedCardsIndex = 0;
+        currentCardIndex = 0;
+        [allCards removeAllObjects];
+        [self swapCards];
     }
 }
 
@@ -253,14 +272,14 @@ NSString * const SAVE_IMG = @"save-btn";
 // action called when the card goes to the left.
 - (void)draggableViewCardSwipedLeft:(UIView *)card {
     [loadedCards removeObjectAtIndex:0]; // card was swiped, so it's no longer a "loaded card"
+    self->currentCardIndex++;
+    [self checkCardIndexStatus];
     if (loadedCardsIndex < [allCards count]) { // if we haven't reached the end of all cards, put another into the loaded cards
         [loadedCards addObject:[allCards objectAtIndex:loadedCardsIndex]];
         loadedCardsIndex++;// loaded a card, so have to increment count
         [self insertSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-1)] belowSubview:[loadedCards objectAtIndex:(MAX_BUFFER_SIZE-2)]];
         [self updateValues];
     }
-    self->currentCardIndex++;
-    [self checkCardIndexStatus];
 }
 
 // action called when the card goes to the right.

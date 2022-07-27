@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSMutableArray *recipes;
 @property (nonatomic, strong) NSString *searchText;
 @property (strong, nonatomic) NSTimer * searchTimer;
+@property (strong, nonatomic) SearchCollectionReusableView *searchView;
 @end
 
 @implementation SearchViewController 
@@ -35,6 +36,7 @@ static const float HEIGHT_FACTOR = 1.2;
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     SearchCollectionReusableView *searchView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SearchView" forIndexPath:indexPath];
+    self.searchView = searchView;
     return searchView;
 }
 
@@ -46,24 +48,27 @@ static const float HEIGHT_FACTOR = 1.2;
         [self.searchTimer invalidate];
         self.searchTimer = nil;
     }
-    
+
     // reschedule the search: in 0.5 second, call the reloadSearch: method on the new textfield content
     self.searchTimer = [NSTimer scheduledTimerWithTimeInterval: 0.5
                                 target: self
-                                selector: @selector(reloadSearch)
-                                userInfo: nil
+                                selector: @selector(reloadSearch:)
+                                userInfo: searchText
                                 repeats: NO];
 }
 
-- (void)reloadSearch {
-    [self getRecipes:^(NSMutableArray *recipes, NSError *error){
-        if(recipes){
-            self.recipes = recipes;
-            [self.collectionView reloadData];
-        } else{
-            //TODO: add failure support
-        }
-    }];
+- (void)reloadSearch:(NSTimer *)timer{
+    NSString *query = timer.userInfo;    // Strong reference!
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self getRecipes:^(NSMutableArray *recipes, NSError *error){
+            if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
+                self.recipes = recipes;
+                [self.collectionView reloadData];
+            } else {
+                //TODO: add failure support
+            }
+        }];
+    });
 }
 
 - (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion {

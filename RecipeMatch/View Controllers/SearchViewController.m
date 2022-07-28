@@ -34,6 +34,7 @@ static const float HEIGHT_FACTOR = 1.2;
     self.collectionView.dataSource = self;
 }
 
+// adds search bar to collection view header
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     SearchCollectionReusableView *searchView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"SearchView" forIndexPath:indexPath];
     self.searchView = searchView;
@@ -57,8 +58,9 @@ static const float HEIGHT_FACTOR = 1.2;
                                 repeats: NO];
 }
 
-- (void)reloadSearch:(NSTimer *)timer{
-    NSString *query = timer.userInfo;    // Strong reference!
+// called when user stops typing to get recipes
+- (void)reloadSearch:(NSTimer *)timer {
+    NSString *query = timer.userInfo;    // strong reference
     dispatch_async(dispatch_get_main_queue(), ^{
         [self getRecipes:^(NSMutableArray *recipes, NSError *error){
             if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
@@ -114,7 +116,8 @@ static const float HEIGHT_FACTOR = 1.2;
     cell.searchImageView.layer.cornerRadius = CORNER_RADIUS;
     cell.searchRecipeTitle.text = recipe[@"label"];
     
-    if(indexPath.row == self.recipes.count-1) { // add more recipes to recipes array
+    // when the bottom of the page is reached, adds more recipes to array for infinitie scroll
+    if(indexPath.row == self.recipes.count-1) {
         [self getRecipes:^(NSArray *recipes, NSError *error){
             if(recipes){
                 [self.recipes addObjectsFromArray:recipes];

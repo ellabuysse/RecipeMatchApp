@@ -22,7 +22,6 @@
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
-static const float CORNER_RADIUS = 15;
 static const float MIN_LINE_SPACING = 10;
 static const float HEIGHT_FACTOR = 1.2;
 
@@ -45,19 +44,19 @@ static const float HEIGHT_FACTOR = 1.2;
 }
 
 // called after returning from PreferencesViewController
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self fetchRecipes];
 }
 
 // fetch all saved recipe from user in APIManager
-- (void)fetchRecipes{
+- (void)fetchRecipes {
     [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
-        if(recipes){
+        if (recipes) {
             self.recipes = recipes;
             [self.recipesCollectionView reloadData];
             [self.refreshControl endRefreshing];
-        } else{
+        } else {
             [self.refreshControl endRefreshing];
             //TODO: Add failure support
         }
@@ -75,7 +74,7 @@ static const float HEIGHT_FACTOR = 1.2;
 
 #pragma mark - UICollectionViewDelegate
 
-- (void)viewDidLayoutSubviews{
+- (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = MIN_LINE_SPACING;
@@ -89,11 +88,8 @@ static const float HEIGHT_FACTOR = 1.2;
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
-    NSDictionary *recipe = self.recipes[indexPath.row];
-    NSString *imageUrl = recipe[@"image"];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:imageUrl]];
-    cell.imageView.layer.cornerRadius = CORNER_RADIUS;
-    cell.recipeTitle.text = recipe[@"name"];
+    SavedRecipe *recipe = self.recipes[indexPath.row];
+    [cell setupWithRecipe:recipe];
     return cell;
 }
 

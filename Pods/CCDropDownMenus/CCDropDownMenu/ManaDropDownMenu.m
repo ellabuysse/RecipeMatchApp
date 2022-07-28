@@ -160,9 +160,9 @@ static CGFloat const seperatorWidth = 1;
         [self animateForClose];
         [self updateForColor:self.inactiveColor];
         
-        //if ([self.delegate respondsToSelector:@selector(dropDownMenu:didSelectRowAtIndex:)]) {
+        if ([self.delegate respondsToSelector:@selector(dropDownMenu:didSelectRowAtIndex:)]) {
             [self.delegate dropDownMenu:self didSelectRowAtIndex:index];
-        //}
+        }
     }
 }
 

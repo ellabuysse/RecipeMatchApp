@@ -153,11 +153,11 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="OHe-CW-FeY" userLabel="Profile View Controller" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EDP-kq-ef7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BD7-3U-4Vo">
-                                <rect key="frame" x="10" y="56" width="404" height="757"/>
+                                <rect key="frame" x="10" y="44" width="404" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QqC-zg-VSy">
                                     <size key="itemSize" width="170" height="190"/>
@@ -182,7 +182,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZ4-n3-lAy">
-                                                    <rect key="frame" x="0.0" y="188" width="180" height="17"/>
+                                                    <rect key="frame" x="0.0" y="188" width="180" height="2"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -191,6 +191,7 @@
                                             <constraints>
                                                 <constraint firstItem="SZ4-n3-lAy" firstAttribute="top" secondItem="GdD-Su-h9j" secondAttribute="bottom" constant="8" id="B71-W4-h1h"/>
                                                 <constraint firstItem="GdD-Su-h9j" firstAttribute="top" secondItem="zDQ-2Q-Wi0" secondAttribute="top" id="eTr-fu-JSm"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="SZ4-n3-lAy" secondAttribute="bottom" id="i2a-Jr-7Zq"/>
                                                 <constraint firstItem="SZ4-n3-lAy" firstAttribute="leading" secondItem="GdD-Su-h9j" secondAttribute="leading" id="i4X-Ma-rn8"/>
                                                 <constraint firstItem="SZ4-n3-lAy" firstAttribute="trailing" secondItem="GdD-Su-h9j" secondAttribute="trailing" id="zdA-o1-OU7"/>
                                             </constraints>
@@ -489,7 +490,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="iFt-Us-QNR"/>
+        <segue reference="oXq-lS-4qU"/>
         <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
     <resources>

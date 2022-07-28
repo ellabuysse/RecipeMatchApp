@@ -38,6 +38,9 @@ PODS:
     - Bolts/Tasks (~> 1.9.1)
     - FBSDKLoginKit (= 11.0.1)
     - Parse/Core
+  - SDWebImage (5.13.2):
+    - SDWebImage/Core (= 5.13.2)
+  - SDWebImage/Core (5.13.2)
 
 DEPENDENCIES:
   - AFNetworking
@@ -46,6 +49,7 @@ DEPENDENCIES:
   - FBSDKLoginKit
   - Parse
   - Parse/FacebookUtils
+  - SDWebImage
 
 SPEC REPOS:
   trunk:
@@ -57,6 +61,7 @@ SPEC REPOS:
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
     - Parse
+    - SDWebImage
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
@@ -67,7 +72,8 @@ SPEC CHECKSUMS:
   FBSDKCoreKit_Basics: 06780a4a12e16596bde8406add02c6aa1bf38616
   FBSDKLoginKit: 8243e04c590c38b85c69fcf09d1234514d2475c3
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
+  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
 
-PODFILE CHECKSUM: 8e6e281a78189750e6dca6bb64f680220e8c8e45
+PODFILE CHECKSUM: b3646cf374eb505cb93dc505c230b7bea1b17dca
 
 COCOAPODS: 1.11.3

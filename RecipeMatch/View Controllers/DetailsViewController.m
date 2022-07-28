@@ -42,10 +42,10 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     
     // setups like button
     [APIManager checkIfRecipeIsAlreadyLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(succeeded == YES){
+        if (succeeded) {
             [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
             self.liked = YES;
-        } else{
+        } else {
             [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
             self.liked = NO;
         }
@@ -53,10 +53,10 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
     //setups save button
     [APIManager checkIfRecipeIsAlreadySavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-        if(succeeded == YES){
+        if (succeeded) {
             [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
             self.saved = YES;
-        } else{
+        } else {
             [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
             self.saved = NO;
         }
@@ -66,9 +66,9 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 }
 
 // gets recipe details from recipe API
-- (void)fetchRecipeInfo{
+- (void)fetchRecipeInfo {
     [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSDictionary *recipe, NSError *error){
-        if(recipe){
+        if (recipe) {
             self.fullRecipe = recipe;
             self.recipeTitle.text = recipe[@"label"];
             [self.source setTitle:recipe[@"source"] forState:UIControlStateNormal];
@@ -96,23 +96,23 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // if recipe is already saved, removes from Parse, otherwise adds it
 - (void)didTapSave:(UIButton *)sender {
-    if(self.saved){
+    if (self.saved) {
         [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
-            if(succeeded){
+            if (succeeded) {
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
                 self.saved = NO;
                 [self updateSaveCount];
-            } else{
+            } else {
                 //TODO: Add failure support
             }
         }];
     } else {
         [APIManager postSavedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if(succeeded){
+            if (succeeded) {
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
                 self.saved = YES;
                 [self updateSaveCount];
-            } else{
+            } else {
                 //TODO: Add failure support
             }
         }];
@@ -120,22 +120,22 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 }
 
 // get save count
--(void)updateSaveCount{
+- (void)updateSaveCount {
     [APIManager countSavesWithId:self.savedRecipe.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
-        if(saves){
+        if (saves) {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
-        } else{
+        } else {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
     }];
 }
 
 // get like count
--(void)updateLikeCount{
+- (void)updateLikeCount {
     [APIManager countLikesWithId:self.savedRecipe.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
-        if(likes){
+        if (likes) {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
-        } else{
+        } else {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
     }];
@@ -143,23 +143,23 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // if recipe is already liked, removes from Parse, otherwise adds it
 - (void)didTapLike:(UIButton *)sender {
-    if(self.liked){
+    if (self.liked) {
         [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
-            if(succeeded){
+            if (succeeded) {
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
                 self.liked = NO;
                 [self updateLikeCount];
-            } else{
+            } else {
                 //TODO: Add failure support
             }
         }];
     } else {
         [APIManager postLikedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if(succeeded){
+            if (succeeded) {
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
                 self.liked = YES;
                 [self updateLikeCount];
-            } else{
+            } else {
                 //TODO: Add failure support
             }
         }];

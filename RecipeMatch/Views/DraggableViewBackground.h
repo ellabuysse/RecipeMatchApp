@@ -43,13 +43,14 @@
 - (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
 - (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
 - (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card;
+- (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
 @end
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>
-- (void)reload;
+- (void)reloadView;
 - (void)updateValues;
 
 @property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;
-@property (retain,nonatomic)NSMutableArray* _Nullable allCards;
-@property NSArray * _Nullable recipes;
+
+@property NSMutableArray * _Nullable recipes; // current array of recipes
 @end

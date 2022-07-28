@@ -17,6 +17,8 @@ static const float CORNER_RADIUS = 15;
     [self.imageView cancelImageDownloadTask];
     self.imageView.image = NULL;
     self.recipeTitle.text = @"";
+    self.searchImageView.image = NULL;
+    self.searchRecipeTitle.text = @"";
 }
 
 - (void)setupWithRecipe:(SavedRecipe *)recipe {

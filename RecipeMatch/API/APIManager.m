@@ -16,7 +16,8 @@
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
-NSString* const BASE_API_PARAMS = @"?type=public&random=true&q=&health=alcohol-free";
+NSString* const BASE_API_PARAMS = @"?type=public&random=true&health=alcohol-free";
+NSString* const BASE_QUERY = @"&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
@@ -103,6 +104,28 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
             completion(dataDictionary[@"hits"], nil);
         } else {
             /* if there are not enough recipes returned, handle the restricting preferences in the caller */
+            completion(nil, error);
+        }
+    }];
+}
+
+
+- (void)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion{
+    NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+    apiString = [apiString stringByAppendingString:APP_ID_PARAM];
+    apiString = [apiString stringByAppendingString:self.app_id];
+    apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
+    apiString = [apiString stringByAppendingString:self.app_key];
+    if(query){
+        apiString = [apiString stringByAppendingString:@"&q="];
+        apiString = [apiString stringByAppendingString: query];
+    }
+    NSURL *url = [NSURL URLWithString:apiString];
+    [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
+        int count = (int)[dataDictionary[@"count"] integerValue];
+        if(count > MIN_RECIPE_COUNT){
+            completion(dataDictionary[@"hits"], nil);
+        } else{
             completion(nil, error);
         }
     }];

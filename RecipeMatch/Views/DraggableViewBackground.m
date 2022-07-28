@@ -62,15 +62,10 @@ NSString * const SAVE_IMG = @"save-btn";
     loadedCardsIndex = 0;
     currentCardIndex = 0;
     [self setupView];
-    [self loadCardsWithCompletion:^(BOOL succeeded, NSError *error){
-        if(succeeded){
-            [self swapCards];
-            [self showLoadedCards];
-            [self updateValues];
-        } else{
-            // TODO: add failure support
-        }
-    }];
+    [self loadCards];
+    [self swapCards];
+    [self showLoadedCards];
+    [self updateValues];
 }
 
 // called when recipe cards are needed on the screen
@@ -120,22 +115,15 @@ NSString * const SAVE_IMG = @"save-btn";
 }
 
 // loads all the cards and puts the first x in the "loaded cards" array
-- (void)loadCardsWithCompletion:(void (^)(BOOL succeeded, NSError *error))completion{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if([self.recipes count] > 0) {
-            // loops through the recipes array to create a card for each recipe
-            for (int i = 0; i<[self.recipes count]; i++) {
-                DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
-                [preppedCards addObject:newCard];
-                NSLog(@"%@", newCard.title.text);
-            }
-        } else{
-            completion(NO, nil);
+- (void)loadCards {
+    if([self.recipes count] > 0) {
+        // loops through the recipes array to create a card for each recipe
+        for (int i = 0; i<[self.recipes count]; i++) {
+            DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
+            [preppedCards addObject:newCard];
+            NSLog(@"%@", newCard.title.text);
         }
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            completion(YES, nil);
-        });
-    });
+    }
 }
 
 // called initially when page loads to populate loadedCards array and show loaded cards
@@ -265,7 +253,7 @@ NSString * const SAVE_IMG = @"save-btn";
     if (currentCardIndex == [allCards count]-LOAD_OFFSET) { // start loading more cards into preppedCards
         [delegate getMoreRecipesFromDraggableViewBackgroundWithCompletion:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                [self loadCardsWithCompletion:^(BOOL succeeded, NSError *error) {}];
+                [self loadCards];
             } else {
                 // TODO: add failure support
             }

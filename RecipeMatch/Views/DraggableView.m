@@ -103,7 +103,7 @@ static const float DETAILS_Y_OFFSET = 20;
         detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-DETAILS_X_OFFSET, DETAILS_Y_OFFSET, DETAILS_BTN_SIZE, DETAILS_BTN_SIZE)];
         [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle.fill"] forState:UIControlStateNormal];
         detailsBtn.tintColor = [UIColor whiteColor];
-        detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        //detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:detailsBtn];
 

@@ -13,11 +13,11 @@
 @interface APIManager ()
 @property (nonatomic, strong) NSString *app_id;
 @property (nonatomic, strong) NSString *app_key;
+@property (nonatomic, strong) NSURLSessionDataTask* dataTask;
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
 NSString* const BASE_API_PARAMS = @"?type=public&random=true&health=alcohol-free";
-NSString* const BASE_QUERY = @"&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
@@ -40,6 +40,11 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     return sharedManager;
 }
 
+- (void)cancelDataTask {
+    [self.dataTask cancel];
+    self.dataTask = nil;
+}
+
 - (instancetype)init {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"Keys" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
@@ -52,7 +57,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 - (void)requestFromAPIWithURL:(NSURL *)url andCompletion:(void (^)(NSDictionary *dataDictionary, NSError *error))completion {
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    self.dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
            if (error != nil) {
                completion(nil, error);
            }
@@ -61,7 +66,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
                completion(dataDictionary, nil);
            };
     }];
-    [task resume];
+    [self.dataTask resume];
 }
 
 // creates PFQuery for Parse search
@@ -122,12 +127,13 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
         query = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLUserAllowedCharacterSet]]; // remove spaces and extra characters
         apiString = [apiString stringByAppendingString: query];
     }
+
     NSURL *url = [NSURL URLWithString:apiString];
     [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         int count = (int)[dataDictionary[@"count"] integerValue];
         if(count > MIN_RECIPE_COUNT){
             completion(dataDictionary[@"hits"], nil);
-        } else{
+        } else {
             completion(nil, error);
         }
     }];

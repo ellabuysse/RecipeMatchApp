@@ -29,6 +29,7 @@ static const float MIN_LINE_SPACING = 10;
 static const float HEIGHT_FACTOR = 1.2;
 static const float MARGIN_SIZE = 7;
 static const float HEADER_SIZE = 50;
+static const float TIMER_INTERVAL = 0.5;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,8 +47,8 @@ static const float HEADER_SIZE = 50;
         self.searchTimer = nil;
     }
 
-    // reschedule the search: in 0.5 second, call the reloadSearch: method on the new textfield content
-    self.searchTimer = [NSTimer scheduledTimerWithTimeInterval: 1
+    // reschedule the search: in TIMER_INTERVAL seconds, call the reloadSearch: method on the new textfield content
+    self.searchTimer = [NSTimer scheduledTimerWithTimeInterval: TIMER_INTERVAL
                                 target: self
                                 selector: @selector(reloadSearch:)
                                 userInfo: searchText
@@ -59,6 +60,7 @@ static const float HEADER_SIZE = 50;
     [searchBar resignFirstResponder];
 }
 
+
 // called when user stops typing to get recipes
 - (void)reloadSearch:(NSTimer *)timer {
     NSString *query = timer.userInfo;    // strong reference
@@ -67,9 +69,10 @@ static const float HEADER_SIZE = 50;
             self.recipes = recipes;
             // only reload section 1 to prevent search bar from losing first responder status
             [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
-            
+        } else if (recipes) {
+            [[APIManager shared] cancelDataTask];
         } else {
-            //TODO: add failure support
+            // TODO: add failure support
         }
     }];
 }
@@ -136,7 +139,7 @@ static const float HEADER_SIZE = 50;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     NSDictionary *recipe = self.recipes[indexPath.row][@"recipe"];
-    [cell searchSetupWithRecipe:recipe];
+    [cell setupWithRecipeFromSearch:recipe];
     
     // when the bottom of the page is reached, adds more recipes to array for infinite scroll
     if (indexPath.row == self.recipes.count-1) {
@@ -167,7 +170,7 @@ static const float HEADER_SIZE = 50;
          DetailsViewController *detailsController = [segue destinationViewController];
          UICollectionViewCell *tappedCell = sender;
          NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
-         detailsController.fullRecipe = self.recipes[indexPath.row][@"recipe"];;
+         detailsController.recipeId = [self.recipes[indexPath.row][@"recipe"][@"uri"] componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
      }
  }
 @end

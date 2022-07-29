@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
-@property (strong, nonatomic) NSString *recipeId;
+@property (strong, nonatomic) NSDictionary *recipe;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -35,19 +35,13 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
    
-    // if given SavedRecipe, need to get full recipe details first
-    if (self.savedRecipe) {
-        self.recipeId = self.savedRecipe.recipeId;
-        [self setupButtons]; // start API calls to prevent excess loading time
-        // wait for fullRecipe data before setting info on screen
-        [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
-            [self fetchRecipeInfo];
-        }];
-    } else { // otherwise, already given full details
-        self.recipeId = [self.fullRecipe[@"uri"] componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
-        [self setupButtons];
+ 
+    [self setupButtons]; // start API calls to prevent excess loading time
+    // wait for fullRecipe data before setting info on screen
+    [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
         [self fetchRecipeInfo];
-    }
+    }];
+
 }
 
 // called initially to load setup like and save buttons
@@ -84,9 +78,9 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // if given SavedRecipe, get full recipe details
 - (void)fetchFullRecipeWithCompletion:(void (^)(BOOL succeeded, NSError *error))completion {
-    [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion:^(NSDictionary *recipe, NSError *error) {
+    [[APIManager shared] getRecipeWithId:self.recipeId andCompletion:^(NSDictionary *recipe, NSError *error) {
         if (recipe) {
-            self.fullRecipe = recipe;
+            self.recipe = recipe;
             completion(YES, nil);
         } else {
             completion(NO, error);
@@ -96,22 +90,22 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // sets recipe details from fullRecipe
 - (void)fetchRecipeInfo {
-    self.recipeTitle.text = self.fullRecipe[@"label"];
-    [self.source setTitle:self.fullRecipe[@"source"] forState:UIControlStateNormal];
+    self.recipeTitle.text = self.recipe[@"label"];
+    [self.source setTitle:self.recipe[@"source"] forState:UIControlStateNormal];
     [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
     [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
-    NSArray *ingrArray = self.fullRecipe[@"ingredientLines"];
+    NSArray *ingrArray = self.recipe[@"ingredientLines"];
     NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
     self.ingredients.text = [@"• " stringByAppendingString:ingrString];
-    self.yield.text = [NSString stringWithFormat:@"%@", self.fullRecipe[@"yield"]];
-    [self.recipeImage sd_setImageWithURL:[NSURL URLWithString:self.fullRecipe[@"image"]] placeholderImage:nil];
+    self.yield.text = [NSString stringWithFormat:@"%@", self.recipe[@"yield"]];
+    [self.recipeImage sd_setImageWithURL:[NSURL URLWithString:self.recipe[@"image"]] placeholderImage:nil];
     [self.view setNeedsDisplay];
 }
 
 // called when recipe source is tapped to redirect to recipe site
 - (void)didTapSource:(UIButton *)sender {
     UIApplication *application = [UIApplication sharedApplication];
-    NSURL *URL = [NSURL URLWithString:self.fullRecipe[@"url"]];
+    NSURL *URL = [NSURL URLWithString:self.recipe[@"url"]];
     [application openURL:URL options:@{} completionHandler:nil];
 }
 
@@ -128,7 +122,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             }
         }];
     } else {
-        [APIManager postSavedRecipeWithId:self.recipeId title:self.fullRecipe[@"label"] image:self.fullRecipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [APIManager postSavedRecipeWithId:self.recipeId title:self.recipe[@"label"] image:self.recipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
                 self.saved = YES;
@@ -175,7 +169,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             }
         }];
     } else {
-        [APIManager postLikedRecipeWithId:self.recipeId title:self.fullRecipe[@"label"] image:self.fullRecipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [APIManager postLikedRecipeWithId:self.recipeId title:self.recipe[@"label"] image:self.recipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
                 self.liked = YES;

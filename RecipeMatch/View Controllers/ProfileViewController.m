@@ -91,7 +91,7 @@ static const float TOP_MARGIN = 20;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     SavedRecipe *recipe = self.recipes[indexPath.row];
-    [cell setupWithRecipe:recipe];
+    [cell setupWithRecipeFromProfile:recipe];
     return cell;
 }
 
@@ -111,7 +111,7 @@ static const float TOP_MARGIN = 20;
         UICollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
         SavedRecipe *recipe = self.recipes[indexPath.row];
-        detailsController.savedRecipe = recipe;
+        detailsController.recipeId = recipe.recipeId;
     }
 }
 @end

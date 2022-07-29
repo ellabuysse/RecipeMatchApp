@@ -173,7 +173,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="170" height="190"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GdD-Su-h9j">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GdD-Su-h9j">
                                                     <rect key="frame" x="0.0" y="0.0" width="180" height="180"/>
                                                     <color key="tintColor" systemColor="systemGray3Color"/>
                                                     <constraints>
@@ -181,7 +181,7 @@
                                                         <constraint firstAttribute="height" constant="180" id="pb0-oM-fDr"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZ4-n3-lAy">
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZ4-n3-lAy">
                                                     <rect key="frame" x="0.0" y="188" width="180" height="2"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
@@ -198,8 +198,6 @@
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="170" height="190"/>
                                         <connections>
-                                            <outlet property="imageView" destination="GdD-Su-h9j" id="Fk3-0M-AT9"/>
-                                            <outlet property="recipeTitle" destination="SZ4-n3-lAy" id="7EU-5J-fPp"/>
                                             <segue destination="3d8-s9-noU" kind="show" identifier="detailsViewSegue" id="oXq-lS-4qU"/>
                                         </connections>
                                     </collectionViewCell>
@@ -560,14 +558,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="205"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Vj-hI-Fkc">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Vj-hI-Fkc">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="180"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="180" id="2bk-Ol-YfA"/>
                                                         <constraint firstAttribute="height" constant="180" id="yHQ-ii-SHS"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuc-rt-wRn">
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuc-rt-wRn">
                                                     <rect key="frame" x="60" y="188" width="42" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
@@ -583,8 +581,6 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
-                                            <outlet property="searchImageView" destination="1Vj-hI-Fkc" id="IIl-JH-bpG"/>
-                                            <outlet property="searchRecipeTitle" destination="nuc-rt-wRn" id="Wyv-Ev-kja"/>
                                             <segue destination="3d8-s9-noU" kind="show" identifier="detailsViewSegue" id="D7I-YF-KYW"/>
                                         </connections>
                                     </collectionViewCell>

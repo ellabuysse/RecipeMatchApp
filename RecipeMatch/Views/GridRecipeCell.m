@@ -15,21 +15,30 @@ static const float CORNER_RADIUS = 15;
 // clears image and title of cell
 - (void)prepareForReuse {
     [super prepareForReuse];
+    [self.imageView cancelImageDownloadTask];
+    self.imageView.image = NULL;
     [self.imageView sd_cancelCurrentImageLoad];
     self.recipeTitle.text = @"";
-    [self.searchImageView sd_cancelCurrentImageLoad];
-    self.searchRecipeTitle.text = @"";
 }
 
-- (void)setupWithRecipe:(SavedRecipe *)recipe {
+// sets up cell for profile page
+- (void)setupWithRecipeFromProfile:(SavedRecipe *)recipe {
+    // set outlets programmatically
+    self.imageView = (UIImageView *)[self viewWithTag:1];
+    self.recipeTitle = (UILabel *)[self viewWithTag:2];
+
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe.image] placeholderImage:nil];
     self.imageView.layer.cornerRadius = CORNER_RADIUS;
     self.recipeTitle.text = recipe.name;
 }
 
-- (void)searchSetupWithRecipe:(NSDictionary *)recipe {
-    [self.searchImageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:nil];
-    self.searchImageView.layer.cornerRadius = CORNER_RADIUS;
-    self.searchRecipeTitle.text = recipe[@"label"];
+// sets up cell for search page
+- (void)setupWithRecipeFromSearch:(NSDictionary *)recipe {
+    self.imageView = (UIImageView *)[self viewWithTag:3];
+    self.recipeTitle = (UILabel *)[self viewWithTag:4];
+
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:nil];
+    self.imageView.layer.cornerRadius = CORNER_RADIUS;
+    self.recipeTitle.text = recipe[@"label"];
 }
 @end

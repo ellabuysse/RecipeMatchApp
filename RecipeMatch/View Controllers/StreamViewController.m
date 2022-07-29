@@ -32,7 +32,7 @@ static const float TITLE_HEIGHT = 40;
     imageView.frame = titleView.bounds;
     [titleView addSubview:imageView];
     self.navigationItem.titleView = titleView;
-    //[self setupCards];
+    [self setupCards];
 }
 
 // called after returning from PreferencesViewController

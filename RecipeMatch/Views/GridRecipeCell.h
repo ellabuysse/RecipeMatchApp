@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *searchRecipeTitle;
 
 - (void)setupWithRecipe:(SavedRecipe *)recipe;
+- (void)searchSetupWithRecipe:(NSDictionary *)recipe;
 @end
 
 NS_ASSUME_NONNULL_END

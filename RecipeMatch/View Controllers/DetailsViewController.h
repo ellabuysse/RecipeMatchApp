@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DetailsViewController : UIViewController
 @property (strong, nonatomic) SavedRecipe *savedRecipe;
+@property NSDictionary *fullRecipe;
 @end
 
 NS_ASSUME_NONNULL_END

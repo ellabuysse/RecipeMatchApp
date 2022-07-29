@@ -7,6 +7,7 @@
 
 #import "DetailsViewController.h"
 #import "APIManager.h"
+#import "SDWebImage/SDWebImage.h"
 
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
@@ -14,12 +15,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *yield;
 @property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property (weak, nonatomic) IBOutlet UIButton *source;
-@property (strong, nonatomic) NSString *recipeUrl;
 @property (weak, nonatomic) IBOutlet UIButton *likeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
-@property NSDictionary *fullRecipe;
+@property (strong, nonatomic) NSString *recipeId;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -34,14 +34,31 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
-    [self fetchRecipeInfo];
+   
+    // if given SavedRecipe, need to get full recipe details first
+    if (self.savedRecipe) {
+        self.recipeId = self.savedRecipe.recipeId;
+        [self setupButtons]; // start API calls to prevent excess loading time
+        // wait for fullRecipe data before setting info on screen
+        [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
+            [self fetchRecipeInfo];
+        }];
+    } else { // otherwise, already given full details
+        self.recipeId = [self.fullRecipe[@"uri"] componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
+        [self setupButtons];
+        [self fetchRecipeInfo];
+    }
+}
+
+// called initially to load setup like and save buttons
+- (void)setupButtons {
     [self.likeBtn addTarget:self action:@selector(didTapLike:)
          forControlEvents:UIControlEventTouchUpInside];
     [self.saveBtn addTarget:self action:@selector(didTapSave:)
          forControlEvents:UIControlEventTouchUpInside];
-    
+        
     // setups like button
-    [APIManager checkIfRecipeIsAlreadyLikedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager checkIfRecipeIsAlreadyLikedWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
             self.liked = YES;
@@ -52,7 +69,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     }];
 
     //setups save button
-    [APIManager checkIfRecipeIsAlreadySavedWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+    [APIManager checkIfRecipeIsAlreadySavedWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
             self.saved = YES;
@@ -65,39 +82,43 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [self updateSaveCount];
 }
 
-// gets recipe details from recipe API
-- (void)fetchRecipeInfo {
-    [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion: ^(NSDictionary *recipe, NSError *error){
+// if given SavedRecipe, get full recipe details
+- (void)fetchFullRecipeWithCompletion:(void (^)(BOOL succeeded, NSError *error))completion {
+    [[APIManager shared] getRecipeWithId:self.savedRecipe.recipeId andCompletion:^(NSDictionary *recipe, NSError *error) {
         if (recipe) {
             self.fullRecipe = recipe;
-            self.recipeTitle.text = recipe[@"label"];
-            [self.source setTitle:recipe[@"source"] forState:UIControlStateNormal];
-            [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
-            [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
-            self.recipeUrl = recipe[@"url"];
-            NSArray *ingrArray = recipe[@"ingredientLines"];
-            NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
-            self.ingredients.text = [@"• " stringByAppendingString:ingrString];
-            self.yield.text = [NSString stringWithFormat:@"%@", recipe[@"yield"]];
-            NSString *imageUrl = recipe[@"image"];
-            NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
-            self.recipeImage.image = [UIImage imageWithData: imageData];
-            [self.view setNeedsDisplay];
+            completion(YES, nil);
+        } else {
+            completion(NO, error);
         }
     }];
+}
+
+// sets recipe details from fullRecipe
+- (void)fetchRecipeInfo {
+    self.recipeTitle.text = self.fullRecipe[@"label"];
+    [self.source setTitle:self.fullRecipe[@"source"] forState:UIControlStateNormal];
+    [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+    [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
+    NSArray *ingrArray = self.fullRecipe[@"ingredientLines"];
+    NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
+    self.ingredients.text = [@"• " stringByAppendingString:ingrString];
+    self.yield.text = [NSString stringWithFormat:@"%@", self.fullRecipe[@"yield"]];
+    [self.recipeImage sd_setImageWithURL:[NSURL URLWithString:self.fullRecipe[@"image"]] placeholderImage:nil];
+    [self.view setNeedsDisplay];
 }
 
 // called when recipe source is tapped to redirect to recipe site
 - (void)didTapSource:(UIButton *)sender {
     UIApplication *application = [UIApplication sharedApplication];
-    NSURL *URL = [NSURL URLWithString:self.recipeUrl];
+    NSURL *URL = [NSURL URLWithString:self.fullRecipe[@"url"]];
     [application openURL:URL options:@{} completionHandler:nil];
 }
 
 // if recipe is already saved, removes from Parse, otherwise adds it
 - (void)didTapSave:(UIButton *)sender {
     if (self.saved) {
-        [APIManager unsaveRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
+        [APIManager unsaveRecipeWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if (succeeded) {
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_KEY] forState:UIControlStateNormal];
                 self.saved = NO;
@@ -107,7 +128,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             }
         }];
     } else {
-        [APIManager postSavedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [APIManager postSavedRecipeWithId:self.recipeId title:self.fullRecipe[@"label"] image:self.fullRecipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 [self.saveBtn setImage:[UIImage systemImageNamed:BOOKMARK_FILL_KEY] forState:UIControlStateNormal];
                 self.saved = YES;
@@ -121,7 +142,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // get save count
 - (void)updateSaveCount {
-    [APIManager countSavesWithId:self.savedRecipe.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
+    [APIManager countSavesWithId:self.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
         if (saves) {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
         } else {
@@ -132,7 +153,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // get like count
 - (void)updateLikeCount {
-    [APIManager countLikesWithId:self.savedRecipe.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+    [APIManager countLikesWithId:self.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
         if (likes) {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
         } else {
@@ -144,7 +165,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 // if recipe is already liked, removes from Parse, otherwise adds it
 - (void)didTapLike:(UIButton *)sender {
     if (self.liked) {
-        [APIManager unlikeRecipeWithId:self.savedRecipe.recipeId andCompletion:^(BOOL succeeded, NSError *error){
+        [APIManager unlikeRecipeWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if (succeeded) {
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_KEY] forState:UIControlStateNormal];
                 self.liked = NO;
@@ -154,7 +175,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
             }
         }];
     } else {
-        [APIManager postLikedRecipeWithId:self.savedRecipe.recipeId title:self.savedRecipe.name image:self.savedRecipe.image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        [APIManager postLikedRecipeWithId:self.recipeId title:self.fullRecipe[@"label"] image:self.fullRecipe[@"image"] andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 [self.likeBtn setImage:[UIImage systemImageNamed:HEART_FILL_KEY] forState:UIControlStateNormal];
                 self.liked = YES;

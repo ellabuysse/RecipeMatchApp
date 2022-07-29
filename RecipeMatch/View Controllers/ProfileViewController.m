@@ -24,6 +24,8 @@
 
 static const float MIN_LINE_SPACING = 10;
 static const float HEIGHT_FACTOR = 1.2;
+static const float MARGIN_SIZE = 7;
+static const float TOP_MARGIN = 20;
 
 @implementation ProfileViewController
 - (void)viewDidLoad {
@@ -79,7 +81,7 @@ static const float HEIGHT_FACTOR = 1.2;
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = MIN_LINE_SPACING;
     self.flowLayout.minimumInteritemSpacing = 0;
-    self.flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
+    self.flowLayout.sectionInset = UIEdgeInsetsMake(TOP_MARGIN,MARGIN_SIZE,0,MARGIN_SIZE);
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -96,7 +98,7 @@ static const float HEIGHT_FACTOR = 1.2;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     int totalwidth = self.recipesCollectionView.bounds.size.width;
     int numberOfCellsPerRow = 2;
-    int widthDimensions = (CGFloat)(totalwidth / numberOfCellsPerRow);
+    int widthDimensions = (CGFloat)(totalwidth / numberOfCellsPerRow)-MARGIN_SIZE*2;
     int heightDimensions = widthDimensions * HEIGHT_FACTOR;
     return CGSizeMake(widthDimensions, heightDimensions);
 }

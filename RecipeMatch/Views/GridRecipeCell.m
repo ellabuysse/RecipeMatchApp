@@ -7,6 +7,7 @@
 
 #import "GridRecipeCell.h"
 #import "UIKit+AFNetworking.h"
+#import "SDWebImage/SDWebImage.h"
 
 @implementation GridRecipeCell
 static const float CORNER_RADIUS = 15;
@@ -14,16 +15,21 @@ static const float CORNER_RADIUS = 15;
 // clears image and title of cell
 - (void)prepareForReuse {
     [super prepareForReuse];
-    [self.imageView cancelImageDownloadTask];
-    self.imageView.image = NULL;
+    [self.imageView sd_cancelCurrentImageLoad];
     self.recipeTitle.text = @"";
-    self.searchImageView.image = NULL;
+    [self.searchImageView sd_cancelCurrentImageLoad];
     self.searchRecipeTitle.text = @"";
 }
 
 - (void)setupWithRecipe:(SavedRecipe *)recipe {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe.image] placeholderImage:[UIImage systemImageNamed:@"photo"]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe.image] placeholderImage:nil];
     self.imageView.layer.cornerRadius = CORNER_RADIUS;
     self.recipeTitle.text = recipe.name;
+}
+
+- (void)searchSetupWithRecipe:(NSDictionary *)recipe {
+    [self.searchImageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:nil];
+    self.searchImageView.layer.cornerRadius = CORNER_RADIUS;
+    self.searchRecipeTitle.text = recipe[@"label"];
 }
 @end

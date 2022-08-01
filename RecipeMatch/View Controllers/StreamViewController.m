@@ -13,7 +13,6 @@
 #import "APIManager.h"
 #import "DetailsViewController.h"
 
-
 @interface StreamViewController()
 @property (nonatomic, strong) NSMutableArray *preferences;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;

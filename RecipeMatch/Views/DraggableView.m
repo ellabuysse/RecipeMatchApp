@@ -38,9 +38,7 @@ static const float LABEL_WIDTH = 50;
 static const float IMAGE_X_OFFSET = 10;
 static const float SHORT_LABEL_WIDTH = 15;
 static const float FONT_SIZE = 16;
-static const float DETAILS_BTN_SIZE = 25;
-static const float DETAILS_X_OFFSET = 48;
-static const float DETAILS_Y_OFFSET = 20;
+static const float TITLE_X_OFFSET = 20;
 
 @synthesize delegate; // delegate is instance of DraggableViewBackground
 @synthesize panGestureRecognizer;
@@ -72,7 +70,7 @@ static const float DETAILS_Y_OFFSET = 20;
         [[self likeLabel] setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [self addSubview:likeLabel];
 
-        title = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height - TITLE_Y_OFFSET, self.frame.size.width, LABEL_HEIGHT * 2)];
+        title = [[UILabel alloc]initWithFrame:CGRectMake(TITLE_X_OFFSET, self.frame.size.height - TITLE_Y_OFFSET, self.frame.size.width - TITLE_X_OFFSET * 2, LABEL_HEIGHT * 2)];
         title.lineBreakMode = NSLineBreakByWordWrapping;
         title.numberOfLines = 0;
         title.textColor = [UIColor blackColor];

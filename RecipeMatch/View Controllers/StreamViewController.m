@@ -59,12 +59,20 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
+- (void)showAlert {
+    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Oops!" message:@"Ran out of results with these preferences! Showing recipes that match most of your preferences." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
+    [recipeFailure addAction:okAction];
+    [self presentViewController:recipeFailure animated:YES completion:^{}];
+}
+
 // called when there are not enought recipes from user preferences
 // removes preferences one by one until enough recipes are found
 - (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
     if ([self.preferences count] > 0) {
         [self.preferences removeLastObject];
     }
+    [self showAlert];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if (recipes) {
             completion(recipes, nil);

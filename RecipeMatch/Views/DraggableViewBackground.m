@@ -306,14 +306,14 @@ NSString * const SAVE_IMG = @"save-btn";
         if (liked) {
             [self.delegate unlikeRecipeFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if (succeeded) {
-                    [sender setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
+                    [self->heartButton setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
             }];
         } else {
             [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:card.recipeId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if (succeeded) {
-                    [sender setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
+                    [self->heartButton setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
             }];
@@ -324,5 +324,10 @@ NSString * const SAVE_IMG = @"save-btn";
 - (void)draggableViewDidTapOnDetails {
     DraggableView *card = [loadedCards firstObject];
     [delegate showDetailsFromDraggableViewBackground:card];
+}
+
+- (void)draggableViewDidTapLike {
+    DraggableView *card = [loadedCards firstObject];
+    [self tapLike:card];
 }
 @end

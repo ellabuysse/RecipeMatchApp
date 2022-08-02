@@ -51,6 +51,5 @@
 - (void)updateValues;
 
 @property (weak) id <DraggableViewBackgroundDelegate> _Nullable delegate;
-
 @property NSMutableArray * _Nullable recipes; // current array of recipes
 @end

@@ -49,7 +49,6 @@ static const float DETAILS_Y_OFFSET = 20;
 @synthesize recipeImage;
 @synthesize imageUrl;
 @synthesize overlayView;
-@synthesize detailsBtn;
 @synthesize likeLabel;
 @synthesize likeCount;
 @synthesize saveLabel;
@@ -100,16 +99,20 @@ static const float DETAILS_Y_OFFSET = 20;
         recipeImage.layer.cornerRadius = CORNER_RADIUS;
         [self addSubview:recipeImage];
         
-        detailsBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-DETAILS_X_OFFSET, DETAILS_Y_OFFSET, DETAILS_BTN_SIZE, DETAILS_BTN_SIZE)];
-        [detailsBtn setBackgroundImage:[UIImage systemImageNamed:@"info.circle.fill"] forState:UIControlStateNormal];
-        detailsBtn.tintColor = [UIColor whiteColor];
-        detailsBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [detailsBtn addTarget:self action:@selector(didTapDetails) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:detailsBtn];
-
         panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(beingDragged:)];
         [self addGestureRecognizer:panGestureRecognizer];
         
+        // show details on single tap
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapDetails)];
+        singleTap.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:singleTap];
+
+        // like recipe on double tap
+        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap)];
+        doubleTap.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTap];
+        [singleTap requireGestureRecognizerToFail:doubleTap];
+
         overlayView = [[OverlayView alloc]initWithFrame:CGRectMake(self.frame.size.width/2-OVERLAY_SIZE, 0, OVERLAY_SIZE, OVERLAY_SIZE)];
         overlayView.alpha = 0;
         [self addSubview:overlayView];
@@ -117,8 +120,12 @@ static const float DETAILS_Y_OFFSET = 20;
     return self;
 }
 
--(void)didTapDetails {
+- (void)didTapDetails {
     [delegate draggableViewDidTapOnDetails];
+}
+
+- (void)didDoubleTap {
+    [delegate draggableViewDidTapLike];
 }
 
 - (void)setupView {

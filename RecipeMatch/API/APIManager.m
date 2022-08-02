@@ -98,14 +98,13 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     }
     NSURL *url = [NSURL URLWithString:apiString];
     [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        RecipeModel *recipeModel = [[RecipeModel alloc] initWithDictionary:dataDictionary error:&error];
-
-        int count = recipeModel.count;
+        //RecipeModel *recipeModel = [[RecipeModel alloc] initWithDictionary:dataDictionary error:&error];
+        int count = dataDictionary[@"count"];
         if (count > MIN_RECIPE_COUNT) {
             /* if the total count of recipes returned is large enough,
                numerous random calls to the API are unlikely to produce repeated recipes.
                we want variation in the recipes, not the same ones shown repeatedly */
-            completion(recipeModel.hits, nil);
+            completion(dataDictionary[@"hits"], nil);
         } else {
             /* if there are not enough recipes returned, handle the restricting preferences in the caller */
             completion(nil, error);

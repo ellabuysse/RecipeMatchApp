@@ -62,7 +62,6 @@ static const float TIMER_INTERVAL = 0.5;
     [searchBar resignFirstResponder];
 }
 
-
 // called when user stops typing to get recipes
 - (void)reloadSearch:(NSTimer *)timer {
     NSString *query = timer.userInfo;    // strong reference

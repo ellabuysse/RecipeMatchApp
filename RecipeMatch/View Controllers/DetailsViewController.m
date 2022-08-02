@@ -39,7 +39,6 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
         [self fetchRecipeInfo];
     }];
-
 }
 
 // called initially to load setup like and save buttons

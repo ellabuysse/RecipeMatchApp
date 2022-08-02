@@ -10,9 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol RecipeContainerModel;
+@protocol RecipeContainerModel @end
 
-@interface SingleRecipeModel : JSONModel
+@interface RecipeModel : JSONModel
 @property (nonatomic) NSString *uri;
 @property (nonatomic) NSString *label;
 @property (nonatomic) NSString *image;
@@ -23,11 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface RecipeContainerModel : JSONModel
-@property SingleRecipeModel *recipe;
+@property RecipeModel *recipe;
 @end
 
-@interface RecipeModel : JSONModel
-@property (nonatomic) NSArray <RecipeContainerModel *> <RecipeContainerModel> *hits;
+@interface AllRecipesModel : JSONModel
+@property (nonatomic) NSMutableArray <RecipeContainerModel *> <RecipeContainerModel> *hits;
 @property (nonatomic) int count;
 @end
 

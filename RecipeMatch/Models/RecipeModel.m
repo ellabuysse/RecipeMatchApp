@@ -8,5 +8,10 @@
 #import "RecipeModel.h"
 
 @implementation RecipeModel
+@end
 
+@implementation RecipeContainerModel
+@end
+
+@implementation AllRecipesModel
 @end

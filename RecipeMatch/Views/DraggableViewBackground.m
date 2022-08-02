@@ -12,6 +12,7 @@
 #import "APIManager.h"
 #import "StreamViewController.h"
 #import "SDWebImage/SDWebImage.h"
+#import "RecipeModel.h"
 
 @interface DraggableViewBackground ()
 @end
@@ -104,12 +105,12 @@ NSString * const SAVE_IMG = @"save-btn";
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-    draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
-    NSString *recipeUri = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
+    RecipeContainerModel *recipeContainer = [self.recipes objectAtIndex:index];
+    draggableView.title.text = recipeContainer.recipe.label;
+    NSString *recipeUri = recipeContainer.recipe.uri;
     draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
-    NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
-    draggableView.imageUrl = imageUrl;
-    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    draggableView.imageUrl = recipeContainer.recipe.image;
+    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:draggableView.imageUrl] placeholderImage:nil];
     draggableView.delegate = self;
     return draggableView;
 }

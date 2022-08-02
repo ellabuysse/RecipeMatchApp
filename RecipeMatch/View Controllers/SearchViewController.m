@@ -13,6 +13,7 @@
 #import "DetailsViewController.h"
 #import "DraggableView.h"
 #import "EmptyCollectionReusableView.h"
+#import "RecipeModel.h"
 
 @interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -138,8 +139,9 @@ static const float TIMER_INTERVAL = 0.5;
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
-    NSDictionary *recipe = self.recipes[indexPath.row][@"recipe"];
-    [cell setupWithRecipeTitle:recipe[@"label"] recipeImageUrl:recipe[@"image"] cellType:GridRecipeCellTypeSearch];
+    RecipeContainerModel *recipeContainer = self.recipes[indexPath.row];
+    RecipeModel *recipe = recipeContainer.recipe;
+    [cell setupWithRecipeTitle:recipe.label recipeImageUrl:recipe.image cellType:GridRecipeCellTypeSearch];
     
     // when the bottom of the page is reached, adds more recipes to array for infinite scroll
     if (indexPath.row == self.recipes.count-1) {
@@ -170,7 +172,8 @@ static const float TIMER_INTERVAL = 0.5;
          DetailsViewController *detailsController = [segue destinationViewController];
          UICollectionViewCell *tappedCell = sender;
          NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
-         detailsController.recipeId = [self.recipes[indexPath.row][@"recipe"][@"uri"] componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
+         RecipeContainerModel *recipeContainer = self.recipes[indexPath.row];
+         detailsController.recipeId = [recipeContainer.recipe.uri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
      }
  }
 @end

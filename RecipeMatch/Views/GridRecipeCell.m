@@ -11,6 +11,10 @@
 
 @implementation GridRecipeCell
 static const float CORNER_RADIUS = 15;
+static const int PROFILE_IMAGE_TAG = 1;
+static const int SEARCH_IMAGE_TAG = 3;
+static const int PROFILE_TITLE_TAG = 2;
+static const int SEARCH_TITLE_TAG = 4;
 
 // clears image and title of cell
 - (void)prepareForReuse {
@@ -21,24 +25,12 @@ static const float CORNER_RADIUS = 15;
     self.recipeTitle.text = @"";
 }
 
-// sets up cell for profile page
-- (void)setupWithRecipeFromProfile:(SavedRecipe *)recipe {
-    // set outlets programmatically
-    self.imageView = (UIImageView *)[self viewWithTag:1];
-    self.recipeTitle = (UILabel *)[self viewWithTag:2];
+- (void)setupWithRecipeTitle:(NSString *)recipeTitle recipeImageUrl:(NSString *)recipeImageURl screenType:(ScreenTypeConstants)screenType {
+    self.imageView = (UIImageView *)[self viewWithTag:(screenType == Profile)?PROFILE_IMAGE_TAG:SEARCH_IMAGE_TAG];
+    self.recipeTitle = (UILabel *)[self viewWithTag:(screenType == Profile)?PROFILE_TITLE_TAG:SEARCH_TITLE_TAG];
 
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe.image] placeholderImage:nil];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipeImageURl] placeholderImage:nil];
     self.imageView.layer.cornerRadius = CORNER_RADIUS;
-    self.recipeTitle.text = recipe.name;
-}
-
-// sets up cell for search page
-- (void)setupWithRecipeFromSearch:(NSDictionary *)recipe {
-    self.imageView = (UIImageView *)[self viewWithTag:3];
-    self.recipeTitle = (UILabel *)[self viewWithTag:4];
-
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipe[@"image"]] placeholderImage:nil];
-    self.imageView.layer.cornerRadius = CORNER_RADIUS;
-    self.recipeTitle.text = recipe[@"label"];
+    self.recipeTitle.text = recipeTitle;
 }
 @end

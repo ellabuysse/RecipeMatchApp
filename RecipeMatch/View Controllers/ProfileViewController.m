@@ -91,7 +91,7 @@ static const float TOP_MARGIN = 20;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     SavedRecipe *recipe = self.recipes[indexPath.row];
-    [cell setupWithRecipeFromProfile:recipe];
+    [cell setupWithRecipeTitle:recipe.name recipeImageUrl:recipe.image screenType:Profile];
     return cell;
 }
 

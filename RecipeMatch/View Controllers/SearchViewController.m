@@ -64,25 +64,25 @@ static const float TIMER_INTERVAL = 0.5;
 // called when user stops typing to get recipes
 - (void)reloadSearch:(NSTimer *)timer {
     NSString *query = timer.userInfo;    // strong reference
-    [self getRecipes:^(NSMutableArray *recipes, NSError *error){
+    [self getRecipes:^(NSMutableArray *recipes, NSURLSessionDataTask *dataTask, NSError *error){
         if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
             self.recipes = recipes;
             // only reload section 1 to prevent search bar from losing first responder status
             [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
         } else if (recipes) {
-            [[APIManager shared] cancelDataTask];
+            [dataTask cancel];
         } else {
             // TODO: add failure support
         }
     }];
 }
 
-- (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion {
-    [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion:^(NSMutableArray *recipes, NSError *error) {
+- (void)getRecipes:(void (^)(NSMutableArray *recipes, NSURLSessionDataTask *dataTask, NSError *error))completion {
+    [[APIManager shared] getRecipesWithQuery:self.searchText andCompletion:^(NSMutableArray *recipes, NSURLSessionDataTask *dataTask, NSError *error) {
         if (recipes) {
-            completion(recipes, nil);
+            completion(recipes, dataTask, nil);
         } else {
-            completion(nil, error);
+            completion(nil, dataTask, error);
         }
     }];
 }
@@ -139,11 +139,11 @@ static const float TIMER_INTERVAL = 0.5;
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
     NSDictionary *recipe = self.recipes[indexPath.row][@"recipe"];
-    [cell setupWithRecipeFromSearch:recipe];
+    [cell setupWithRecipeTitle:recipe[@"label"] recipeImageUrl:recipe[@"image"] screenType:Search];
     
     // when the bottom of the page is reached, adds more recipes to array for infinite scroll
     if (indexPath.row == self.recipes.count-1) {
-        [self getRecipes:^(NSArray *recipes, NSError *error){
+        [self getRecipes:^(NSArray *recipes, NSURLSessionDataTask *dataTask, NSError *error){
             if (recipes) {
                 [self.recipes addObjectsFromArray:recipes];
                 [collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];

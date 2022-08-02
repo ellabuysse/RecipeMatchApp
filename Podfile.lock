@@ -30,6 +30,7 @@ PODS:
   - FBSDKLoginKit/Login (11.0.1):
     - FBSDKCoreKit (~> 11.0.1)
     - FBSDKCoreKit_Basics (~> 11.0.1)
+  - JSONModel (1.8.0)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
@@ -47,6 +48,7 @@ DEPENDENCIES:
   - BDBOAuth1Manager
   - CCDropDownMenus
   - FBSDKLoginKit
+  - JSONModel
   - Parse
   - Parse/FacebookUtils
   - SDWebImage
@@ -60,6 +62,7 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
+    - JSONModel
     - Parse
     - SDWebImage
 
@@ -71,9 +74,10 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 38c9e29a3f1436362acacff6486d3a28628c288f
   FBSDKCoreKit_Basics: 06780a4a12e16596bde8406add02c6aa1bf38616
   FBSDKLoginKit: 8243e04c590c38b85c69fcf09d1234514d2475c3
+  JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
 
-PODFILE CHECKSUM: b3646cf374eb505cb93dc505c230b7bea1b17dca
+PODFILE CHECKSUM: 0049a1ef8a3169caf155ee06b6185313509eb62f
 
 COCOAPODS: 1.11.3

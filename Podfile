@@ -13,7 +13,8 @@ target 'RecipeMatch' do
   pod 'BDBOAuth1Manager'
   pod 'CCDropDownMenus'
   pod 'SDWebImage'
-
+  pod 'JSONModel'
+  
   target 'RecipeMatchTests' do
     inherit! :search_paths
     # Pods for testing

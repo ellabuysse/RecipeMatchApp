@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface APIManager : BDBOAuth1SessionManager
 + (instancetype)shared;
 - (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipe, NSError *error))completion;
-- (void)getRecipesWithQuery:(NSString * _Nullable)preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion;
+- (void)getRecipesWithQuery:(NSString * _Nullable)preferences andCompletion: (void (^)(NSMutableArray *recipe, NSURLSessionDataTask *dataTask, NSError *error))completion;
 - (void)getRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(NSDictionary *recipe, NSError *error))completion;
 + (void)unsaveRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion;
 + (void)unlikeRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion;
@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)countLikesWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(int likes, NSError *error))completion;
 + (void)postLikedRecipeWithId:recipeId title:(NSString * _Nullable)title image: (NSString * _Nullable )image andCompletion:(PFBooleanResultBlock  _Nullable)completion;
 + (void)countSavesWithId:( NSString * _Nullable )recipeId andCompletion:(void (^)(int likes, NSError *error))completion;
-- (void)cancelDataTask;
 @end
 
 NS_ASSUME_NONNULL_END

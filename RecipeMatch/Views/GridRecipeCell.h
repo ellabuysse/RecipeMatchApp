@@ -11,12 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, ScreenTypeConstants) {
+    Profile,
+    Search,
+};
+
 @interface GridRecipeCell : UICollectionViewCell
 @property (weak, nonatomic) UILabel *recipeTitle;
 @property (weak, nonatomic) UIImageView *imageView;
 
-- (void)setupWithRecipeFromProfile:(SavedRecipe *)recipe;
-- (void)setupWithRecipeFromSearch:(NSDictionary *)recipe;
+- (void)setupWithRecipeTitle:(NSString *)recipeTitle recipeImageUrl:(NSString *)recipeImageURl screenType:(ScreenTypeConstants)screenType;
 @end
 
 NS_ASSUME_NONNULL_END

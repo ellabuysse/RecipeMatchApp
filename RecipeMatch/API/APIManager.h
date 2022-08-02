@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface APIManager : BDBOAuth1SessionManager
 + (instancetype)shared;
 - (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipe, NSError *error))completion;
-- (void)getRecipesWithQuery:(NSString * _Nullable)preferences andCompletion: (void (^)(NSMutableArray *recipe, NSURLSessionDataTask *dataTask, NSError *error))completion;
+- (NSURLSessionDataTask *)getRecipesWithQuery:(NSString * _Nullable)preferences andCompletion: (void (^)(NSMutableArray *recipe, NSError *error))completion;
 - (void)getRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(NSDictionary *recipe, NSError *error))completion;
 + (void)unsaveRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion;
 + (void)unlikeRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(BOOL succeeded, NSError *error))completion;

@@ -25,9 +25,9 @@ static const int SEARCH_TITLE_TAG = 4;
     self.recipeTitle.text = @"";
 }
 
-- (void)setupWithRecipeTitle:(NSString *)recipeTitle recipeImageUrl:(NSString *)recipeImageURl screenType:(ScreenTypeConstants)screenType {
-    self.imageView = (UIImageView *)[self viewWithTag:(screenType == Profile)?PROFILE_IMAGE_TAG:SEARCH_IMAGE_TAG];
-    self.recipeTitle = (UILabel *)[self viewWithTag:(screenType == Profile)?PROFILE_TITLE_TAG:SEARCH_TITLE_TAG];
+- (void)setupWithRecipeTitle:(NSString *)recipeTitle recipeImageUrl:(NSString *)recipeImageURl cellType:(GridRecipeCellType)cellType {
+    self.imageView = (UIImageView *)[self viewWithTag:(cellType == GridRecipeCellTypeProfile)?PROFILE_IMAGE_TAG:SEARCH_IMAGE_TAG];
+    self.recipeTitle = (UILabel *)[self viewWithTag:(cellType == GridRecipeCellTypeProfile)?PROFILE_TITLE_TAG:SEARCH_TITLE_TAG];
 
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:recipeImageURl] placeholderImage:nil];
     self.imageView.layer.cornerRadius = CORNER_RADIUS;

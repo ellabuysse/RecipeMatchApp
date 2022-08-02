@@ -48,19 +48,20 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 }
 
 // creates NSURL session and returns NSDictionary result on completion
-- (void)requestFromAPIWithURL:(NSURL *)url andCompletion:(void (^)(NSDictionary *dataDictionary,NSURLSessionDataTask *dataTask, NSError *error))completion {
+- (NSURLSessionDataTask *)requestFromAPIWithURL:(NSURL *)url andCompletion:(void (^)(NSDictionary *dataDictionary, NSError *error))completion {
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    __block NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
            if (error != nil) {
-               completion(nil, dataTask, error);
+               completion(nil, error);
            }
            else {
                NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-               completion(dataDictionary, dataTask, nil);
+               completion(dataDictionary, nil);
            };
     }];
     [dataTask resume];
+    return dataTask;
 }
 
 // creates PFQuery for Parse search
@@ -94,7 +95,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
         apiString = [apiString stringByAppendingString: preferences];
     }
     NSURL *url = [NSURL URLWithString:apiString];
-    [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSURLSessionDataTask *dataTask, NSError *error) {
+    [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         int count = [dataDictionary[@"count"] integerValue];
         if (count > MIN_RECIPE_COUNT) {
             /* if the total count of recipes returned is large enough,
@@ -110,7 +111,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
 // gets array of recipes with query from recipe API
 // returns recipes on success, nil on failure
-- (void)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipes, NSURLSessionDataTask *dataTask, NSError *error))completion{
+- (NSURLSessionDataTask *)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipes, NSError *error))completion{
     NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
     apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
@@ -123,14 +124,15 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     }
 
     NSURL *url = [NSURL URLWithString:apiString];
-    [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSURLSessionDataTask *dataTask, NSError *error) {
+    NSURLSessionDataTask *dataTask = [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         int count = (int)[dataDictionary[@"count"] integerValue];
         if(count > MIN_RECIPE_COUNT){
-            completion(dataDictionary[@"hits"], dataTask, nil);
+            completion(dataDictionary[@"hits"], nil);
         } else {
-            completion(nil, dataTask, error);
+            completion(nil, error);
         }
     }];
+    return dataTask;
 }
 
 // gets specific recipe by id from recipe API
@@ -144,7 +146,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     apiString = [apiString stringByAppendingString:self.app_id];
     apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
     NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:self.app_key]];
-    [self requestFromAPIWithURL:apiUrl andCompletion:^(NSDictionary *dataDictionary, NSURLSessionDataTask *dataTask, NSError *error) {
+    [self requestFromAPIWithURL:apiUrl andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         if (dataDictionary) {
             completion(dataDictionary[@"recipe"], nil);
         } else {

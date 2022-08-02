@@ -13,7 +13,6 @@
 #import "APIManager.h"
 #import "DetailsViewController.h"
 
-
 @interface StreamViewController()
 @property (nonatomic, strong) NSMutableArray *preferences;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;
@@ -183,14 +182,9 @@ static const float TITLE_HEIGHT = 40;
     }
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
         // make saved recipe object (but don't save) for DetailsViewController
-        SavedRecipe *newRecipe = [SavedRecipe new];
         DraggableView *recipe = (DraggableView *)sender;
-        newRecipe.name = recipe.title.text;
-        newRecipe.recipeId = recipe.recipeId;
-        newRecipe.image = recipe.imageUrl;
-        newRecipe.username = [PFUser currentUser].username;
         DetailsViewController *detailsController = [segue destinationViewController];
-        detailsController.savedRecipe = newRecipe;
+        detailsController.recipeId = recipe.recipeId;
     }
 }
 @end

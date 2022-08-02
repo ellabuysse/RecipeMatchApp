@@ -109,7 +109,7 @@ NSString * const SAVE_IMG = @"save-btn";
     draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
     NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
     draggableView.imageUrl = imageUrl;
-    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage systemImageNamed:@"photo"]];
+    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
     draggableView.delegate = self;
     return draggableView;
 }
@@ -121,7 +121,6 @@ NSString * const SAVE_IMG = @"save-btn";
         for (int i = 0; i<[self.recipes count]; i++) {
             DraggableView* newCard = [self createDraggableViewWithDataAtIndex:i];
             [preppedCards addObject:newCard];
-            NSLog(@"%@", newCard.title.text);
         }
     }
 }

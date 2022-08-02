@@ -16,7 +16,7 @@
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
-NSString* const BASE_API_PARAMS = @"?type=public&random=true&q=&health=alcohol-free";
+NSString* const BASE_API_PARAMS = @"?type=public&random=true&health=alcohol-free";
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
@@ -48,10 +48,10 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 }
 
 // creates NSURL session and returns NSDictionary result on completion
-- (void)requestFromAPIWithURL:(NSURL *)url andCompletion:(void (^)(NSDictionary *dataDictionary, NSError *error))completion {
+- (NSURLSessionDataTask *)requestFromAPIWithURL:(NSURL *)url andCompletion:(void (^)(NSDictionary *dataDictionary, NSError *error))completion {
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
            if (error != nil) {
                completion(nil, error);
            }
@@ -60,7 +60,8 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
                completion(dataDictionary, nil);
            };
     }];
-    [task resume];
+    [dataTask resume];
+    return dataTask;
 }
 
 // creates PFQuery for Parse search
@@ -106,6 +107,32 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
             completion(nil, error);
         }
     }];
+}
+
+// gets array of recipes with query from recipe API
+// returns recipes on success, nil on failure
+- (NSURLSessionDataTask *)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipes, NSError *error))completion{
+    NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+    apiString = [apiString stringByAppendingString:APP_ID_PARAM];
+    apiString = [apiString stringByAppendingString:self.app_id];
+    apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
+    apiString = [apiString stringByAppendingString:self.app_key];
+    if(query){
+        apiString = [apiString stringByAppendingString:@"&q="];
+        query = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLUserAllowedCharacterSet]]; // remove spaces and extra characters
+        apiString = [apiString stringByAppendingString: query];
+    }
+
+    NSURL *url = [NSURL URLWithString:apiString];
+    NSURLSessionDataTask *dataTask = [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
+        int count = (int)[dataDictionary[@"count"] integerValue];
+        if(count > MIN_RECIPE_COUNT){
+            completion(dataDictionary[@"hits"], nil);
+        } else {
+            completion(nil, error);
+        }
+    }];
+    return dataTask;
 }
 
 // gets specific recipe by id from recipe API

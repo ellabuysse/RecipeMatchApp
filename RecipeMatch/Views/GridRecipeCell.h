@@ -11,11 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GridRecipeCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+typedef NS_ENUM(NSUInteger, GridRecipeCellType) {
+    GridRecipeCellTypeProfile,
+    GridRecipeCellTypeSearch,
+};
 
-- (void)setupWithRecipe:(SavedRecipe *)recipe;
+@interface GridRecipeCell : UICollectionViewCell
+@property (weak, nonatomic) UILabel *recipeTitle;
+@property (weak, nonatomic) UIImageView *imageView;
+
+- (void)setupWithRecipeTitle:(NSString *)recipeTitle recipeImageUrl:(NSString *)recipeImageURl cellType:(GridRecipeCellType)cellType;
 @end
 
 NS_ASSUME_NONNULL_END

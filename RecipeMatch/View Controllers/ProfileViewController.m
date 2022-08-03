@@ -14,8 +14,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
+#import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 
-@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
 @property (nonatomic, strong) NSArray *recipes;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
@@ -34,7 +35,10 @@ static const float TOP_MARGIN = 20;
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
     self.recipesCollectionView.refreshControl = self.refreshControl;
-
+    
+    self.recipesCollectionView.emptyDataSetSource = self;
+    self.recipesCollectionView.emptyDataSetDelegate = self;
+    
     // setup logout button
     UIBarButtonItem *logout = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Logout"
@@ -81,7 +85,7 @@ static const float TOP_MARGIN = 20;
 #pragma mark - DZNEmptyDataSetDelegate
 
 - (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
-    return [UIImage imageNamed:@"save-placeholder"];
+    return [UIImage imageNamed:@"profile-placeholder"];
 }
 
 - (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
@@ -143,6 +147,9 @@ static const float TOP_MARGIN = 20;
         NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
         SavedRecipe *recipe = self.recipes[indexPath.row];
         detailsController.recipeId = recipe.recipeId;
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
+        
     }
 }
 @end

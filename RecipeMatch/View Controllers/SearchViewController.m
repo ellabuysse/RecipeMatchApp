@@ -76,20 +76,31 @@ static const float TITLE_HEIGHT = 40;
     [searchBar resignFirstResponder];
 }
 
+// clears current recipes and updates screen
+- (void)clearRecipes {
+    self.recipes = NULL;
+    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+    [self.collectionView reloadEmptyDataSet];
+}
+
 // called when user stops typing to get recipes
 - (void)reloadSearch:(NSTimer *)timer {
     NSString *query = timer.userInfo;    // strong reference
     [self.dataTask cancel];
-    [self getRecipes:^(NSMutableArray *recipes, NSError *error){
-        if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
-            self.recipes = recipes;
-            // only reload section 1 to prevent search bar from losing first responder status
-            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
-            [self.collectionView reloadEmptyDataSet];
-        } else {
-            // TODO: add failure support
-        }
-    }];
+    if ([query length]) {
+        [self getRecipes:^(NSMutableArray *recipes, NSError *error){
+            if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
+                self.recipes = recipes;
+                // only reload section 1 to prevent search bar from losing first responder status
+                [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+                [self.collectionView reloadEmptyDataSet];
+            } else {
+                [self clearRecipes];
+            }
+        }];
+    } else {
+        [self clearRecipes];
+    }
 } 
 
 - (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion {

@@ -44,6 +44,11 @@
     [FBSDKAppEvents activateApp];
 }
 
+// disables device rotation
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 #pragma mark - UISceneSession lifecycle
 
 

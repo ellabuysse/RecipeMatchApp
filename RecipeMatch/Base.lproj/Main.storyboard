@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -70,29 +71,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WDi-Y2-4db">
-                                <rect key="frame" x="40" y="342" width="73" height="31"/>
+                                <rect key="frame" x="57" y="352" width="300" height="32"/>
+                                <color key="backgroundColor" red="0.50196078430000002" green="0.79607843140000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="che-8e-iPd"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Sign up"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign up">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="signupBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="o5y-JZ-t1c"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-sA-qGm">
-                                <rect key="frame" x="314" y="342" width="60" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Login"/>
-                                <connections>
-                                    <action selector="loginBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zPj-wm-o0P"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AXM-To-nVK">
-                                <rect key="frame" x="40" y="234" width="334" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textField opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AXM-To-nVK">
+                                <rect key="frame" x="57" y="234" width="300" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="hbT-17-PXF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wyj-3v-jYU">
-                                <rect key="frame" x="40" y="288" width="334" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <rect key="frame" x="57" y="288" width="300" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="lLL-lx-enS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kPc-Nt-Hda">
@@ -102,44 +108,59 @@
                                     <constraint firstAttribute="height" constant="70" id="gI8-7l-3yI"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tO6-Jb-sWi">
-                                <rect key="frame" x="94.5" y="393" width="225" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tO6-Jb-sWi" userLabel="FBLogin">
+                                <rect key="frame" x="57" y="446" width="300" height="32"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="225" id="9WK-uF-dEt"/>
+                                    <constraint firstAttribute="width" constant="300" id="9WK-uF-dEt"/>
                                 </constraints>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Login with Facebook">
-                                    <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="facebookLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9BA-ub-NQC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-sA-qGm">
+                                <rect key="frame" x="57" y="399" width="300" height="32"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="V27-U2-SMl"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Login">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="loginBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zPj-wm-o0P"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="AXM-To-nVK" secondAttribute="trailing" constant="40" id="Brq-bN-IGd"/>
+                            <constraint firstItem="WDi-Y2-4db" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6TX-zS-Pj0"/>
                             <constraint firstItem="kPc-Nt-Hda" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="FBx-qE-Mmh"/>
-                            <constraint firstItem="wyj-3v-jYU" firstAttribute="leading" secondItem="AXM-To-nVK" secondAttribute="leading" id="Hue-Hw-PtN"/>
                             <constraint firstItem="kPc-Nt-Hda" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="I9Y-VN-dPq"/>
-                            <constraint firstItem="tO6-Jb-sWi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="JAq-XA-afa"/>
-                            <constraint firstItem="wyj-3v-jYU" firstAttribute="trailing" secondItem="AXM-To-nVK" secondAttribute="trailing" id="TgC-l7-5IG"/>
-                            <constraint firstItem="WDi-Y2-4db" firstAttribute="top" secondItem="wyj-3v-jYU" secondAttribute="bottom" constant="20" id="W6Y-UC-Cv1"/>
-                            <constraint firstItem="AXM-To-nVK" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="XcQ-tr-FE7"/>
-                            <constraint firstItem="0hH-sA-qGm" firstAttribute="centerY" secondItem="WDi-Y2-4db" secondAttribute="centerY" id="f6E-ZR-9m7"/>
-                            <constraint firstItem="tO6-Jb-sWi" firstAttribute="top" secondItem="WDi-Y2-4db" secondAttribute="bottom" constant="20" id="fAt-gj-pPW"/>
+                            <constraint firstItem="0hH-sA-qGm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Mq4-kT-S8I"/>
+                            <constraint firstItem="tO6-Jb-sWi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="POY-yg-ymT"/>
+                            <constraint firstItem="wyj-3v-jYU" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="QTU-Dw-uGQ"/>
+                            <constraint firstItem="WDi-Y2-4db" firstAttribute="top" secondItem="wyj-3v-jYU" secondAttribute="bottom" constant="30" id="W6Y-UC-Cv1"/>
+                            <constraint firstItem="tO6-Jb-sWi" firstAttribute="top" secondItem="0hH-sA-qGm" secondAttribute="bottom" constant="15" id="fAt-gj-pPW"/>
                             <constraint firstItem="wyj-3v-jYU" firstAttribute="top" secondItem="AXM-To-nVK" secondAttribute="bottom" constant="20" id="hwk-V3-SAj"/>
-                            <constraint firstItem="WDi-Y2-4db" firstAttribute="leading" secondItem="wyj-3v-jYU" secondAttribute="leading" id="pIg-X8-Vzc"/>
-                            <constraint firstItem="0hH-sA-qGm" firstAttribute="trailing" secondItem="wyj-3v-jYU" secondAttribute="trailing" id="pwB-gn-dc8"/>
+                            <constraint firstItem="0hH-sA-qGm" firstAttribute="top" secondItem="WDi-Y2-4db" secondAttribute="bottom" constant="15" id="saW-4g-HyR"/>
                             <constraint firstItem="AXM-To-nVK" firstAttribute="top" secondItem="kPc-Nt-Hda" secondAttribute="bottom" constant="20" id="vme-ae-r4n"/>
+                            <constraint firstItem="AXM-To-nVK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zZH-Po-uj8"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="login" destination="tO6-Jb-sWi" id="K4W-X1-6lA"/>
+                        <outlet property="fbLoginBtn" destination="tO6-Jb-sWi" id="s72-GO-UTk"/>
+                        <outlet property="loginBtn" destination="0hH-sA-qGm" id="dOc-c1-RgO"/>
                         <outlet property="passwordField" destination="wyj-3v-jYU" id="ivs-iK-H1K"/>
+                        <outlet property="signupBtn" destination="WDi-Y2-4db" id="5cn-MP-BzL"/>
                         <outlet property="usernameField" destination="AXM-To-nVK" id="Nf0-eh-Xgn"/>
                         <segue destination="tdd-MK-ilI" kind="show" identifier="mainSegue" id="dmU-gY-4Dv"/>
                     </connections>
@@ -336,14 +357,14 @@
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="bookmark.fill" catalog="system" title=""/>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I1u-if-3wD">
-                                                <rect key="frame" x="-2" y="0.0" width="24" height="20"/>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I1u-if-3wD">
+                                                <rect key="frame" x="-2" y="0.0" width="38" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="jnj-lH-z4b"/>
                                                 </constraints>
                                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="">
-                                                    <fontDescription key="titleFontDescription" type="boldSystem" pointSize="15"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="" imagePadding="5">
+                                                    <imageReference key="image" image="paperplane.fill" catalog="system" symbolScale="small"/>
                                                 </buttonConfiguration>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VDb-H6-E0X" userLabel="heartButton">
@@ -644,6 +665,7 @@
         <image name="line.horizontal.3.circle" catalog="system" width="128" height="121"/>
         <image name="logo.png" width="225" height="75"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="paperplane.fill" catalog="system" width="128" height="118"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -653,6 +675,9 @@
         </systemColor>
         <systemColor name="systemGray3Color">
             <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -34,6 +34,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
+
     [self setupButtons]; // start API calls to prevent excess loading time
     // wait for fullRecipe data before setting info on screen
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){

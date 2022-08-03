@@ -9,6 +9,7 @@ target 'RecipeMatch' do
   pod 'Parse'
   pod 'Parse/FacebookUtils'
   pod 'FBSDKLoginKit'
+  pod 'FBSDKShareKit'
   pod 'AFNetworking'
   pod 'BDBOAuth1Manager'
   pod 'CCDropDownMenus'

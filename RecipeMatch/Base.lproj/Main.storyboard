@@ -363,7 +363,10 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwr-Eg-5ca">
                                                 <rect key="frame" x="307" y="434.5" width="47" height="31"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.right.fill" catalog="system" title=""/>
+                                                <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.right" catalog="system" title=""/>
+                                                <connections>
+                                                    <action selector="didTapShare:" destination="3d8-s9-noU" eventType="touchUpInside" id="EhC-ml-kd5"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IGK-Yg-w0M">
                                                 <rect key="frame" x="66" y="494.5" width="0.0" height="0.0"/>
@@ -436,11 +439,11 @@
                     <navigationItem key="navigationItem" id="E2B-aG-N1U"/>
                     <connections>
                         <outlet property="ingredients" destination="0MF-1s-Eal" id="HOB-Eq-1Q9"/>
-                        <outlet property="likeBtn" destination="VDb-H6-E0X" id="W7H-Ad-nwh"/>
+                        <outlet property="likeBtn" destination="VDb-H6-E0X" id="0dW-9x-o7Y"/>
                         <outlet property="likeCount" destination="Jxo-uK-iu6" id="6fU-cB-qDi"/>
                         <outlet property="recipeImage" destination="mRd-xE-qLP" id="0DY-Cd-F3K"/>
                         <outlet property="recipeTitle" destination="mbP-eR-5yc" id="U5o-7Y-liq"/>
-                        <outlet property="saveBtn" destination="MUn-1a-CGF" id="YGH-YX-mGx"/>
+                        <outlet property="saveBtn" destination="MUn-1a-CGF" id="wJh-Lo-1dg"/>
                         <outlet property="saveCount" destination="Grx-61-CUq" id="5Ov-Tq-d42"/>
                         <outlet property="source" destination="I1u-if-3wD" id="SqV-zm-BYh"/>
                         <outlet property="yield" destination="IGK-Yg-w0M" id="i0F-pH-J8K"/>
@@ -636,7 +639,7 @@
         <segue reference="aok-Jv-uoA"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="arrowshape.turn.up.right.fill" catalog="system" width="128" height="106"/>
+        <image name="arrowshape.turn.up.right" catalog="system" width="128" height="106"/>
         <image name="bookmark.fill" catalog="system" width="112" height="128"/>
         <image name="favor" width="128" height="128"/>
         <image name="house" catalog="system" width="128" height="106"/>

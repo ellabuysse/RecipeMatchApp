@@ -18,15 +18,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     ParseClientConfiguration *config = [ParseClientConfiguration  configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
-
             configuration.applicationId = @"iEhXuIXVGRrRSUULKFSItJLzzXuauJJ1E3gfrCbo"; // <- UPDATE
             configuration.clientKey = @"JDGYgnNOgGGNmtFZEqaF7r8XdkPgzgYhIe8HKGdY"; // <- UPDATE
             configuration.server = @"https://parseapi.back4app.com";
     }];
 
     [Parse initializeWithConfiguration:config];
-    
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
     return YES;
 }
 

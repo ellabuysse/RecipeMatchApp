@@ -30,6 +30,11 @@ PODS:
   - FBSDKLoginKit/Login (11.0.1):
     - FBSDKCoreKit (~> 11.0.1)
     - FBSDKCoreKit_Basics (~> 11.0.1)
+  - FBSDKShareKit (11.0.1):
+    - FBSDKShareKit/Share (= 11.0.1)
+  - FBSDKShareKit/Share (11.0.1):
+    - FBSDKCoreKit (~> 11.0.1)
+    - FBSDKCoreKit_Basics (~> 11.0.1)
   - JSONModel (1.8.0)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
@@ -48,6 +53,7 @@ DEPENDENCIES:
   - BDBOAuth1Manager
   - CCDropDownMenus
   - FBSDKLoginKit
+  - FBSDKShareKit
   - JSONModel
   - Parse
   - Parse/FacebookUtils
@@ -62,6 +68,7 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
+    - FBSDKShareKit
     - JSONModel
     - Parse
     - SDWebImage
@@ -74,10 +81,12 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 38c9e29a3f1436362acacff6486d3a28628c288f
   FBSDKCoreKit_Basics: 06780a4a12e16596bde8406add02c6aa1bf38616
   FBSDKLoginKit: 8243e04c590c38b85c69fcf09d1234514d2475c3
+  FBSDKShareKit: e55ddcd33d5169597ae86866faffae0acae971c1
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 PODFILE CHECKSUM: 0049a1ef8a3169caf155ee06b6185313509eb62f
@@ -87,5 +96,8 @@ PODFILE CHECKSUM: fca9a9ef63bcf164fc939b4dbdd10f6a60aa9551
 =======
 PODFILE CHECKSUM: fca9a9ef63bcf164fc939b4dbdd10f6a60aa9551
 >>>>>>> bc7b751 (made data model)
+=======
+PODFILE CHECKSUM: 2ba114427484bf6fac4a53c83508e8138a535f98
+>>>>>>> 8013b8d (added FB share functionality to button)
 
 COCOAPODS: 1.11.3

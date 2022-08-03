@@ -15,13 +15,13 @@
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
 @property (strong, nonatomic) NSString *recipeUrl;
 @property (weak, nonatomic) IBOutlet UILabel *yield;
-@property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property (weak, nonatomic) IBOutlet UIButton *source;
 @property (weak, nonatomic) IBOutlet UIButton *likeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property (strong, nonatomic) RecipeModel *recipe;
+@property (weak, nonatomic) IBOutlet UITextView *ingredients;
 @property BOOL saved;
 @property BOOL liked;
 @end

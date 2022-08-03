@@ -8,18 +8,20 @@
 #import "DetailsViewController.h"
 #import "APIManager.h"
 #import "SDWebImage/SDWebImage.h"
+#import "FBSDKShareKit/FBSDKShareKit.h"
 
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
+@property (strong, nonatomic) NSString *recipeUrl;
 @property (weak, nonatomic) IBOutlet UILabel *yield;
-@property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property (weak, nonatomic) IBOutlet UIButton *source;
 @property (weak, nonatomic) IBOutlet UIButton *likeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property (strong, nonatomic) RecipeModel *recipe;
+@property (weak, nonatomic) IBOutlet UITextView *ingredients;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -34,6 +36,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
+
     [self setupButtons]; // start API calls to prevent excess loading time
     // wait for fullRecipe data before setting info on screen
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
@@ -47,7 +50,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
          forControlEvents:UIControlEventTouchUpInside];
     [self.saveBtn addTarget:self action:@selector(didTapSave:)
          forControlEvents:UIControlEventTouchUpInside];
-        
+
     // setups like button
     [APIManager checkIfRecipeIsAlreadyLikedWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
@@ -87,6 +90,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 // sets recipe details from fullRecipe
 - (void)fetchRecipeInfo {
     self.recipeTitle.text = self.recipe.label;
+    self.recipeUrl = self.recipe.url;
     [self.source setTitle:self.recipe.source forState:UIControlStateNormal];
     [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
     [self.source addTarget:self action:@selector(didTapSource:) forControlEvents:UIControlEventTouchUpInside];
@@ -98,6 +102,13 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [self.view setNeedsDisplay];
 }
 
+- (void)didTapShare:(id)sender {
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    content.contentURL = [NSURL URLWithString:self.recipeUrl];
+    content.quote = @"Recipe matching app";
+    [FBSDKShareDialog showFromViewController:self withContent:content delegate:nil];
+}
+
 // called when recipe source is tapped to redirect to recipe site
 - (void)didTapSource:(UIButton *)sender {
     UIApplication *application = [UIApplication sharedApplication];
@@ -106,7 +117,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 }
 
 // if recipe is already saved, removes from Parse, otherwise adds it
-- (void)didTapSave:(UIButton *)sender {
+- (void)didTapSave:(id)sender {
     if (self.saved) {
         [APIManager unsaveRecipeWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if (succeeded) {
@@ -153,7 +164,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 }
 
 // if recipe is already liked, removes from Parse, otherwise adds it
-- (void)didTapLike:(UIButton *)sender {
+- (void)didTapLike:(id)sender {
     if (self.liked) {
         [APIManager unlikeRecipeWithId:self.recipeId andCompletion:^(BOOL succeeded, NSError *error){
             if (succeeded) {

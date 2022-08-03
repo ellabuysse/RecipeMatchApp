@@ -11,19 +11,23 @@
 
 @interface LoginViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
+@property (weak, nonatomic) IBOutlet UIButton *signupBtn;
+@property (weak, nonatomic) IBOutlet UIButton *fbLoginBtn;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
-@property (weak, nonatomic) IBOutlet UIButton *login;
+@property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @end
 
-static const float CORNER_RADIUS = 10;
+static const float CORNER_RADIUS = 15;
 static const float BORDER_WIDTH = 0.5;
 
 @implementation LoginViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.login.layer.borderWidth = BORDER_WIDTH;
-    self.login.layer.borderColor = [UIColor blackColor].CGColor;
-    self.login.layer.cornerRadius = CORNER_RADIUS;
+    self.fbLoginBtn.layer.borderWidth = BORDER_WIDTH;
+    self.fbLoginBtn.layer.borderColor = [UIColor blackColor].CGColor;
+    self.fbLoginBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.signupBtn.layer.cornerRadius = CORNER_RADIUS;
+    self.loginBtn.layer.cornerRadius = CORNER_RADIUS;
 }
 
 // called when Facebook Login button is pressed

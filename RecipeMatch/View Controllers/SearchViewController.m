@@ -14,8 +14,9 @@
 #import "DraggableView.h"
 #import "EmptyCollectionReusableView.h"
 #import "RecipeModel.h"
+#import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 
-@interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
+@interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) NSMutableArray *recipes;
@@ -32,12 +33,25 @@ static const float HEIGHT_FACTOR = 1.2;
 static const float MARGIN_SIZE = 7;
 static const float HEADER_SIZE = 50;
 static const float TIMER_INTERVAL = 0.5;
+static const float TITLE_WIDTH = 100;
+static const float TITLE_HEIGHT = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerClass:EmptyCollectionReusableView.self forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"EmptyView"];
+    
+    self.collectionView.emptyDataSetSource = self;
+    self.collectionView.emptyDataSetDelegate = self;
+    
+    // setup top nav bar
+    UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, TITLE_WIDTH, TITLE_HEIGHT)];
+    imageView.frame = titleView.bounds;
+    [titleView addSubview:imageView];
+    self.navigationItem.titleView = titleView;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -62,19 +76,31 @@ static const float TIMER_INTERVAL = 0.5;
     [searchBar resignFirstResponder];
 }
 
+// clears current recipes and updates screen
+- (void)clearRecipes {
+    self.recipes = NULL;
+    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+    [self.collectionView reloadEmptyDataSet];
+}
+
 // called when user stops typing to get recipes
 - (void)reloadSearch:(NSTimer *)timer {
     NSString *query = timer.userInfo;    // strong reference
     [self.dataTask cancel];
-    [self getRecipes:^(NSMutableArray *recipes, NSError *error){
-        if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
-            self.recipes = recipes;
-            // only reload section 1 to prevent search bar from losing first responder status
-            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
-        } else {
-            // TODO: add failure support
-        }
-    }];
+    if ([query length]) {
+        [self getRecipes:^(NSMutableArray *recipes, NSError *error){
+            if(recipes && [self.searchText isEqualToString:query]){ // check that the returning call is for the correct current query
+                self.recipes = recipes;
+                // only reload section 1 to prevent search bar from losing first responder status
+                [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+                [self.collectionView reloadEmptyDataSet];
+            } else {
+                [self clearRecipes];
+            }
+        }];
+    } else {
+        [self clearRecipes];
+    }
 } 
 
 - (void)getRecipes:(void (^)(NSMutableArray *recipes, NSError *error))completion {
@@ -85,6 +111,34 @@ static const float TIMER_INTERVAL = 0.5;
             completion(nil, error);
         }
     }];
+}
+
+#pragma mark - DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
+    return [UIImage imageNamed:@"search-placeholder"];
+}
+
+- (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"No results yet";
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor]};
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+- (NSAttributedString *)descriptionForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"Search by title, ingredient, etc.";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor colorWithRed:0.85 green:0.86 blue:0.87 alpha:1.0],
+                                 NSParagraphStyleAttributeName: paragraph};
+                                 
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 #pragma mark - UICollectionViewDelegate

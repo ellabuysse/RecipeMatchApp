@@ -14,8 +14,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
+#import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 
-@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
 @property (nonatomic, strong) NSArray *recipes;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
@@ -34,7 +35,10 @@ static const float TOP_MARGIN = 20;
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
     self.recipesCollectionView.refreshControl = self.refreshControl;
-
+    
+    self.recipesCollectionView.emptyDataSetSource = self;
+    self.recipesCollectionView.emptyDataSetDelegate = self;
+    
     // setup logout button
     UIBarButtonItem *logout = [[UIBarButtonItem alloc]
                                    initWithTitle:@"Logout"
@@ -43,6 +47,10 @@ static const float TOP_MARGIN = 20;
                                    action:@selector(logoutBtn:)];
     self.navigationItem.leftBarButtonItem = logout;
     [self fetchRecipes];
+    
+    PFUser *user = [PFUser currentUser];
+    NSString *title = [@"@" stringByAppendingString:user.username];
+    self.navigationItem.title = title;
 }
 
 // called after returning from PreferencesViewController
@@ -72,6 +80,33 @@ static const float TOP_MARGIN = 20;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     myDelegate.window.rootViewController = loginViewController;
+}
+
+#pragma mark - DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
+    return [UIImage imageNamed:@"profile-placeholder"];
+}
+
+- (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"No Saves yet";
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor]};
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+- (NSAttributedString *)descriptionForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"Start swiping to discover recipes!";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor colorWithRed:0.85 green:0.86 blue:0.87 alpha:1.0],
+                                 NSParagraphStyleAttributeName: paragraph};
+                                 
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -112,6 +147,9 @@ static const float TOP_MARGIN = 20;
         NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
         SavedRecipe *recipe = self.recipes[indexPath.row];
         detailsController.recipeId = recipe.recipeId;
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
+        
     }
 }
 @end

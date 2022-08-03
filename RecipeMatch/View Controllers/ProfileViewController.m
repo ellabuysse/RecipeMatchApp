@@ -149,7 +149,6 @@ static const float TOP_MARGIN = 20;
         detailsController.recipeId = recipe.recipeId;
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem = backButton;
-        
     }
 }
 @end

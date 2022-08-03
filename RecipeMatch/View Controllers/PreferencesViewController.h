@@ -10,13 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString* const CUISINE_KEY;
+extern NSString* const HEALTH_KEY;
+extern NSString* const DIET_KEY;
+extern NSString* const MEAL_TYPE_KEY;
+
 @protocol PreferencesViewControllerDelegate <NSObject>
 @required
-- (void)sendData:(NSString *)request;
+- (void)sendPreferences:(NSDictionary *)preferences;
 @end
 
 @interface PreferencesViewController : UIViewController
-@property(nonatomic,assign)id<PreferencesViewControllerDelegate> delegate;
+@property(nonatomic,assign) id<PreferencesViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSMutableDictionary *preferencesDict;
 @end
 
 NS_ASSUME_NONNULL_END

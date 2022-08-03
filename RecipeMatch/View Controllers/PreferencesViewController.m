@@ -49,25 +49,26 @@ static const float DROPDOWN_HEIGHT = 37;
 
 - (void)setupView {
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
-    self.cuisineMenu = [self getDropDownMenuWithFrame:frame items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
+    self.cuisineMenu = [self getDropDownMenuWithFrame:frame key:CUISINE_KEY items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
     [self.view addSubview:self.cuisineMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.healthMenu = [self getDropDownMenuWithFrame:frame items:@[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"]];
+    self.healthMenu = [self getDropDownMenuWithFrame:frame key:HEALTH_KEY items:@[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"]];
     [self.view addSubview:self.healthMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.dietMenu = [self getDropDownMenuWithFrame:frame items:@[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"]];
+    self.dietMenu = [self getDropDownMenuWithFrame:frame key:DIET_KEY items:@[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"]];
     [self.view addSubview:self.dietMenu];
     
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.mealMenu = [self getDropDownMenuWithFrame:frame items:@[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"]];
+    self.mealMenu = [self getDropDownMenuWithFrame:frame key:MEAL_TYPE_KEY  items:@[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"]];
     [self.view addSubview:self.mealMenu];
 }
 
 // creates and returns a dropdown menu
-- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame items:(NSArray *)items {
-    ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
+- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame key:(NSString *)key items:(NSArray *)items {
+    NSString *title = [self.preferencesDict objectForKey:key];
+    ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:title?title:@"no preference"];
     dropDownMenu.textOfRows = items;
     dropDownMenu.numberOfRows = [dropDownMenu.textOfRows count];
     dropDownMenu.activeColor = UIColorFromRGB(0x80CB99);
@@ -76,37 +77,31 @@ static const float DROPDOWN_HEIGHT = 37;
     return dropDownMenu;
 }
 
+// removes preference from dictionary if it exists, otherwise adds it
+- (void)updatePreferenceWithKey:(NSString *)key title:(NSString *)title {
+    if(![title isEqualToString:@"no preference"]){
+        [self.preferencesDict setObject:title forKey:key];
+    } else {
+        [self.preferencesDict removeObjectForKey:key];
+    }
+}
+
 // called when drop down item is selected
 - (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index {
     NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
-    if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
-    } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
-        self.healthLabel = [NSString stringWithFormat:@"&health=%@", title];
-    } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
-        self.dietLabel = [NSString stringWithFormat:@"&diet=%@", title];
-    } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
-        self.mealLabel = [NSString stringWithFormat:@"&mealType=%@", title];
+    if (dropDownMenu == self.cuisineMenu) {
+        [self updatePreferenceWithKey:CUISINE_KEY title:title];
+    } else if (dropDownMenu == self.healthMenu) {
+        [self updatePreferenceWithKey:HEALTH_KEY title:title];
+    } else if (dropDownMenu == self.dietMenu) {
+        [self updatePreferenceWithKey:DIET_KEY title:title];
+    } else if (dropDownMenu == self.mealMenu) {
+        [self updatePreferenceWithKey:MEAL_TYPE_KEY title:title];
     }
 }
 
 //called when back button is pressed
 - (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    NSMutableArray *preferences = [[NSMutableArray alloc] init];
-    
-    if(self.cuisineLabel) {
-        [preferences addObject:self.cuisineLabel];
-    }
-    if(self.healthLabel) {
-        [preferences addObject:self.healthLabel];
-    }
-    if(self.dietLabel) {
-        [preferences addObject:self.dietLabel];
-    }
-    if(self.mealLabel) {
-        [preferences addObject:self.mealLabel];
-    }
-    [delegate sendData:preferences];
+    [delegate sendPreferences:self.preferencesDict];
 }
 @end

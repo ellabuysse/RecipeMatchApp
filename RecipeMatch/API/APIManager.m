@@ -8,6 +8,8 @@
 #import "APIManager.h"
 #import "SavedRecipe.h"
 #import "LikedRecipe.h"
+#import "RecipeModel.h"
+
 @import Parse;
 
 @interface APIManager ()
@@ -85,7 +87,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
 // gets initial array of recipes for home feed from recipe API
 // returns recipes on success, nil on failure
-- (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipe, NSError *error))completion {
+- (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipes, NSError *error))completion {
     NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
     apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
@@ -96,12 +98,13 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     }
     NSURL *url = [NSURL URLWithString:apiString];
     [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        int count = [dataDictionary[@"count"] integerValue];
+        AllRecipesModel *allRecipes = [[AllRecipesModel alloc] initWithDictionary:dataDictionary error:&error];
+        int count = allRecipes.count;
         if (count > MIN_RECIPE_COUNT) {
             /* if the total count of recipes returned is large enough,
                numerous random calls to the API are unlikely to produce repeated recipes.
                we want variation in the recipes, not the same ones shown repeatedly */
-            completion(dataDictionary[@"hits"], nil);
+            completion(allRecipes.hits, nil);
         } else {
             /* if there are not enough recipes returned, handle the restricting preferences in the caller */
             completion(nil, error);
@@ -125,10 +128,11 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
     NSURL *url = [NSURL URLWithString:apiString];
     NSURLSessionDataTask *dataTask = [self requestFromAPIWithURL:url andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
-        int count = (int)[dataDictionary[@"count"] integerValue];
+        AllRecipesModel *allRecipes = [[AllRecipesModel alloc] initWithDictionary:dataDictionary error:&error];
+        int count = allRecipes.count;
         if(count > MIN_RECIPE_COUNT){
-            completion(dataDictionary[@"hits"], nil);
-        } else {
+            completion(allRecipes.hits, nil);
+        } else{
             completion(nil, error);
         }
     }];
@@ -137,7 +141,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
 // gets specific recipe by id from recipe API
 // returns recipe on success, nil on failure
-- (void)getRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(NSDictionary *recipe, NSError *error))completion {
+- (void)getRecipeWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(RecipeModel *recipe, NSError *error))completion {
     NSString *apiString = BASE_API_URL;
     apiString = [apiString stringByAppendingString:@"/"];
     apiString = [apiString stringByAppendingString:recipeId];
@@ -148,7 +152,8 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
     NSURL *apiUrl = [NSURL URLWithString:[apiString stringByAppendingString:self.app_key]];
     [self requestFromAPIWithURL:apiUrl andCompletion:^(NSDictionary *dataDictionary, NSError *error) {
         if (dataDictionary) {
-            completion(dataDictionary[@"recipe"], nil);
+            RecipeContainerModel *recipeContainer = [[RecipeContainerModel alloc] initWithDictionary:dataDictionary error:&error];
+            completion(recipeContainer.recipe, nil);
         } else {
             completion(nil, error);
         }

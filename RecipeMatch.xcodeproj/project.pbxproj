@@ -32,6 +32,7 @@
 		7548BE89288EF85800BC2070 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE88288EF85800BC2070 /* SearchViewController.m */; };
 		7548BE8C288EFC0A00BC2070 /* SearchCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE8B288EFC0A00BC2070 /* SearchCollectionReusableView.m */; };
 		7548BE922893432700BC2070 /* EmptyCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE912893432700BC2070 /* EmptyCollectionReusableView.m */; };
+		7548BE952894535400BC2070 /* RecipeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE942894535400BC2070 /* RecipeModel.m */; };
 		87EDF27A08FD44653147F8BE /* Pods_RecipeMatchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12B6F7397E19C6A6B9DECCE2 /* Pods_RecipeMatchTests.framework */; };
 		934EF84F3F3CB69102C0A0F7 /* Pods_RecipeMatch_RecipeMatchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3DDD5EE0B590FE43A4636D3 /* Pods_RecipeMatch_RecipeMatchUITests.framework */; };
 		DD8E1568C25F29B80D81AEEB /* Pods_RecipeMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FD8C05F1FE7D9F9CA433C61 /* Pods_RecipeMatch.framework */; };
@@ -108,6 +109,8 @@
 		7548BE8B288EFC0A00BC2070 /* SearchCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchCollectionReusableView.m; sourceTree = "<group>"; };
 		7548BE902893432700BC2070 /* EmptyCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyCollectionReusableView.h; sourceTree = "<group>"; };
 		7548BE912893432700BC2070 /* EmptyCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyCollectionReusableView.m; sourceTree = "<group>"; };
+		7548BE932894535400BC2070 /* RecipeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecipeModel.h; sourceTree = "<group>"; };
+		7548BE942894535400BC2070 /* RecipeModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecipeModel.m; sourceTree = "<group>"; };
 		815B6F5D9CD89E392CA83E8C /* Pods-RecipeMatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatchTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeMatchTests/Pods-RecipeMatchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CD1C4C5D86C051FB5C316B86 /* Pods-RecipeMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatch.release.xcconfig"; path = "Target Support Files/Pods-RecipeMatch/Pods-RecipeMatch.release.xcconfig"; sourceTree = "<group>"; };
 		E3DDD5EE0B590FE43A4636D3 /* Pods_RecipeMatch_RecipeMatchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RecipeMatch_RecipeMatchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,6 +254,8 @@
 				7502381C2878E06E00367EE7 /* SavedRecipe.m */,
 				7548BE842881D15700BC2070 /* LikedRecipe.h */,
 				7548BE852881D15700BC2070 /* LikedRecipe.m */,
+				7548BE932894535400BC2070 /* RecipeModel.h */,
+				7548BE942894535400BC2070 /* RecipeModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -540,6 +545,7 @@
 				7548BE7B287F2C3700BC2070 /* PreferencesViewController.m in Sources */,
 				75023823287C823300367EE7 /* GridRecipeCell.m in Sources */,
 				750237ED287601AC00367EE7 /* LoginViewController.m in Sources */,
+				7548BE952894535400BC2070 /* RecipeModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

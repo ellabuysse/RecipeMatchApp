@@ -12,6 +12,7 @@
 #import "DraggableViewBackground.h"
 #import "APIManager.h"
 #import "DetailsViewController.h"
+#import "RecipeModel.h"
 
 @interface StreamViewController()
 @property (nonatomic, strong) NSMutableArray *preferences;
@@ -82,7 +83,7 @@ static const float TITLE_HEIGHT = 40;
             // not enough recipes with preferences
             [self handlePreferencesWithCompletion:^(NSArray *recipes, NSError *error){
                 if (recipes) {
-                    completion(recipes,nil);
+                    completion(recipes, nil);
                 } else {
                     completion(nil, error);
                 }

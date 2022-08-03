@@ -8,5 +8,4 @@
 #import "EmptyCollectionReusableView.h"
 
 @implementation EmptyCollectionReusableView
-
 @end

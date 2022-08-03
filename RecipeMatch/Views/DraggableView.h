@@ -39,6 +39,7 @@
 - (void)draggableViewCardSwipedLeft:(UIView *)card;
 - (void)draggableViewCardSwipedRight:(UIView *)card;
 - (void)draggableViewDidTapOnDetails;
+- (void)draggableViewDidTapLike;
 @end
 
 @interface DraggableView : UIView
@@ -50,7 +51,6 @@
 @property (nonatomic,strong)NSString* recipeId;
 @property (nonatomic,strong)UIImageView* recipeImage;
 @property (nonatomic,strong)NSString* imageUrl;
-@property (nonatomic,strong)UIButton* detailsBtn;
 @property (nonatomic,strong)UILabel* likeLabel;
 @property (nonatomic,strong)UILabel* likeCount;
 @property (nonatomic,strong)UILabel* saveLabel;

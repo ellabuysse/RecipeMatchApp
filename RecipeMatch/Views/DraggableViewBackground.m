@@ -12,6 +12,7 @@
 #import "APIManager.h"
 #import "StreamViewController.h"
 #import "SDWebImage/SDWebImage.h"
+#import "RecipeModel.h"
 
 @interface DraggableViewBackground ()
 @end
@@ -104,12 +105,12 @@ NSString * const SAVE_IMG = @"save-btn";
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
     DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
-    draggableView.title.text = [self.recipes objectAtIndex:index][@"recipe"][@"label"];
-    NSString *recipeUri = [self.recipes objectAtIndex:index][@"recipe"][@"uri"];
+    RecipeContainerModel *recipeContainer = [self.recipes objectAtIndex:index];
+    draggableView.title.text = recipeContainer.recipe.label;
+    NSString *recipeUri = recipeContainer.recipe.uri;
     draggableView.recipeId = [recipeUri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
-    NSString *imageUrl = [self.recipes objectAtIndex:index][@"recipe"][@"image"];
-    draggableView.imageUrl = imageUrl;
-    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    draggableView.imageUrl = recipeContainer.recipe.image;
+    [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:draggableView.imageUrl] placeholderImage:nil];
     draggableView.delegate = self;
     return draggableView;
 }
@@ -306,14 +307,14 @@ NSString * const SAVE_IMG = @"save-btn";
         if (liked) {
             [self.delegate unlikeRecipeFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if (succeeded) {
-                    [sender setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
+                    [self->heartButton setImage:[UIImage imageNamed:HEART_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
             }];
         } else {
             [self.delegate postLikedRecipeFromDraggableViewBackgroundWithId:card.recipeId recipeTitle:card.title.text image:card.imageUrl andCompletion:^(BOOL succeeded, NSError * _Nonnull error) {
                 if (succeeded) {
-                    [sender setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
+                    [self->heartButton setImage:[UIImage imageNamed:HEART_FILL_IMG] forState:UIControlStateNormal];
                     [self updateLikeCount];
                 }
             }];
@@ -324,5 +325,10 @@ NSString * const SAVE_IMG = @"save-btn";
 - (void)draggableViewDidTapOnDetails {
     DraggableView *card = [loadedCards firstObject];
     [delegate showDetailsFromDraggableViewBackground:card];
+}
+
+- (void)draggableViewDidTapLike {
+    DraggableView *card = [loadedCards firstObject];
+    [self tapLike:card];
 }
 @end

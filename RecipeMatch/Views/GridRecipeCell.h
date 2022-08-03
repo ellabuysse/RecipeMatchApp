@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "SavedRecipe.h"
 #import "SDWebImage/SDWebImage.h"
+#import "RecipeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

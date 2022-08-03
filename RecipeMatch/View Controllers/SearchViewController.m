@@ -14,8 +14,9 @@
 #import "DraggableView.h"
 #import "EmptyCollectionReusableView.h"
 #import "RecipeModel.h"
+#import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 
-@interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate>
+@interface SearchViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) NSMutableArray *recipes;
@@ -38,6 +39,9 @@ static const float TIMER_INTERVAL = 0.5;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerClass:EmptyCollectionReusableView.self forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"EmptyView"];
+    
+    self.collectionView.emptyDataSetSource = self;
+    self.collectionView.emptyDataSetDelegate = self;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -71,6 +75,7 @@ static const float TIMER_INTERVAL = 0.5;
             self.recipes = recipes;
             // only reload section 1 to prevent search bar from losing first responder status
             [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
+            [self.collectionView reloadEmptyDataSet];
         } else {
             // TODO: add failure support
         }
@@ -85,6 +90,34 @@ static const float TIMER_INTERVAL = 0.5;
             completion(nil, error);
         }
     }];
+}
+
+#pragma mark - DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
+    return [UIImage imageNamed:@"search-placeholder"];
+}
+
+- (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"No results yet";
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor]};
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+- (NSAttributedString *)descriptionForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"Search by title, ingredient, etc.";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor colorWithRed:0.85 green:0.86 blue:0.87 alpha:1.0],
+                                 NSParagraphStyleAttributeName: paragraph};
+                                 
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
 }
 
 #pragma mark - UICollectionViewDelegate

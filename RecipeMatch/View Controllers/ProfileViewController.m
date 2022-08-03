@@ -74,6 +74,33 @@ static const float TOP_MARGIN = 20;
     myDelegate.window.rootViewController = loginViewController;
 }
 
+#pragma mark - DZNEmptyDataSetDelegate
+
+- (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
+    return [UIImage imageNamed:@"save-placeholder"];
+}
+
+- (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"No Saves yet";
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
+                                 NSForegroundColorAttributeName: [UIColor lightGrayColor]};
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
+- (NSAttributedString *)descriptionForEmptyDataSet:(UICollectionView *)collectionView {
+    NSString *text = @"Start swiping to discover recipes!";
+    
+    NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
+    paragraph.lineBreakMode = NSLineBreakByWordWrapping;
+    paragraph.alignment = NSTextAlignmentCenter;
+    
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+                                 NSForegroundColorAttributeName: [UIColor colorWithRed:0.85 green:0.86 blue:0.87 alpha:1.0],
+                                 NSParagraphStyleAttributeName: paragraph};
+                                 
+    return [[NSAttributedString alloc] initWithString:text attributes:attributes];
+}
+
 #pragma mark - UICollectionViewDelegate
 
 - (void)viewDidLayoutSubviews {

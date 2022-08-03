@@ -33,6 +33,8 @@ static const float HEIGHT_FACTOR = 1.2;
 static const float MARGIN_SIZE = 7;
 static const float HEADER_SIZE = 50;
 static const float TIMER_INTERVAL = 0.5;
+static const float TITLE_WIDTH = 100;
+static const float TITLE_HEIGHT = 40;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,6 +44,14 @@ static const float TIMER_INTERVAL = 0.5;
     
     self.collectionView.emptyDataSetSource = self;
     self.collectionView.emptyDataSetDelegate = self;
+    
+    // setup top nav bar
+    UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo"]];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, TITLE_WIDTH, TITLE_HEIGHT)];
+    imageView.frame = titleView.bounds;
+    [titleView addSubview:imageView];
+    self.navigationItem.titleView = titleView;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {

@@ -43,6 +43,10 @@ static const float TOP_MARGIN = 20;
                                    action:@selector(logoutBtn:)];
     self.navigationItem.leftBarButtonItem = logout;
     [self fetchRecipes];
+    
+    PFUser *user = [PFUser currentUser];
+    NSString *title = [@"@" stringByAppendingString:user.username];
+    self.navigationItem.title = title;
 }
 
 // called after returning from PreferencesViewController

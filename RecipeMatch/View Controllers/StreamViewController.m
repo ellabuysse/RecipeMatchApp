@@ -188,14 +188,14 @@ NSString* const CALORIES_KEY = @"calories";
     [APIManager postSavedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {}];
 }
 
-- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
-    [APIManager countLikesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion {
+    [APIManager countLikesWithId:recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
 
-- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
-    [APIManager countSavesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion {
+    [APIManager countSavesWithId:recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }

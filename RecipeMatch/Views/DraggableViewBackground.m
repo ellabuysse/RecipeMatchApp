@@ -203,9 +203,9 @@ NSString * const SAVE_IMG = @"save-btn";
 // updates like count for each card
 - (void)updateLikeCount {
     DraggableView *card = [self->loadedCards objectAtIndex:0];
-    [delegate countLikesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+    [delegate countLikesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         if (likes) {
-            card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
+            card.likeCount.text = [[NSString alloc] initWithFormat:@"%lu", likes];
         } else {
             card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
@@ -227,9 +227,9 @@ NSString * const SAVE_IMG = @"save-btn";
 // updates save count for each card
 - (void)updateSaveCount {
     DraggableView *card = [self->loadedCards objectAtIndex:0];
-    [delegate countSavesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
+    [delegate countSavesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(NSUInteger saves, NSError * _Nullable error) {
         if (saves) {
-            card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
+            card.saveCount.text = [[NSString alloc] initWithFormat:@"%lu", saves];
         } else {
             card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }

@@ -18,8 +18,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     ParseClientConfiguration *config = [ParseClientConfiguration  configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
-            configuration.applicationId = @"iEhXuIXVGRrRSUULKFSItJLzzXuauJJ1E3gfrCbo"; // <- UPDATE
-            configuration.clientKey = @"JDGYgnNOgGGNmtFZEqaF7r8XdkPgzgYhIe8HKGdY"; // <- UPDATE
+            configuration.applicationId = @"LbLwuJfs3ZFtn8m3kVnWj2CMn0tNAVsJs3qPjnJL"; // <- UPDATE
+            configuration.clientKey = @"1r4XnG1VfW3wOrT5JXd4jzzIYfDgVtfwkbGNwnir"; // <- UPDATE
             configuration.server = @"https://parseapi.back4app.com";
     }];
 
@@ -30,22 +30,8 @@
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBSDKAppEvents activateApp];
-}
-
 // disables device rotation
-- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     return UIInterfaceOrientationMaskPortrait;
 }
 

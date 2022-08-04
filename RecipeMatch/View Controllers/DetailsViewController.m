@@ -143,9 +143,9 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // get save count
 - (void)updateSaveCount {
-    [APIManager countSavesWithId:self.recipeId andCompletion:^(int saves, NSError * _Nullable error) {
+    [APIManager countSavesWithId:self.recipeId andCompletion:^(NSUInteger saves, NSError * _Nullable error) {
         if (saves) {
-            self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", saves];
+            self.saveCount.text = [[NSString alloc] initWithFormat:@"%lu", saves];
         } else {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }
@@ -154,9 +154,9 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 
 // get like count
 - (void)updateLikeCount {
-    [APIManager countLikesWithId:self.recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+    [APIManager countLikesWithId:self.recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         if (likes) {
-            self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", likes];
+            self.likeCount.text = [[NSString alloc] initWithFormat:@"%lu", likes];
         } else {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
         }

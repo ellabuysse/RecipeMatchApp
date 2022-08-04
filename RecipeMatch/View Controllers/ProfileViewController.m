@@ -11,7 +11,6 @@
 #import "SceneDelegate.h"
 #import "GridRecipeCell.h"
 #import "SavedRecipe.h"
-#import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>

@@ -6,7 +6,6 @@
 //
 
 #import "GridRecipeCell.h"
-#import "UIKit+AFNetworking.h"
 #import "SDWebImage/SDWebImage.h"
 
 @implementation GridRecipeCell
@@ -19,7 +18,6 @@ static const int SEARCH_TITLE_TAG = 4;
 // clears image and title of cell
 - (void)prepareForReuse {
     [super prepareForReuse];
-    [self.imageView cancelImageDownloadTask];
     self.imageView.image = NULL;
     [self.imageView sd_cancelCurrentImageLoad];
     self.recipeTitle.text = @"";

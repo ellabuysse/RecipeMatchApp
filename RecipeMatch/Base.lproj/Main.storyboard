@@ -19,48 +19,114 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cuisine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GM7-Xj-uCr">
-                                <rect key="frame" x="40" y="107" width="56" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="30" y="107" width="61" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tx3-gY-L3E">
-                                <rect key="frame" x="40" y="188" width="50" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="30" y="188.5" width="54" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cBW-Hw-qPn">
-                                <rect key="frame" x="40" y="269" width="31" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="30" y="270" width="33.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meal type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N6H-K0-4GJ">
-                                <rect key="frame" x="40" y="350" width="75" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="30" y="351.5" width="81" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1000" minValue="0.0" maxValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="LFg-Kv-ECN">
+                                <rect key="frame" x="28" y="474.5" width="358" height="31"/>
+                                <color key="tintColor" red="0.50196078430000002" green="0.79607843140000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="sliderValueChanged:" destination="f37-ou-fth" eventType="valueChanged" id="lYl-Mx-pAl"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max Calories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EHC-8z-3oy">
+                                <rect key="frame" x="30" y="433" width="106.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="1000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNU-dW-7Wr">
+                                <rect key="frame" x="279" y="434" width="105" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Ijq-wo-11I"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nd8-f4-A6Q">
+                                <rect key="frame" x="127.5" y="604.5" width="159.5" height="33.5"/>
+                                <color key="tintColor" red="0.50196078430000002" green="0.79607843140000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Clear Preferences">
+                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="16"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapClearPreferences:" destination="f37-ou-fth" eventType="touchUpInside" id="YcI-Rc-Qvc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hT7-Ya-M37">
+                                <rect key="frame" x="107" y="554.5" width="200" height="40"/>
+                                <color key="backgroundColor" red="0.50196078430000002" green="0.79607843140000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="uCY-QP-6fX"/>
+                                    <constraint firstAttribute="height" constant="40" id="wXB-qC-nU1"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Apply">
+                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapApplyPreferences:" destination="f37-ou-fth" eventType="touchUpInside" id="Fs8-LI-jfE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Qkr-wf-TqK"/>
-                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
                         <constraints>
+                            <constraint firstItem="Qkr-wf-TqK" firstAttribute="trailing" secondItem="LFg-Kv-ECN" secondAttribute="trailing" constant="30" id="2sl-EY-v06"/>
+                            <constraint firstItem="hT7-Ya-M37" firstAttribute="top" secondItem="LFg-Kv-ECN" secondAttribute="bottom" constant="50" id="476-Yx-9if"/>
+                            <constraint firstItem="hT7-Ya-M37" firstAttribute="centerX" secondItem="A9O-l0-NA6" secondAttribute="centerX" id="9Qu-i2-fxA"/>
+                            <constraint firstItem="Qkr-wf-TqK" firstAttribute="trailing" secondItem="bNU-dW-7Wr" secondAttribute="trailing" constant="30" id="AZp-Is-swZ"/>
+                            <constraint firstItem="LFg-Kv-ECN" firstAttribute="centerX" secondItem="A9O-l0-NA6" secondAttribute="centerX" id="H3W-i6-Ksc"/>
                             <constraint firstItem="Tx3-gY-L3E" firstAttribute="top" secondItem="GM7-Xj-uCr" secondAttribute="bottom" constant="60" id="NsD-tW-eqr"/>
-                            <constraint firstItem="GM7-Xj-uCr" firstAttribute="leading" secondItem="Qkr-wf-TqK" secondAttribute="leading" constant="40" id="dNF-ev-Ytr"/>
+                            <constraint firstItem="EHC-8z-3oy" firstAttribute="top" secondItem="N6H-K0-4GJ" secondAttribute="bottom" constant="60" id="bbS-uD-MmZ"/>
+                            <constraint firstItem="LFg-Kv-ECN" firstAttribute="leading" secondItem="Qkr-wf-TqK" secondAttribute="leading" constant="30" id="bbc-g4-1P3"/>
+                            <constraint firstItem="GM7-Xj-uCr" firstAttribute="leading" secondItem="Qkr-wf-TqK" secondAttribute="leading" constant="30" id="dNF-ev-Ytr"/>
+                            <constraint firstItem="nd8-f4-A6Q" firstAttribute="top" secondItem="hT7-Ya-M37" secondAttribute="bottom" constant="10" id="emf-Wz-3AL"/>
                             <constraint firstItem="N6H-K0-4GJ" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="fl8-QB-pTR"/>
                             <constraint firstItem="N6H-K0-4GJ" firstAttribute="top" secondItem="cBW-Hw-qPn" secondAttribute="bottom" constant="60" id="gtv-SD-nCg"/>
                             <constraint firstItem="Tx3-gY-L3E" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="gzY-IW-LwO"/>
                             <constraint firstItem="cBW-Hw-qPn" firstAttribute="leading" secondItem="GM7-Xj-uCr" secondAttribute="leading" id="h5u-bq-ue1"/>
+                            <constraint firstItem="EHC-8z-3oy" firstAttribute="leading" secondItem="N6H-K0-4GJ" secondAttribute="leading" id="mUO-JW-EFq"/>
                             <constraint firstItem="GM7-Xj-uCr" firstAttribute="top" secondItem="Qkr-wf-TqK" secondAttribute="top" constant="51" id="ohR-lZ-egH"/>
+                            <constraint firstItem="LFg-Kv-ECN" firstAttribute="top" secondItem="EHC-8z-3oy" secondAttribute="bottom" constant="20" id="otn-Ko-zi0"/>
+                            <constraint firstItem="bNU-dW-7Wr" firstAttribute="centerY" secondItem="EHC-8z-3oy" secondAttribute="centerY" id="r1B-qJ-Q7o"/>
                             <constraint firstItem="cBW-Hw-qPn" firstAttribute="top" secondItem="Tx3-gY-L3E" secondAttribute="bottom" constant="60" id="tbY-wX-cVW"/>
+                            <constraint firstItem="nd8-f4-A6Q" firstAttribute="centerX" secondItem="A9O-l0-NA6" secondAttribute="centerX" id="xst-ZL-GcW"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="AbD-xy-ScW"/>
+                    <connections>
+                        <outlet property="applyBtn" destination="hT7-Ya-M37" id="rwF-ar-wcc"/>
+                        <outlet property="caloriesLabel" destination="bNU-dW-7Wr" id="YlN-eb-i7X"/>
+                        <outlet property="slider" destination="LFg-Kv-ECN" id="Vep-aE-CmC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="okt-v8-bsi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1342" y="1573"/>
+            <point key="canvasLocation" x="-1342.0289855072465" y="1572.9910714285713"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -686,11 +752,11 @@
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

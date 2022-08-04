@@ -17,6 +17,10 @@
 @property (nonatomic, strong) NSString *healthLabel;
 @property (nonatomic, strong) NSString *dietLabel;
 @property (nonatomic, strong) NSString *mealLabel;
+@property (weak, nonatomic) IBOutlet UISlider *slider;
+@property (weak, nonatomic) IBOutlet UILabel *caloriesLabel;
+@property (weak, nonatomic) IBOutlet UIButton *applyBtn;
+
 @property int selectedIndex;
 @end
 
@@ -24,10 +28,11 @@ static const float ROW_HEIGHT = 30;
 static const float MENU_OFFSET = 80;
 static const float TITLE_WIDTH = 100;
 static const float TITLE_HEIGHT = 40;
-static const float DROPDOWN_X_OFFSET = 220;
+static const float DROPDOWN_X_OFFSET = 230;
 static const float DROPDOWN_Y_POS = 133;
 static const float DROPDOWN_WIDTH = 200;
 static const float DROPDOWN_HEIGHT = 37;
+static const float CORNER_RADIUS = 15;
 
 @implementation PreferencesViewController
 @synthesize delegate; // delegate is instance of StreamViewController
@@ -45,6 +50,33 @@ static const float DROPDOWN_HEIGHT = 37;
     [titleView addSubview:title];
     self.navigationItem.titleView = titleView;
     [self setupView];
+    
+    // setup slider with current value
+    NSString *caloriesCount = [self.preferencesDict objectForKey:CALORIES_KEY];
+    if (caloriesCount) {
+        self.caloriesLabel.text = caloriesCount;
+        [self.slider setValue:[caloriesCount floatValue]];
+    }
+    self.applyBtn.layer.cornerRadius = CORNER_RADIUS;
+}
+
+// sends preferences to stream VC and removes view
+- (IBAction)didTapApplyPreferences:(id)sender {
+    if (![self.caloriesLabel.text isEqualToString:@"1000"]) {
+        [self.preferencesDict setObject:self.caloriesLabel.text forKey:CALORIES_KEY];
+    }
+    [delegate sendPreferences:self.preferencesDict];
+    [self.navigationController popViewControllerAnimated:YES]; // go back to stream VC
+}
+
+// clears all preferences and resets dropdown menu titles
+- (IBAction)didTapClearPreferences:(id)sender {
+    [self.preferencesDict removeAllObjects];
+    [self setupView];
+}
+
+- (IBAction) sliderValueChanged:(UISlider *)sender {
+    self.caloriesLabel.text = [NSString stringWithFormat:@"%.0f", [sender value]];
 }
 
 - (void)setupView {
@@ -98,10 +130,5 @@ static const float DROPDOWN_HEIGHT = 37;
     } else if (dropDownMenu == self.mealMenu) {
         [self updatePreferenceWithKey:MEAL_TYPE_KEY title:title];
     }
-}
-
-//called when back button is pressed
-- (void)viewWillDisappear:(BOOL)animated {
-    [delegate sendPreferences:self.preferencesDict];
 }
 @end

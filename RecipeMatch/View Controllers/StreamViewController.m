@@ -28,6 +28,7 @@ NSString* const CUISINE_KEY = @"cuisineType";
 NSString* const HEALTH_KEY = @"health";
 NSString* const DIET_KEY = @"diet";
 NSString* const MEAL_TYPE_KEY = @"mealType";
+NSString* const CALORIES_KEY = @"calories";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -75,9 +76,14 @@ NSString* const MEAL_TYPE_KEY = @"mealType";
 // called when there are not enought recipes from user preferences
 // removes preferences one by one until enough recipes are found
 - (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
-    if ([self.preferencesDict count] > 0) {
+    if ([self.preferencesDict objectForKey:MEAL_TYPE_KEY]) {
         [self.preferencesDict removeObjectForKey:MEAL_TYPE_KEY];
+    } else if ([self.preferencesDict objectForKey:DIET_KEY]) {
+        [self.preferencesDict removeObjectForKey:DIET_KEY];
+    } else if ([self.preferencesDict objectForKey:HEALTH_KEY]) {
+        [self.preferencesDict removeObjectForKey:HEALTH_KEY];
     }
+    
     [self showAlert];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if (recipes) {
@@ -102,6 +108,7 @@ NSString* const MEAL_TYPE_KEY = @"mealType";
     [self addPreferenceToStringWithKey: DIET_KEY];
     [self addPreferenceToStringWithKey: HEALTH_KEY];
     [self addPreferenceToStringWithKey: MEAL_TYPE_KEY];
+    [self addPreferenceToStringWithKey: CALORIES_KEY];
 }
 
 - (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
@@ -126,7 +133,7 @@ NSString* const MEAL_TYPE_KEY = @"mealType";
 
 - (void)sendPreferences:(NSMutableDictionary *)preferences {
     // check that there are new preferences before reloading
-    if ([preferences count] > 0 && ![preferences isEqualToDictionary:self.preferencesDict]) {
+    if (![preferences isEqualToDictionary:self.preferencesDict]) {
         self.preferencesDict = preferences;
         [self.draggableBackground removeFromSuperview];
         [self setupCards];

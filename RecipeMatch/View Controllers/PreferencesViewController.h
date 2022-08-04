@@ -14,6 +14,7 @@ extern NSString* const CUISINE_KEY;
 extern NSString* const HEALTH_KEY;
 extern NSString* const DIET_KEY;
 extern NSString* const MEAL_TYPE_KEY;
+extern NSString* const CALORIES_KEY;
 
 @protocol PreferencesViewControllerDelegate <NSObject>
 @required

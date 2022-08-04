@@ -33,9 +33,10 @@
 static const int MAX_BUFFER_SIZE = 2; // max number of cards loaded at any given time, must be greater than 1
 static const float CARD_HEIGHT = 465; // height of the draggable card
 static const float CARD_WIDTH = 350; // width of the draggable card
+static const float CARD_YPOS = 150;
 static const float BTN_HEIGHT = 60;
 static const float MIDDLE_BTN_OFFSET = 20;
-static const float BTN_YPOS = 650;
+static const float BTN_YPOS = CARD_YPOS + CARD_HEIGHT + 30;
 static const float LEFT_BTN_XPOS = 40;
 static const float MIDDLE_BTN_XPOS = 155;
 static const float RIGHT_BTN_XPOS = 290;
@@ -104,7 +105,7 @@ NSString * const SAVE_IMG = @"save-btn";
 
 // creates a card and returns it
 - (DraggableView *)createDraggableViewWithDataAtIndex:(NSInteger)index {
-    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, (self.frame.size.height - CARD_HEIGHT - BTN_HEIGHT)/2, CARD_WIDTH, CARD_HEIGHT)];
+    DraggableView *draggableView = [[DraggableView alloc]initWithFrame:CGRectMake((self.frame.size.width - CARD_WIDTH)/2, CARD_YPOS, CARD_WIDTH, CARD_HEIGHT)];
     RecipeContainerModel *recipeContainer = [self.recipes objectAtIndex:index];
     draggableView.title.text = recipeContainer.recipe.label;
     NSString *recipeUri = recipeContainer.recipe.uri;

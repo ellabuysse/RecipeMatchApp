@@ -33,6 +33,7 @@ static const float DROPDOWN_Y_POS = 133;
 static const float DROPDOWN_WIDTH = 200;
 static const float DROPDOWN_HEIGHT = 37;
 static const float CORNER_RADIUS = 15;
+static NSString* const CALORIES_DEFAULT = @"1000";
 
 @implementation PreferencesViewController
 @synthesize delegate; // delegate is instance of StreamViewController
@@ -73,6 +74,8 @@ static const float CORNER_RADIUS = 15;
 - (IBAction)didTapClearPreferences:(id)sender {
     [self.preferencesDict removeAllObjects];
     [self setupView];
+    self.caloriesLabel.text = CALORIES_DEFAULT;
+    [self.slider setValue:[CALORIES_DEFAULT floatValue]];
 }
 
 - (IBAction) sliderValueChanged:(UISlider *)sender {

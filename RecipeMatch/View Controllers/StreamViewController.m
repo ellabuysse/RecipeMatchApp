@@ -76,7 +76,9 @@ NSString* const CALORIES_KEY = @"calories";
 // called when there are not enought recipes from user preferences
 // removes preferences one by one until enough recipes are found
 - (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
-    if ([self.preferencesDict objectForKey:MEAL_TYPE_KEY]) {
+    if ([self.preferencesDict objectForKey:CALORIES_KEY]) {
+        [self.preferencesDict removeObjectForKey:CALORIES_KEY];
+    } else if ([self.preferencesDict objectForKey:MEAL_TYPE_KEY]) {
         [self.preferencesDict removeObjectForKey:MEAL_TYPE_KEY];
     } else if ([self.preferencesDict objectForKey:DIET_KEY]) {
         [self.preferencesDict removeObjectForKey:DIET_KEY];

@@ -222,6 +222,8 @@ NSString* const CALORIES_KEY = @"calories";
         PreferencesViewController *preferencesController = [segue destinationViewController];
         preferencesController.delegate = self;
         preferencesController.preferencesDict = [NSMutableDictionary dictionaryWithDictionary:self.preferencesDict];
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
     }
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
         // make saved recipe object (but don't save) for DetailsViewController

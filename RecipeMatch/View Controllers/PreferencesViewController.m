@@ -84,25 +84,52 @@ static NSString* const CALORIES_DEFAULT = @"1000";
 
 - (void)setupView {
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
-    self.cuisineMenu = [self getDropDownMenuWithFrame:frame key:CUISINE_KEY items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
+    self.cuisineMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeCuisine];
     [self.view addSubview:self.cuisineMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.healthMenu = [self getDropDownMenuWithFrame:frame key:HEALTH_KEY items:@[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"]];
+    self.healthMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeHealth];
     [self.view addSubview:self.healthMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.dietMenu = [self getDropDownMenuWithFrame:frame key:DIET_KEY items:@[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"]];
+    self.dietMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeDiet];
     [self.view addSubview:self.dietMenu];
     
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.mealMenu = [self getDropDownMenuWithFrame:frame key:MEAL_TYPE_KEY  items:@[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"]];
+    self.mealMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeMeal];
     [self.view addSubview:self.mealMenu];
 }
 
+// returns dropdown items based on enum type
+- (NSArray *)getItemsFromType:(DropdownMenuType)type {
+    if (type == DropdownMenuTypeCuisine) {
+        return @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
+    } else if (type == DropdownMenuTypeHealth) {
+        return @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
+    } else if (type == DropdownMenuTypeDiet) {
+        return @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
+    } else {
+        return @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
+    }
+}
+
+// returns dropdown title based on enum type
+- (NSString *)getTitleFromType:(DropdownMenuType)type {
+    if (type == DropdownMenuTypeCuisine) {
+        return CUISINE_KEY;
+    } else if (type == DropdownMenuTypeHealth) {
+        return HEALTH_KEY;
+    } else if (type == DropdownMenuTypeDiet) {
+        return DIET_KEY;
+    } else {
+        return MEAL_TYPE_KEY;
+    }
+}
+
 // creates and returns a dropdown menu
-- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame key:(NSString *)key items:(NSArray *)items {
-    NSString *title = [self.preferencesDict objectForKey:key];
+- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame type:(DropdownMenuType)type {
+    NSArray* items = [self getItemsFromType:type];
+    NSString *title = [self getTitleFromType:type];
     ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:title?title:@"no preference"];
     dropDownMenu.textOfRows = items;
     dropDownMenu.numberOfRows = [dropDownMenu.textOfRows count];

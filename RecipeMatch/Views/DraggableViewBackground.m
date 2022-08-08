@@ -214,6 +214,7 @@ NSString * const SAVE_IMG = @"save-btn";
             card.likeLabel.hidden = NO;
         } else {
             card.likeCount.text = nil;
+            card.likeLabel.hidden = YES;
         }
     }];
 }
@@ -239,6 +240,7 @@ NSString * const SAVE_IMG = @"save-btn";
             card.saveLabel.hidden = NO;
         } else {
             card.saveCount.text = nil;
+            card.saveLabel.text = nil;
         }
     }];
 }

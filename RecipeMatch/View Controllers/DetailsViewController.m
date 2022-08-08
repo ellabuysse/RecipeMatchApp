@@ -90,6 +90,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 // sets recipe details from fullRecipe
 - (void)fetchRecipeInfo {
     self.recipeTitle.text = self.recipe.label;
+    self.recipeTitle.layer.zPosition = 1;
     self.recipeUrl = self.recipe.url;
     [self.source setTitle:self.recipe.source forState:UIControlStateNormal];
     [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];

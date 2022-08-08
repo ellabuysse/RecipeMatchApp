@@ -114,6 +114,8 @@ static const float TITLE_X_OFFSET = 20;
         overlayView = [[OverlayView alloc]initWithFrame:CGRectMake(self.frame.size.width/2-OVERLAY_SIZE, 0, OVERLAY_SIZE, OVERLAY_SIZE)];
         overlayView.alpha = 0;
         [self addSubview:overlayView];
+        
+        self.layer.cornerRadius = CORNER_RADIUS;
     }
     return self;
 }

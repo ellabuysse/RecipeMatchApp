@@ -147,7 +147,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         if (saves) {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%lu", saves];
         } else {
-            self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            self.saveCount.text = nil;
         }
     }];
 }
@@ -158,7 +158,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         if (likes) {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%lu", likes];
         } else {
-            self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            self.likeCount.text = nil;
         }
     }];
 }

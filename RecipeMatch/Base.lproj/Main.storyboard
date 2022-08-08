@@ -447,7 +447,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MUn-1a-CGF">
-                                                <rect key="frame" x="165.5" y="381" width="43" height="31"/>
+                                                <rect key="frame" x="185.5" y="381" width="43" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="bookmark.fill" catalog="system" title=""/>
                                             </button>
@@ -459,12 +459,12 @@
                                                 </buttonConfiguration>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VDb-H6-E0X" userLabel="heartButton">
-                                                <rect key="frame" x="20" y="381" width="152" height="142"/>
+                                                <rect key="frame" x="30" y="381" width="152" height="142"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="favor" title=""/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwr-Eg-5ca">
-                                                <rect key="frame" x="317" y="381" width="47" height="31"/>
+                                                <rect key="frame" x="337" y="381" width="47" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.right" catalog="system" title=""/>
                                                 <connections>
@@ -478,13 +478,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Grx-61-CUq">
-                                                <rect key="frame" x="216.5" y="381" width="0.0" height="31"/>
+                                                <rect key="frame" x="236.5" y="381" width="0.0" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxo-uK-iu6">
-                                                <rect key="frame" x="172" y="381" width="0.0" height="31"/>
+                                                <rect key="frame" x="182" y="381" width="0.0" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -515,15 +515,15 @@
                                             <constraint firstItem="Grx-61-CUq" firstAttribute="centerY" secondItem="Jxo-uK-iu6" secondAttribute="centerY" id="JUs-CH-EPv"/>
                                             <constraint firstItem="N5K-om-hQF" firstAttribute="top" secondItem="mAz-KC-JgT" secondAttribute="bottom" constant="20" id="NGj-hX-WwS"/>
                                             <constraint firstItem="mRd-xE-qLP" firstAttribute="top" secondItem="I1u-if-3wD" secondAttribute="bottom" constant="20" id="Olp-58-XjW"/>
-                                            <constraint firstItem="VDb-H6-E0X" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="20" id="QDo-T3-ozd"/>
+                                            <constraint firstItem="VDb-H6-E0X" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="30" id="QDo-T3-ozd"/>
                                             <constraint firstItem="Grx-61-CUq" firstAttribute="top" secondItem="mRd-xE-qLP" secondAttribute="bottom" constant="15" id="QHP-Bz-gkM"/>
                                             <constraint firstItem="mAz-KC-JgT" firstAttribute="leading" secondItem="0Na-zD-PiS" secondAttribute="leading" id="RTy-Bw-bbe"/>
-                                            <constraint firstItem="MUn-1a-CGF" firstAttribute="centerX" secondItem="K5V-di-0KL" secondAttribute="centerX" constant="-20" id="Tez-N6-tVO"/>
+                                            <constraint firstItem="MUn-1a-CGF" firstAttribute="centerX" secondItem="K5V-di-0KL" secondAttribute="centerX" id="Tez-N6-tVO"/>
                                             <constraint firstAttribute="trailing" secondItem="N5K-om-hQF" secondAttribute="trailing" constant="20" id="YLt-xT-ZhL"/>
                                             <constraint firstItem="mAz-KC-JgT" firstAttribute="leading" secondItem="mbP-eR-5yc" secondAttribute="leading" id="ail-Ye-4Cl"/>
                                             <constraint firstItem="I1u-if-3wD" firstAttribute="leading" secondItem="mbP-eR-5yc" secondAttribute="leading" constant="-12" id="b17-hS-PpD"/>
                                             <constraint firstItem="Jxo-uK-iu6" firstAttribute="top" secondItem="mRd-xE-qLP" secondAttribute="bottom" constant="15" id="bzW-YI-OBC"/>
-                                            <constraint firstAttribute="trailing" secondItem="vwr-Eg-5ca" secondAttribute="trailing" constant="50" id="dOq-K2-FVW"/>
+                                            <constraint firstAttribute="trailing" secondItem="vwr-Eg-5ca" secondAttribute="trailing" constant="30" id="dOq-K2-FVW"/>
                                             <constraint firstItem="N5K-om-hQF" firstAttribute="leading" secondItem="mAz-KC-JgT" secondAttribute="leading" id="hDm-eO-Lh3"/>
                                             <constraint firstItem="mbP-eR-5yc" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="10" id="iaj-VK-9my"/>
                                             <constraint firstItem="IGK-Yg-w0M" firstAttribute="leading" secondItem="0Na-zD-PiS" secondAttribute="trailing" constant="5" id="kZP-Ov-I4a"/>

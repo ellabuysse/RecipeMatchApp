@@ -230,6 +230,8 @@ NSString* const CALORIES_KEY = @"calories";
         DraggableView *recipe = (DraggableView *)sender;
         DetailsViewController *detailsController = [segue destinationViewController];
         detailsController.recipeId = recipe.recipeId;
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
     }
 }
 @end

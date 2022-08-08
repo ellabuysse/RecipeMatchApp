@@ -34,10 +34,6 @@ static const float SAVED_CONTROL_INDEX = 0;
 @implementation ProfileViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // setup scroll refresh
-    self.refreshControl = [[UIRefreshControl alloc] init];
-   // [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
-   // self.recipesCollectionView.refreshControl = self.refreshControl;
     
     self.recipesCollectionView.emptyDataSetSource = self;
     self.recipesCollectionView.emptyDataSetDelegate = self;
@@ -138,11 +134,20 @@ static const float SAVED_CONTROL_INDEX = 0;
 #pragma mark - DZNEmptyDataSetDelegate
 
 - (UIImage *)imageForEmptyDataSet:(UICollectionView *)collectionView {
-    return [UIImage imageNamed:@"profile-placeholder"];
+    if (self.profileHeaderView.segmentedControl.selectedSegmentIndex == SAVED_CONTROL_INDEX) {
+        return [UIImage imageNamed:@"profile-placeholder"];
+    } else {
+        return [UIImage imageNamed:@"like-placeholder"];
+    }
 }
 
 - (NSAttributedString *)titleForEmptyDataSet:(UICollectionView *)collectionView {
-    NSString *text = @"No Saves yet";
+    NSString *text;
+    if (self.profileHeaderView.segmentedControl.selectedSegmentIndex == SAVED_CONTROL_INDEX) {
+        text = @"No Saves yet";
+    } else {
+        text = @"No Likes yet";
+    }
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18.0f],
                                  NSForegroundColorAttributeName: [UIColor lightGrayColor]};
     return [[NSAttributedString alloc] initWithString:text attributes:attributes];

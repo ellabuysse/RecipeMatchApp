@@ -44,6 +44,7 @@
 - (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion;
 - (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card;
 - (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
+- (void)showAlertWithMessage:(NSString *_Nullable)message;
 @end
 
 @interface DraggableViewBackground : UIView <DraggableViewDelegate>

@@ -61,13 +61,13 @@ NSString* const CALORIES_KEY = @"calories";
             [self.draggableBackground reloadView];
             [self.view addSubview:self.draggableBackground];
         } else {
-            //TODO: Add failure support
+            [self showAlertWithMessage:@"Error loading recipes. Please try again later."];
         }
     }];
 }
 
-- (void)showAlert {
-    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:@"Ran out of results with these preferences! Showing recipes that match most of your preferences." preferredStyle:UIAlertControllerStyleAlert];
+- (void)showAlertWithMessage:(NSString *)message {
+    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
     [recipeFailure addAction:okAction];
     [self presentViewController:recipeFailure animated:YES completion:^{}];
@@ -86,7 +86,7 @@ NSString* const CALORIES_KEY = @"calories";
         [self.preferencesDict removeObjectForKey:HEALTH_KEY];
     }
     
-    [self showAlert];
+    [self showAlertWithMessage:@"Ran out of results with these preferences! Showing recipes that match most of your preferences."];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if (recipes) {
             completion(recipes, nil);

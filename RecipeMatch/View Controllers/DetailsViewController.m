@@ -9,9 +9,8 @@
 #import "APIManager.h"
 #import "SDWebImage/SDWebImage.h"
 #import "FBSDKShareKit/FBSDKShareKit.h"
-#import "IngredientTableViewCell.h"
 
-@interface DetailsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
 @property (strong, nonatomic) NSString *recipeUrl;
@@ -42,6 +41,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
         [self fetchRecipeInfo];
     }];
+  
 }
 
 // called initially to load setup like and save buttons
@@ -126,7 +126,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
                 self.saved = NO;
                 [self updateSaveCount];
             } else {
-                //TODO: Add failure support
+                [self showFailureAlert];
             }
         }];
     } else {
@@ -136,10 +136,17 @@ NSString * const BOOKMARK_KEY = @"bookmark";
                 self.saved = YES;
                 [self updateSaveCount];
             } else {
-                //TODO: Add failure support
+                [self showFailureAlert];
             }
         }];
     }
+}
+
+- (void)showFailureAlert {
+    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:@"Couldn't complete action. Please try again later." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
+    [recipeFailure addAction:okAction];
+    [self presentViewController:recipeFailure animated:YES completion:^{}];
 }
 
 // get save count
@@ -173,7 +180,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
                 self.liked = NO;
                 [self updateLikeCount];
             } else {
-                //TODO: Add failure support
+                [self showFailureAlert];
             }
         }];
     } else {
@@ -183,22 +190,9 @@ NSString * const BOOKMARK_KEY = @"bookmark";
                 self.liked = YES;
                 [self updateLikeCount];
             } else {
-                //TODO: Add failure support
+                [self showFailureAlert];
             }
         }];
     }
 }
-
-#pragma mark - UITableViewDelegate
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    IngredientTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ingredientCell" forIndexPath:indexPath];
-    cell.ingredient.text = [self.recipe.ingredientLines objectAtIndex:indexPath.row];
-    return  cell;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.recipe.ingredientLines count];
-}
-
 @end

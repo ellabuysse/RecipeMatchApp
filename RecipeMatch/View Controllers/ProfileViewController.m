@@ -57,6 +57,13 @@ static const float SAVED_CONTROL_INDEX = 0;
     [self reloadData];
 }
 
+- (void)showAlertWithMessage:(NSString *)message {
+    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
+    [recipeFailure addAction:okAction];
+    [self presentViewController:recipeFailure animated:YES completion:^{}];
+}
+
 // fetches recipes from API and sets currentRecipes
 - (void)reloadData {
     [self fetchSavedRecipesWithCompletion:^(BOOL succeeded, NSError *error){
@@ -65,11 +72,11 @@ static const float SAVED_CONTROL_INDEX = 0;
                 if (succeeded) {
                     [self segmentedControlDidChange];
                 } else {
-                    //TODO: add failure support
+                    [self showAlertWithMessage:@"Error getting Liked recipes. Please try again later."];
                 }
             }];
         } else {
-            //TODO: add failure support
+            [self showAlertWithMessage:@"Error getting Saved recipes. Please try again later."];
         }
     }];
 }

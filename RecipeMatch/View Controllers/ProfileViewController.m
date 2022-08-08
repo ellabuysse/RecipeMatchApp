@@ -14,26 +14,30 @@
 #import "DetailsViewController.h"
 #import "APIManager.h"
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
+#import "ProfileCollectionReusableView.h"
 
-@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate>
+@interface ProfileViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, ProfileCollectionReusableViewDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *recipesCollectionView;
-@property (nonatomic, strong) NSArray *recipes;
+@property (nonatomic, strong) NSArray *savedRecipes;
+@property (nonatomic, strong) NSArray *likedRecipes;
+@property (nonatomic, strong) NSArray *currentRecipes;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) ProfileCollectionReusableView *profileHeaderView;
 @end
 
 static const float MIN_LINE_SPACING = 10;
 static const float HEIGHT_FACTOR = 1.2;
 static const float MARGIN_SIZE = 7;
-static const float TOP_MARGIN = 20;
+static const float SAVED_CONTROL_INDEX = 0;
 
 @implementation ProfileViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
     // setup scroll refresh
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
-    self.recipesCollectionView.refreshControl = self.refreshControl;
+   // [self.refreshControl addTarget:self action:@selector(fetchRecipes) forControlEvents:UIControlEventValueChanged];
+   // self.recipesCollectionView.refreshControl = self.refreshControl;
     
     self.recipesCollectionView.emptyDataSetSource = self;
     self.recipesCollectionView.emptyDataSetDelegate = self;
@@ -45,40 +49,90 @@ static const float TOP_MARGIN = 20;
                                    target:self
                                    action:@selector(logoutBtn:)];
     self.navigationItem.leftBarButtonItem = logout;
-    [self fetchRecipes];
+    [self reloadData];
     
     PFUser *user = [PFUser currentUser];
     NSString *title = [@"@" stringByAppendingString:user.username];
     self.navigationItem.title = title;
 }
 
-// called after returning from PreferencesViewController
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self fetchRecipes];
+    [self reloadData];
 }
 
-// fetch all saved recipe from user in APIManager
-- (void)fetchRecipes {
-    [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
-        if (recipes) {
-            self.recipes = recipes;
-            [self.recipesCollectionView reloadData];
-            [self.refreshControl endRefreshing];
+// fetches recipes from API and sets currentRecipes
+- (void)reloadData {
+    [self fetchSavedRecipesWithCompletion:^(BOOL succeeded, NSError *error){
+        if(succeeded) {
+            [self fetchLikedRecipesWithCompletion:^(BOOL succeeded, NSError *error){
+                if (succeeded) {
+                    [self segmentedControlDidChange];
+                } else {
+                    //TODO: add failure support
+                }
+            }];
         } else {
-            [self.refreshControl endRefreshing];
-            //TODO: Add failure support
+            //TODO: add failure support
         }
     }];
 }
 
-- (IBAction)logoutBtn:(id)sender {
-    [PFUser logOutInBackgroundWithBlock:^(NSError * _Nullable error) {
+// fetch all saved recipes from user in APIManager
+- (void)fetchSavedRecipesWithCompletion:(void (^)(BOOL succeeded, NSError *error))completion{
+    [APIManager fetchSavedRecipes:^(NSArray *recipes, NSError *error) {
+        if (recipes) {
+            self.savedRecipes = recipes;
+            completion(YES, nil);
+        } else {
+            [self.refreshControl endRefreshing];
+            completion(NO, error);
+        }
     }];
+}
+
+// fetch all liked recipes from user in APIManager
+- (void)fetchLikedRecipesWithCompletion:(void (^)(BOOL succeeded, NSError *error))completion{
+    [APIManager fetchLikedRecipes:^(NSArray *recipes, NSError *error) {
+        if (recipes) {
+            self.likedRecipes = recipes;
+            completion(YES, nil);
+        } else {
+            [self.refreshControl endRefreshing];
+            completion(NO, error);
+        }
+    }];
+}
+
+// sets currentRecipes to savedRecipes and reloads collection view
+- (void)showSavedRecipes {
+    self.currentRecipes = self.savedRecipes;
+    [self.recipesCollectionView reloadData];
+}
+
+// sets currentRecipes to likedRecipes and reloads collection view
+- (void)showLikedRecipes {
+    self.currentRecipes = self.likedRecipes;
+    [self.recipesCollectionView reloadData];
+}
+
+- (IBAction)logoutBtn:(id)sender {
+    [PFUser logOutInBackground];
     SceneDelegate *myDelegate = (SceneDelegate *)self.view.window.windowScene.delegate;
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     myDelegate.window.rootViewController = loginViewController;
+}
+
+#pragma mark - ProfileCollectionReusableViewDelegate
+
+// sets currentRecipes based on segmentedControl
+- (void)segmentedControlDidChange {
+    if (self.profileHeaderView.segmentedControl.selectedSegmentIndex == SAVED_CONTROL_INDEX) {
+        [self showSavedRecipes];
+    } else {
+        [self showLikedRecipes];
+    }
 }
 
 #pragma mark - DZNEmptyDataSetDelegate
@@ -110,21 +164,28 @@ static const float TOP_MARGIN = 20;
 
 #pragma mark - UICollectionViewDelegate
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    ProfileCollectionReusableView *profileHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ProfileHeader" forIndexPath:indexPath];
+    self.profileHeaderView = profileHeaderView;
+    self.profileHeaderView.delegate = self;
+    return profileHeaderView;
+}
+
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     self.flowLayout.minimumLineSpacing = MIN_LINE_SPACING;
     self.flowLayout.minimumInteritemSpacing = 0;
-    self.flowLayout.sectionInset = UIEdgeInsetsMake(TOP_MARGIN,MARGIN_SIZE,0,MARGIN_SIZE);
+    self.flowLayout.sectionInset = UIEdgeInsetsMake(MARGIN_SIZE,MARGIN_SIZE,0,MARGIN_SIZE);
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.recipes.count;
+    return self.currentRecipes.count;
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GridRecipeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GridRecipeCell" forIndexPath:indexPath];
-    SavedRecipe *recipe = self.recipes[indexPath.row];
+    SavedRecipe *recipe = self.currentRecipes[indexPath.row];
     [cell setupWithRecipeTitle:recipe.name recipeImageUrl:recipe.image cellType:GridRecipeCellTypeProfile];
     return cell;
 }
@@ -144,7 +205,7 @@ static const float TOP_MARGIN = 20;
         DetailsViewController *detailsController = [segue destinationViewController];
         UICollectionViewCell *tappedCell = sender;
         NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
-        SavedRecipe *recipe = self.recipes[indexPath.row];
+        SavedRecipe *recipe = self.currentRecipes[indexPath.row];
         detailsController.recipeId = recipe.recipeId;
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem = backButton;

@@ -9,8 +9,9 @@
 #import "APIManager.h"
 #import "SDWebImage/SDWebImage.h"
 #import "FBSDKShareKit/FBSDKShareKit.h"
+#import "IngredientTableViewCell.h"
 
-@interface DetailsViewController ()
+@interface DetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
 @property (strong, nonatomic) NSString *recipeUrl;
@@ -21,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property (strong, nonatomic) RecipeModel *recipe;
-@property (weak, nonatomic) IBOutlet UITextView *ingredients;
+@property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -36,7 +37,6 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
-
     [self setupButtons]; // start API calls to prevent excess loading time
     // wait for fullRecipe data before setting info on screen
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
@@ -187,4 +187,17 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         }];
     }
 }
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    IngredientTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ingredientCell" forIndexPath:indexPath];
+    cell.ingredient.text = [self.recipe.ingredientLines objectAtIndex:indexPath.row];
+    return  cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [self.recipe.ingredientLines count];
+}
+
 @end

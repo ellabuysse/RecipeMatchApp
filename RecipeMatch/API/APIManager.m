@@ -18,7 +18,8 @@
 @end
 
 NSString* const BASE_API_URL = @"https://api.edamam.com/api/recipes/v2";
-NSString* const BASE_API_PARAMS = @"?type=public&random=true&health=alcohol-free";
+NSString* const BASE_API_PARAMS = @"?type=public&random=true";
+NSString* const BASE_Q_PARAM = @"&health=alcohol-free"; // recipe API requires at least one parameter, for initial search choose least restricting
 NSString* const USER_KEY = @"user";
 NSString* const USERNAME_KEY = @"username";
 NSString* const ID_KEY = @"recipeId";
@@ -91,11 +92,14 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 // returns recipes on success, nil on failure
 - (void)getRecipesWithPreferences:(NSString * _Nullable)preferences andCompletion:(void (^)(NSMutableArray *recipes, NSError *error))completion {
     NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+    if ([preferences length] == 0) {
+        apiString = [apiString stringByAppendingString:BASE_Q_PARAM];
+    }
     apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
     apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
     apiString = [apiString stringByAppendingString:self.app_key];
-    if (preferences) {
+    if ([preferences length] != 0) {
         apiString = [apiString stringByAppendingString: preferences];
     }
     NSURL *url = [NSURL URLWithString:apiString];
@@ -118,11 +122,14 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 // returns recipes on success, nil on failure
 - (NSURLSessionDataTask *)getRecipesWithQuery:(NSString * _Nullable)query andCompletion: (void (^)(NSMutableArray *recipes, NSError *error))completion{
     NSString *apiString = [BASE_API_URL stringByAppendingString:BASE_API_PARAMS];
+    if ([query length] == 0) {
+        apiString = [apiString stringByAppendingString:BASE_Q_PARAM];
+    }
     apiString = [apiString stringByAppendingString:APP_ID_PARAM];
     apiString = [apiString stringByAppendingString:self.app_id];
     apiString = [apiString stringByAppendingString:APP_KEY_PARAM];
     apiString = [apiString stringByAppendingString:self.app_key];
-    if(query){
+    if ([query length] != 0) {
         apiString = [apiString stringByAppendingString:@"&q="];
         query = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLUserAllowedCharacterSet]]; // remove spaces and extra characters
         apiString = [apiString stringByAppendingString: query];
@@ -270,6 +277,19 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 + (void)fetchSavedRecipes:(void (^)(NSArray *recipes, NSError *error))completion {
     PFQuery *recipeQuery = [self createQueryWithID:nil type:SAVED_RECIPE_TYPE withUser:YES];
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
+        if (recipesFound) {
+            completion(recipesFound,nil);
+        } else {
+            completion(nil,error);
+        }
+    }];
+}
+
+// get all liked recipes of current user from LikedRecipe Parse class
+// return recipes on success, nil on failure
++ (void)fetchLikedRecipes:(void (^)(NSArray *recipes, NSError *error))completion {
+    PFQuery *recipeQuery = [self createQueryWithID:nil type:LIKED_RECIPE_TYPE withUser:YES];
+    [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound) {
             completion(recipesFound,nil);
         } else {

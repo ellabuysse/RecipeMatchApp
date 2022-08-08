@@ -1,4 +1,4 @@
-# Yes Peas - Recipe Matching App
+# YesPeas - Recipe Matching App
 
 ## Table of Contents
 1. [Overview](#Overview)

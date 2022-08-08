@@ -1,7 +1,4 @@
-Original App Design Project - README Template
-===
-
-# Recipe Matching App
+# Yes Peas - Recipe Matching App
 
 ## Table of Contents
 1. [Overview](#Overview)
@@ -11,15 +8,15 @@ Original App Design Project - README Template
 
 ## Overview
 ### Description
-This app allows users to view a stream of curated recipes based on their preferences and filter by meal-type. Users will swipe between recipes in order to select the one they want to cook.
+YesPeas is a recipe swiping app that provides users with inspiration and ideas for recipes. Users can input preferences such as meal type and diet, search for specific recipes, and view saved recipes on their profile. Ultimately, users are able to discover new recipes quickly and in a fun and engaging way.
 
 
 ### App Evaluation
 
 - **Category:** Food/Social
-- **Mobile:** Users swipe right if they like a recipe and swipe left if they dislike a recipe. Recipes will be curated by a user's profile of likes, diet, and preferences. Users can select categories such as meal-type and when they select a recipe, they are taken to that recipe's website so they can easily start cooking. Each liked recipe will be saved to a collection they can return to.
+- **Mobile:** The swiping focus of this app is perfect for mobile use. Users swipe right if they like a recipe and swipe left if they dislike a recipe. Recipes are curated by a user's preferences such as meal-type, diet, and health restrictions. Users can view details of a recipe and go to the external recipe site for instructions to start cooking right away. Users can also view liked and saved recipes on their profile for later reference.
 - **Story:** Allows users to quickly find new recipes they enjoy. Many college-aged individuals don't have go-to recipes, and this app will provide ideas and inspiration when users are looking for something delicious.
-- **Market:** Young people who are looking for new recipes.
+- **Market:** Anyone who is looking for new recipes.
 - **Habit:** Users can explore endless recipes for any meal whenever they want. Users are already faced with at least 3 meal decision every day, and this app will make the process more fun and game-like. The ability to add your own recipes would make users even more engaged and likely to return.
 - **Scope:** A somewhat narrow scope focused on recipes, but stretch features can incorporate social aspects of posting recipes/reviews and following other people. It may be technically challenging to incoporporate user-added recipes to an existing database, but a stripped down version of this project would still be interesting.
 
@@ -30,21 +27,21 @@ This app allows users to view a stream of curated recipes based on their prefere
 
 **Required Must-have Stories**
 
-* User can create a new account
-* User can login
-* User can view a feed of curated recipes based on preferences
-* User can filter recipes by category
-* User can swipe right/left to like/discard a recipe
-    * Liked recipes are saved to grid on profile for later use
-* User can view details of recipe and go to external recipe site
-* User can share recipe to Facebook profile
+* User can login into existing account
+* User can sign up for new account
+* User can login with Facebook account
+* User can view an endless stream of recipes
+* User can swipe right to like a recipe
+* User can swipe left to discard a recipe/move to the next one
+* User can tap on a recipe to view details
+* User can double tap to like a recipe
+* User can view a grid of liked and saved recipes on their profile
 
 **Optional Nice-to-have Stories**
 
-
+* User can search for recipes by title or keyword
 * User can create their own recipe that is added to their profile
 * User can comment on a recipe and like or 5 star rating
-* Search bar
 * User can filter recipes by popularity
 * User can view other users' profiles and see their liked recipes
 
@@ -53,13 +50,16 @@ This app allows users to view a stream of curated recipes based on their prefere
 * Login/Sign up
     * User can login into existing account
     * User can sign up for new account
+    * User can login with Facebook account
+
 
 * Stream
-    * User can view a stream of recipes
+    * User can view an endless stream of recipes
     * User can swipe right to like a recipe
     * User can swipe left to discard a recipe/move to the next one
-    * User can swipe up to view details of recipe and favorite
-    * User can select meal category 
+    * User can tap on a recipe to view details and favorite
+    * User can double tap to like
+
 
 * Detail
     * User can view recipe title, ingredients, instructions, and photo
@@ -68,18 +68,22 @@ This app allows users to view a stream of curated recipes based on their prefere
 
 
 * Profile
-    * User can view grid of liked recipes
-    * User can tap button to go to settings to update preferences and profile photo
+    * User can view grid of liked and saved recipes
 
 
-* Settings
+* Preferences
     * User can update preferences
-    * User can update profile photo and name
+    * User can clear preferences
+
+
+* Search
+   * User can search for recipes by title or keyword
+   * User can view a grid of results and view recipe details
 
 
 * **Future Version** Creation: 
-    * User can input recipe title, ingredients, instructions, and photo
-    * User can post recipe to Home feed and Profile
+    * User can create a recipe
+    * User can view most popular recipes
 
 
 ### 3. Navigation
@@ -87,26 +91,26 @@ This app allows users to view a stream of curated recipes based on their prefere
 **Tab Navigation** (Tab to Screen)
 
 * Home Feed
-* Post a Recipe
+* Search
 * Profile Page
 
 
 **Flow Navigation** (Screen to Screen)
 
 * Login Screen
-   * Home Feed
-* Registration Screen
-    * Home Feed
+   * Stream
 * Stream
-    * Detail screen with ingredients and instructions
-* Creation
-    * Home (after you finish posting the recipe)
+    * Details by tapping on recipe
+    * Preferences
+ * Search
+    * Details by tapping on recipe
+ * Profile
+    * Details by tapping on recipe
+   
 
 ## Wireframes
 ![](https://i.imgur.com/u2GmGAx.jpg)
 
-## Schema 
-[This section will be completed in Unit 9]
 ### Models
 Favorites Model
 Property      | Type	        | Description

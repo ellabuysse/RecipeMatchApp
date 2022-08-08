@@ -31,6 +31,8 @@ NSString* const SAVED_RECIPE_TYPE = @"SavedRecipe";
 const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition is unlikely
 
 @implementation APIManager
+@synthesize app_id;
+@synthesize app_key;
 
 + (instancetype)shared {
     static APIManager *sharedManager = nil;
@@ -225,7 +227,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
 // count number of times recipe is saved in SavedRecipe Parse class
 // return number of saves of recipe
-+ (void)countSavesWithId:(NSString * _Nullable )recipeId andCompletion:(void (^)(int likes, NSError *error))completion {
++ (void)countSavesWithId:(NSString * _Nullable )recipeId andCompletion:(void (^)(NSUInteger likes, NSError *error))completion {
     PFQuery *recipeQuery = [self createQueryWithID:recipeId type:SAVED_RECIPE_TYPE withUser:NO];
     // fetch data asynchronously
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<SavedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
@@ -252,7 +254,7 @@ const int MIN_RECIPE_COUNT = 100; // minimum number of recipes where repetition 
 
 // counts number of times recipe is liked in LikedRecipe Parse class
 // returns number of likes of recipe
-+ (void)countLikesWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(int likes, NSError *error))completion {
++ (void)countLikesWithId:(NSString * _Nullable)recipeId andCompletion:(void (^)(NSUInteger likes, NSError *error))completion {
     PFQuery *recipeQuery = [self createQueryWithID:recipeId type:LIKED_RECIPE_TYPE withUser:NO];
     [recipeQuery findObjectsInBackgroundWithBlock:^(NSArray<LikedRecipe *> * _Nullable recipesFound, NSError * _Nullable error) {
         if (recipesFound) {

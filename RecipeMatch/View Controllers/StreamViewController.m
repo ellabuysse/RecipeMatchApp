@@ -13,15 +13,22 @@
 #import "APIManager.h"
 #import "DetailsViewController.h"
 #import "RecipeModel.h"
+#import "PreferencesViewController.h"
 
 @interface StreamViewController()
-@property (nonatomic, strong) NSMutableArray *preferences;
+@property (nonatomic, strong) NSMutableDictionary *preferencesDict;
+@property (nonatomic, strong) NSString *preferencesString;
 @property (nonatomic, strong) DraggableViewBackground *draggableBackground;
 @end
 
 @implementation StreamViewController
 static const float TITLE_WIDTH = 100;
 static const float TITLE_HEIGHT = 40;
+NSString* const CUISINE_KEY = @"cuisineType";
+NSString* const HEALTH_KEY = @"health";
+NSString* const DIET_KEY = @"diet";
+NSString* const MEAL_TYPE_KEY = @"mealType";
+NSString* const CALORIES_KEY = @"calories";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,7 +40,7 @@ static const float TITLE_HEIGHT = 40;
     [titleView addSubview:imageView];
     self.navigationItem.titleView = titleView;
     [self setupCards];
-}
+    self.preferencesDict = [[NSMutableDictionary alloc] init];}
 
 // called after returning from PreferencesViewController
 - (void)viewDidAppear:(BOOL)animated {
@@ -69,9 +76,16 @@ static const float TITLE_HEIGHT = 40;
 // called when there are not enought recipes from user preferences
 // removes preferences one by one until enough recipes are found
 - (void)handlePreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
-    if ([self.preferences count] > 0) {
-        [self.preferences removeLastObject];
+    if ([self.preferencesDict objectForKey:CALORIES_KEY]) {
+        [self.preferencesDict removeObjectForKey:CALORIES_KEY];
+    } else if ([self.preferencesDict objectForKey:MEAL_TYPE_KEY]) {
+        [self.preferencesDict removeObjectForKey:MEAL_TYPE_KEY];
+    } else if ([self.preferencesDict objectForKey:DIET_KEY]) {
+        [self.preferencesDict removeObjectForKey:DIET_KEY];
+    } else if ([self.preferencesDict objectForKey:HEALTH_KEY]) {
+        [self.preferencesDict removeObjectForKey:HEALTH_KEY];
     }
+    
     [self showAlert];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if (recipes) {
@@ -82,9 +96,26 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
+- (void)addPreferenceToStringWithKey:(NSString *)key {
+    NSString *object = [self.preferencesDict objectForKey:key];
+    if (object) {
+        NSString *preference = [NSString stringWithFormat: @"&%@=%@", key, object];
+        self.preferencesString = [self.preferencesString stringByAppendingString:preference];
+    }
+}
+
+- (void)convertPreferencesDictToString {
+    self.preferencesString = @"";
+    [self addPreferenceToStringWithKey: CUISINE_KEY];
+    [self addPreferenceToStringWithKey: DIET_KEY];
+    [self addPreferenceToStringWithKey: HEALTH_KEY];
+    [self addPreferenceToStringWithKey: MEAL_TYPE_KEY];
+    [self addPreferenceToStringWithKey: CALORIES_KEY];
+}
+
 - (void)getRecipesWithPreferencesWithCompletion:(void (^)(NSArray *recipes, NSError *error))completion {
-    NSString *preferencesString = [self.preferences componentsJoinedByString:@""];
-    [[APIManager shared] getRecipesWithPreferences:preferencesString andCompletion: ^(NSMutableArray *recipes, NSError *error) {
+    [self convertPreferencesDictToString];
+    [[APIManager shared] getRecipesWithPreferences:self.preferencesString andCompletion: ^(NSMutableArray *recipes, NSError *error) {
         if (recipes) {
             completion(recipes, nil);
         } else {
@@ -100,15 +131,17 @@ static const float TITLE_HEIGHT = 40;
     }];
 }
 
-// called by PreferencesViewController to get user preferences
-- (void)sendData:(NSMutableArray *)prefRequest {
-    // check that preferences aren't empty
-    if ([prefRequest count] > 0) {
-        self.preferences = prefRequest;
+#pragma mark - PreferencesViewController method
+
+- (void)sendPreferences:(NSMutableDictionary *)preferences {
+    // check that there are new preferences before reloading
+    if (![preferences isEqualToDictionary:self.preferencesDict]) {
+        self.preferencesDict = preferences;
         [self.draggableBackground removeFromSuperview];
         [self setupCards];
     }
 }
+
 #pragma mark - DraggableViewBackground methods
 
 - (void)checkLikeStatusFromDraggableViewBackground:(DraggableView *)nextCard withCompletion:(void (^)(BOOL liked, NSError *error))completion {
@@ -155,14 +188,14 @@ static const float TITLE_HEIGHT = 40;
     [APIManager postSavedRecipeWithId:recipeId title:title image:image andCompletion:^(BOOL succeeded, NSError * _Nullable error) {}];
 }
 
-- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
-    [APIManager countLikesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion {
+    [APIManager countLikesWithId:recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
 
-- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(int likes, NSError * _Nullable error))completion {
-    [APIManager countSavesWithId:recipeId andCompletion:^(int likes, NSError * _Nullable error) {
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion: (void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion {
+    [APIManager countSavesWithId:recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         completion(likes, nil);
     }];
 }
@@ -188,6 +221,9 @@ static const float TITLE_HEIGHT = 40;
     if ([[segue identifier] isEqualToString:@"preferencesViewSegue"]) {
         PreferencesViewController *preferencesController = [segue destinationViewController];
         preferencesController.delegate = self;
+        preferencesController.preferencesDict = [NSMutableDictionary dictionaryWithDictionary:self.preferencesDict];
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = backButton;
     }
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
         // make saved recipe object (but don't save) for DetailsViewController

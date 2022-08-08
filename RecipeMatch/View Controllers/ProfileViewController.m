@@ -11,7 +11,6 @@
 #import "SceneDelegate.h"
 #import "GridRecipeCell.h"
 #import "SavedRecipe.h"
-#import "UIImageView+AFNetworking.h"
 #import "DetailsViewController.h"
 #import "APIManager.h"
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
@@ -149,7 +148,6 @@ static const float TOP_MARGIN = 20;
         detailsController.recipeId = recipe.recipeId;
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem = backButton;
-        
     }
 }
 @end

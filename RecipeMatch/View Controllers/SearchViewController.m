@@ -7,7 +7,6 @@
 
 #import "SearchViewController.h"
 #import "SearchCollectionReusableView.h"
-#import "UIImageView+AFNetworking.h"
 #import "GridRecipeCell.h"
 #import "APIManager.h"
 #import "DetailsViewController.h"

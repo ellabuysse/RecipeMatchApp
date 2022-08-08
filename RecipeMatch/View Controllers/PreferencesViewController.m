@@ -17,6 +17,10 @@
 @property (nonatomic, strong) NSString *healthLabel;
 @property (nonatomic, strong) NSString *dietLabel;
 @property (nonatomic, strong) NSString *mealLabel;
+@property (weak, nonatomic) IBOutlet UISlider *slider;
+@property (weak, nonatomic) IBOutlet UILabel *caloriesLabel;
+@property (weak, nonatomic) IBOutlet UIButton *applyBtn;
+
 @property int selectedIndex;
 @end
 
@@ -24,10 +28,12 @@ static const float ROW_HEIGHT = 30;
 static const float MENU_OFFSET = 80;
 static const float TITLE_WIDTH = 100;
 static const float TITLE_HEIGHT = 40;
-static const float DROPDOWN_X_OFFSET = 220;
+static const float DROPDOWN_X_OFFSET = 230;
 static const float DROPDOWN_Y_POS = 133;
 static const float DROPDOWN_WIDTH = 200;
 static const float DROPDOWN_HEIGHT = 37;
+static const float CORNER_RADIUS = 15;
+static NSString* const CALORIES_DEFAULT = @"1000";
 
 @implementation PreferencesViewController
 @synthesize delegate; // delegate is instance of StreamViewController
@@ -45,29 +51,86 @@ static const float DROPDOWN_HEIGHT = 37;
     [titleView addSubview:title];
     self.navigationItem.titleView = titleView;
     [self setupView];
+    
+    // setup slider with current value
+    NSString *caloriesCount = [self.preferencesDict objectForKey:CALORIES_KEY];
+    if (caloriesCount) {
+        self.caloriesLabel.text = caloriesCount;
+        [self.slider setValue:[caloriesCount floatValue]];
+    }
+    self.applyBtn.layer.cornerRadius = CORNER_RADIUS;
+}
+
+// sends preferences to stream VC and removes view
+- (IBAction)didTapApplyPreferences:(id)sender {
+    if (![self.caloriesLabel.text isEqualToString:@"1000"]) {
+        [self.preferencesDict setObject:self.caloriesLabel.text forKey:CALORIES_KEY];
+    }
+    [delegate sendPreferences:self.preferencesDict];
+    [self.navigationController popViewControllerAnimated:YES]; // go back to stream VC
+}
+
+// clears all preferences and resets dropdown menu titles
+- (IBAction)didTapClearPreferences:(id)sender {
+    [self.preferencesDict removeAllObjects];
+    [self setupView];
+    self.caloriesLabel.text = CALORIES_DEFAULT;
+    [self.slider setValue:[CALORIES_DEFAULT floatValue]];
+}
+
+- (IBAction) sliderValueChanged:(UISlider *)sender {
+    self.caloriesLabel.text = [NSString stringWithFormat:@"%.0f", [sender value]];
 }
 
 - (void)setupView {
     CGRect frame = CGRectMake((CGRectGetWidth(self.view.frame)-DROPDOWN_X_OFFSET), DROPDOWN_Y_POS, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
-    self.cuisineMenu = [self getDropDownMenuWithFrame:frame items:@[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"]];
+    self.cuisineMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeCuisine];
     [self.view addSubview:self.cuisineMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.healthMenu = [self getDropDownMenuWithFrame:frame items:@[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"]];
+    self.healthMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeHealth];
     [self.view addSubview:self.healthMenu];
 
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.dietMenu = [self getDropDownMenuWithFrame:frame items:@[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"]];
+    self.dietMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeDiet];
     [self.view addSubview:self.dietMenu];
     
     frame = CGRectOffset(frame, 0, MENU_OFFSET);
-    self.mealMenu = [self getDropDownMenuWithFrame:frame items:@[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"]];
+    self.mealMenu = [self getDropDownMenuWithFrame:frame type:DropdownMenuTypeMeal];
     [self.view addSubview:self.mealMenu];
 }
 
+// returns dropdown items based on enum type
+- (NSArray *)getItemsFromType:(DropdownMenuType)type {
+    if (type == DropdownMenuTypeCuisine) {
+        return @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
+    } else if (type == DropdownMenuTypeHealth) {
+        return @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
+    } else if (type == DropdownMenuTypeDiet) {
+        return @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
+    } else {
+        return @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
+    }
+}
+
+// returns dropdown title based on enum type
+- (NSString *)getTitleFromType:(DropdownMenuType)type {
+    if (type == DropdownMenuTypeCuisine) {
+        return CUISINE_KEY;
+    } else if (type == DropdownMenuTypeHealth) {
+        return HEALTH_KEY;
+    } else if (type == DropdownMenuTypeDiet) {
+        return DIET_KEY;
+    } else {
+        return MEAL_TYPE_KEY;
+    }
+}
+
 // creates and returns a dropdown menu
-- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame items:(NSArray *)items {
-    ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:@"no preference"];
+- (ManaDropDownMenu *)getDropDownMenuWithFrame:(CGRect)frame type:(DropdownMenuType)type {
+    NSArray* items = [self getItemsFromType:type];
+    NSString *title = [self getTitleFromType:type];
+    ManaDropDownMenu *dropDownMenu = [[ManaDropDownMenu alloc] initWithFrame:frame title:title?title:@"no preference"];
     dropDownMenu.textOfRows = items;
     dropDownMenu.numberOfRows = [dropDownMenu.textOfRows count];
     dropDownMenu.activeColor = UIColorFromRGB(0x80CB99);
@@ -76,37 +139,26 @@ static const float DROPDOWN_HEIGHT = 37;
     return dropDownMenu;
 }
 
-// called when drop down item is selected
-- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index {
-    NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
-    if (dropDownMenu == self.cuisineMenu && ![title isEqualToString:@"no preference"]) {
-        self.cuisineLabel = [NSString stringWithFormat:@"&cuisineType=%@", title];
-    } else if (dropDownMenu == self.healthMenu && ![title isEqualToString:@"no preference"]) {
-        self.healthLabel = [NSString stringWithFormat:@"&health=%@", title];
-    } else if (dropDownMenu == self.dietMenu && ![title isEqualToString:@"no preference"]) {
-        self.dietLabel = [NSString stringWithFormat:@"&diet=%@", title];
-    } else if (dropDownMenu == self.mealMenu && ![title isEqualToString:@"no preference"]) {
-        self.mealLabel = [NSString stringWithFormat:@"&mealType=%@", title];
+// removes preference from dictionary if it exists, otherwise adds it
+- (void)updatePreferenceWithKey:(NSString *)key title:(NSString *)title {
+    if(![title isEqualToString:@"no preference"]){
+        [self.preferencesDict setObject:title forKey:key];
+    } else {
+        [self.preferencesDict removeObjectForKey:key];
     }
 }
 
-//called when back button is pressed
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    NSMutableArray *preferences = [[NSMutableArray alloc] init];
-    
-    if(self.cuisineLabel) {
-        [preferences addObject:self.cuisineLabel];
+// called when drop down item is selected
+- (void)dropDownMenu:(CCDropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSInteger)index {
+    NSString* title = ((ManaDropDownMenu *)dropDownMenu).title;
+    if (dropDownMenu == self.cuisineMenu) {
+        [self updatePreferenceWithKey:CUISINE_KEY title:title];
+    } else if (dropDownMenu == self.healthMenu) {
+        [self updatePreferenceWithKey:HEALTH_KEY title:title];
+    } else if (dropDownMenu == self.dietMenu) {
+        [self updatePreferenceWithKey:DIET_KEY title:title];
+    } else if (dropDownMenu == self.mealMenu) {
+        [self updatePreferenceWithKey:MEAL_TYPE_KEY title:title];
     }
-    if(self.healthLabel) {
-        [preferences addObject:self.healthLabel];
-    }
-    if(self.dietLabel) {
-        [preferences addObject:self.dietLabel];
-    }
-    if(self.mealLabel) {
-        [preferences addObject:self.mealLabel];
-    }
-    [delegate sendData:preferences];
 }
 @end

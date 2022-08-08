@@ -40,8 +40,8 @@
 - (void)postSavedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId title:(NSString * _Nullable)title image:(NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)postLikedRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId recipeTitle:(NSString * _Nullable)title image: (NSString * _Nullable)image andCompletion:(void (^_Nullable)(BOOL succeeded, NSError * _Nullable error))completion;
 - (void)unlikeRecipeFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
-- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
-- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(int likes, NSError * _Nullable error))completion;
+- (void)countLikesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion;
+- (void)countSavesFromDraggableViewBackgroundWithId:(NSString * _Nullable)recipeId andCompletion:(void (^_Nullable)(NSUInteger likes, NSError * _Nullable error))completion;
 - (void)showDetailsFromDraggableViewBackground:(DraggableView *_Nonnull)card;
 - (void)getMoreRecipesFromDraggableViewBackgroundWithCompletion:(void (^_Nullable)(BOOL succeeded, NSError *_Nullable error))completion;
 @end

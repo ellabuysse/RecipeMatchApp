@@ -219,7 +219,7 @@ static const float SAVED_CONTROL_INDEX = 0;
         NSIndexPath *indexPath = [self.recipesCollectionView indexPathForCell:tappedCell];
         SavedRecipe *recipe = self.currentRecipes[indexPath.row];
         detailsController.recipeId = recipe.recipeId;
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem = backButton;
     }
 }

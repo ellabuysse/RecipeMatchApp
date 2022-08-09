@@ -229,6 +229,8 @@ static const float TITLE_HEIGHT = 40;
          NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
          RecipeContainerModel *recipeContainer = self.recipes[indexPath.row];
          detailsController.recipeId = [recipeContainer.recipe.uri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
+         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+         self.navigationItem.backBarButtonItem = backButton;
      }
  }
 @end

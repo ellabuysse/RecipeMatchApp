@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property (strong, nonatomic) RecipeModel *recipe;
 @property (weak, nonatomic) IBOutlet UILabel *ingredients;
+@property (weak, nonatomic) IBOutlet UILabel *ingredientCount;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -98,6 +99,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
     NSArray *ingrArray = self.recipe.ingredientLines;
     NSString *ingrString = (NSString *)[ingrArray componentsJoinedByString:@"\r\r• "];
     self.ingredients.text = [@"• " stringByAppendingString:ingrString];
+    self.ingredientCount.text = [NSString stringWithFormat:@"%lu", [ingrArray count]];
     self.yield.text = [NSString stringWithFormat:@"%@", self.recipe.yield];
     [self.recipeImage sd_setImageWithURL:[NSURL URLWithString:self.recipe.image] placeholderImage:nil];
     [self.view setNeedsDisplay];

@@ -453,12 +453,12 @@
                                                 </buttonConfiguration>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VDb-H6-E0X" userLabel="heartButton">
-                                                <rect key="frame" x="30" y="376" width="152" height="142"/>
+                                                <rect key="frame" x="50" y="376" width="152" height="142"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="favor" title=""/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vwr-Eg-5ca">
-                                                <rect key="frame" x="337" y="376" width="47" height="31"/>
+                                                <rect key="frame" x="317" y="376" width="47" height="31"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="arrowshape.turn.up.right" catalog="system" title=""/>
                                                 <connections>
@@ -478,7 +478,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxo-uK-iu6">
-                                                <rect key="frame" x="182" y="376" width="0.0" height="31"/>
+                                                <rect key="frame" x="202" y="376" width="0.0" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -501,6 +501,18 @@
                                                 <color key="textColor" systemColor="systemGrayColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calories:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wr8-uI-Px8">
+                                                <rect key="frame" x="339" y="538" width="60" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" systemColor="systemGrayColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xpz-Vf-JnR">
+                                                <rect key="frame" x="404" y="547" width="0.0" height="0.0"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
@@ -511,6 +523,7 @@
                                             <constraint firstItem="mRd-xE-qLP" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" id="40B-0Q-13H"/>
                                             <constraint firstItem="VDb-H6-E0X" firstAttribute="top" secondItem="mRd-xE-qLP" secondAttribute="bottom" constant="15" id="55p-g9-PFV"/>
                                             <constraint firstItem="I1u-if-3wD" firstAttribute="top" secondItem="mbP-eR-5yc" secondAttribute="bottom" constant="10" id="5FN-Rr-PHy"/>
+                                            <constraint firstItem="Xpz-Vf-JnR" firstAttribute="leading" secondItem="wr8-uI-Px8" secondAttribute="trailing" constant="5" id="62K-AD-oSO"/>
                                             <constraint firstItem="mAz-KC-JgT" firstAttribute="top" secondItem="0Na-zD-PiS" secondAttribute="bottom" constant="20" id="8Nd-00-p44"/>
                                             <constraint firstAttribute="trailing" secondItem="mRd-xE-qLP" secondAttribute="trailing" id="8om-z3-5Ho"/>
                                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IGK-Yg-w0M" secondAttribute="trailing" constant="20" symbolic="YES" id="Agj-nf-98b"/>
@@ -520,15 +533,19 @@
                                             <constraint firstItem="0Na-zD-PiS" firstAttribute="top" secondItem="VDb-H6-E0X" secondAttribute="bottom" constant="20" id="GN2-Zg-RKH"/>
                                             <constraint firstItem="MUn-1a-CGF" firstAttribute="centerY" secondItem="Jxo-uK-iu6" secondAttribute="centerY" id="Hgy-WR-wwK"/>
                                             <constraint firstItem="Grx-61-CUq" firstAttribute="centerY" secondItem="Jxo-uK-iu6" secondAttribute="centerY" id="JUs-CH-EPv"/>
+                                            <constraint firstItem="IGK-Yg-w0M" firstAttribute="centerY" secondItem="wr8-uI-Px8" secondAttribute="centerY" id="NF7-5g-QIr"/>
                                             <constraint firstItem="N5K-om-hQF" firstAttribute="top" secondItem="mAz-KC-JgT" secondAttribute="bottom" constant="20" id="NGj-hX-WwS"/>
                                             <constraint firstItem="mRd-xE-qLP" firstAttribute="top" secondItem="I1u-if-3wD" secondAttribute="bottom" constant="20" id="Olp-58-XjW"/>
-                                            <constraint firstItem="VDb-H6-E0X" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="30" id="QDo-T3-ozd"/>
+                                            <constraint firstItem="VDb-H6-E0X" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="50" id="QDo-T3-ozd"/>
                                             <constraint firstItem="Grx-61-CUq" firstAttribute="top" secondItem="mRd-xE-qLP" secondAttribute="bottom" constant="15" id="QHP-Bz-gkM"/>
                                             <constraint firstItem="MUn-1a-CGF" firstAttribute="centerX" secondItem="K5V-di-0KL" secondAttribute="centerX" id="Tez-N6-tVO"/>
                                             <constraint firstAttribute="trailing" secondItem="N5K-om-hQF" secondAttribute="trailing" constant="20" id="YLt-xT-ZhL"/>
+                                            <constraint firstItem="wr8-uI-Px8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0Na-zD-PiS" secondAttribute="trailing" constant="8" symbolic="YES" id="YYd-Vb-n49"/>
                                             <constraint firstItem="I1u-if-3wD" firstAttribute="leading" secondItem="mbP-eR-5yc" secondAttribute="leading" constant="-12" id="b17-hS-PpD"/>
                                             <constraint firstItem="Jxo-uK-iu6" firstAttribute="top" secondItem="mRd-xE-qLP" secondAttribute="bottom" constant="15" id="bzW-YI-OBC"/>
-                                            <constraint firstAttribute="trailing" secondItem="vwr-Eg-5ca" secondAttribute="trailing" constant="30" id="dOq-K2-FVW"/>
+                                            <constraint firstAttribute="trailing" secondItem="vwr-Eg-5ca" secondAttribute="trailing" constant="50" id="dOq-K2-FVW"/>
+                                            <constraint firstAttribute="trailing" secondItem="Xpz-Vf-JnR" secondAttribute="trailing" constant="10" id="eCh-EB-p2G"/>
+                                            <constraint firstItem="Xpz-Vf-JnR" firstAttribute="centerY" secondItem="wr8-uI-Px8" secondAttribute="centerY" id="gEU-R7-e7b"/>
                                             <constraint firstItem="mbP-eR-5yc" firstAttribute="leading" secondItem="K5V-di-0KL" secondAttribute="leading" constant="10" id="iaj-VK-9my"/>
                                             <constraint firstItem="IGK-Yg-w0M" firstAttribute="leading" secondItem="0Na-zD-PiS" secondAttribute="trailing" constant="5" id="kZP-Ov-I4a"/>
                                             <constraint firstItem="IGK-Yg-w0M" firstAttribute="centerY" secondItem="0Na-zD-PiS" secondAttribute="centerY" id="n6a-m1-BMP"/>
@@ -565,6 +582,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="E2B-aG-N1U"/>
                     <connections>
+                        <outlet property="calories" destination="Xpz-Vf-JnR" id="k2h-9e-SxU"/>
                         <outlet property="ingredientCount" destination="bZk-ox-fIc" id="6jZ-Rx-szz"/>
                         <outlet property="ingredients" destination="N5K-om-hQF" id="07B-Vz-Vva"/>
                         <outlet property="likeBtn" destination="VDb-H6-E0X" id="0dW-9x-o7Y"/>

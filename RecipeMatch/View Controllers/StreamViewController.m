@@ -61,13 +61,13 @@ NSString* const CALORIES_KEY = @"calories";
             [self.draggableBackground reloadView];
             [self.view addSubview:self.draggableBackground];
         } else {
-            //TODO: Add failure support
+            [self showAlertWithMessage:@"Error loading recipes. Please try again later."];
         }
     }];
 }
 
-- (void)showAlert {
-    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:@"Ran out of results with these preferences! Showing recipes that match most of your preferences." preferredStyle:UIAlertControllerStyleAlert];
+- (void)showAlertWithMessage:(NSString *)message {
+    UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:message preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
     [recipeFailure addAction:okAction];
     [self presentViewController:recipeFailure animated:YES completion:^{}];
@@ -86,7 +86,7 @@ NSString* const CALORIES_KEY = @"calories";
         [self.preferencesDict removeObjectForKey:HEALTH_KEY];
     }
     
-    [self showAlert];
+    [self showAlertWithMessage:@"Ran out of results with these preferences! Showing recipes that match most of your preferences."];
     [self getRecipesWithPreferencesWithCompletion:^(NSArray *recipes, NSError *error) {
         if (recipes) {
             completion(recipes, nil);
@@ -218,20 +218,18 @@ NSString* const CALORIES_KEY = @"calories";
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = backButton;
     if ([[segue identifier] isEqualToString:@"preferencesViewSegue"]) {
         PreferencesViewController *preferencesController = [segue destinationViewController];
         preferencesController.delegate = self;
         preferencesController.preferencesDict = [NSMutableDictionary dictionaryWithDictionary:self.preferencesDict];
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem = backButton;
     }
     if ([[segue identifier] isEqualToString:@"detailsViewSegue"]) {
         // make saved recipe object (but don't save) for DetailsViewController
         DraggableView *recipe = (DraggableView *)sender;
         DetailsViewController *detailsController = [segue destinationViewController];
         detailsController.recipeId = recipe.recipeId;
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem = backButton;
     }
 }
 @end

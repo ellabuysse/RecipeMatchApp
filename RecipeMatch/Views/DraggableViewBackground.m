@@ -240,7 +240,7 @@ NSString * const SAVE_IMG = @"save-btn";
             card.saveLabel.hidden = NO;
         } else {
             card.saveCount.text = nil;
-            card.saveLabel.text = nil;
+            card.saveLabel.hidden = YES;
         }
     }];
 }
@@ -264,7 +264,7 @@ NSString * const SAVE_IMG = @"save-btn";
             if (succeeded) {
                 [self loadCards];
             } else {
-                // TODO: add failure support
+                [self->delegate showAlertWithMessage:@"Error loading recipes. Please try again later."];
             }
         }];
     } else if (currentCardIndex == [allCards count]-1) { // no cards left -> reset indices and swap new cards in

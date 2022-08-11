@@ -102,14 +102,19 @@ static NSString* const CALORIES_DEFAULT = @"1000";
 
 // returns dropdown items based on enum type
 - (NSArray *)getItemsFromType:(DropdownMenuType)type {
-    if (type == DropdownMenuTypeCuisine) {
-        return @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
-    } else if (type == DropdownMenuTypeHealth) {
-        return @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
-    } else if (type == DropdownMenuTypeDiet) {
-        return @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
-    } else {
-        return @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
+    switch (type) {
+        case DropdownMenuTypeCuisine:
+            return @[@"American", @"Asian", @"British",@"Caribbean",@"Central Europe",@"Chinese", @"Eastern Europe", @"French", @"Indian", @"Italian", @"Japanese", @"Kosher", @"Mediterranean", @"Mexican", @"Middle Eastern", @"Nordic", @"South American", @"South East Asian", @"no preference"];
+            break;
+        case DropdownMenuTypeHealth:
+            return @[@"vegan", @"vegetarian", @"tree-nut-free",@"low-sugar",@"shellfish-free",@"pescatarian", @"paleo", @"gluten-free", @"fodmap-free", @"no preference"];
+            break;
+        case DropdownMenuTypeDiet:
+            return @[@"balanced", @"high-fiber", @"high-protein",@"low-carb",@"low-fat",@"low-sodium",@"no preference"];
+            break;
+        case DropdownMenuTypeMeal:
+            return @[@"breakfast", @"dinner", @"lunch",@"snack",@"teatime",@"no preference"];
+            break;
     }
 }
 

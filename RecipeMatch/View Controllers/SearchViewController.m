@@ -202,7 +202,10 @@ static const float TITLE_HEIGHT = 40;
                 [self.recipes addObjectsFromArray:recipes];
                 [collectionView reloadSections:[NSIndexSet indexSetWithIndex:1]];
             } else {
-                //TODO: add failure support
+                UIAlertController *recipeFailure= [UIAlertController alertControllerWithTitle:@"Uh oh!" message:@"Error getting recipes. Please try again later." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
+                [recipeFailure addAction:okAction];
+                [self presentViewController:recipeFailure animated:YES completion:^{}];
             }
         }];
     }
@@ -226,6 +229,8 @@ static const float TITLE_HEIGHT = 40;
          NSIndexPath *indexPath = [self.collectionView indexPathForCell:tappedCell];
          RecipeContainerModel *recipeContainer = self.recipes[indexPath.row];
          detailsController.recipeId = [recipeContainer.recipe.uri componentsSeparatedByString:@"#recipe_"][1]; // recipeId is found after #recipe_ in the uri
+         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+         self.navigationItem.backBarButtonItem = backButton;
      }
  }
 @end

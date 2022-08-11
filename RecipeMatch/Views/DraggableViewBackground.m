@@ -240,7 +240,7 @@ NSString * const SAVE_IMG = @"save-btn";
             card.saveLabel.hidden = NO;
         } else {
             card.saveCount.text = nil;
-            card.saveLabel.text = nil;
+            card.saveLabel.hidden = YES;
         }
     }];
 }

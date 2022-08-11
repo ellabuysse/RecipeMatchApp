@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSInteger yield;
 @property (nonatomic) NSArray *ingredientLines;
-@property (nonatomic) NSArray *ingredients;
 @property (nonatomic) NSInteger calories;
 @end
 

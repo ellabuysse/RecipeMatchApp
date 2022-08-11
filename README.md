@@ -57,13 +57,15 @@ YesPeas is a recipe swiping app that provides users with inspiration and ideas f
     * User can view an endless stream of recipes
     * User can swipe right to like a recipe
     * User can swipe left to discard a recipe/move to the next one
-    * User can tap on a recipe to view details and favorite
+    * User can tap on a recipe to view details
+    * User can see total like/save count
+    * User can see if they previously liked/saved recipe
     * User can double tap to like
 
 
 * Detail
     * User can view recipe title, ingredients, instructions, and photo
-    * User can tap button to favorite recipe
+    * User can tap button to like/save recipe
     * User can tap button to go to external website with recipe
 
 
@@ -73,6 +75,7 @@ YesPeas is a recipe swiping app that provides users with inspiration and ideas f
 
 * Preferences
     * User can update preferences
+    * Preferences are saved when user leaves screen
     * User can clear preferences
 
 
@@ -98,8 +101,8 @@ YesPeas is a recipe swiping app that provides users with inspiration and ideas f
 **Flow Navigation** (Screen to Screen)
 
 * Login Screen
-   * Stream
-* Stream
+   * Home
+* Home
     * Details by tapping on recipe
     * Preferences
  * Search
@@ -112,11 +115,25 @@ YesPeas is a recipe swiping app that provides users with inspiration and ideas f
 ![](https://i.imgur.com/u2GmGAx.jpg)
 
 ### Models
-Favorites Model
-Property      | Type	        | Description
-------------- | -------------   | ----------------------------------------
+LikedRecipe/SavedRecipe Model
+Property      | Type	           | Description
+------------- | --------------- | ----------------------------------------
 recipeID      | String	        | unique id for the recipe (default field)
-user          | Pointer to User | current user
+name          | String          | recipe name
+image         | String          | recipe image url
+username      | String          | current user username
+
+Recipe Model
+Property        | Type	          | Description
+-------------   | --------------- | ----------------------------------------
+uri             | String	       | unique id for the recipe
+label           | String          | recipe name
+image           | String          | recipe image url
+source          | String          | recipe website title
+url             | String          | recipe website url
+yield           | Integer         | number of servings of recipe
+ingredientLines | Array           | recipe ingredients split into lines
+calories        | Integer         | number of calories of entire recipe
 
 ### Networking
 Recipe API

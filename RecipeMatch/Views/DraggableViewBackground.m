@@ -113,6 +113,10 @@ NSString * const SAVE_IMG = @"save-btn";
     draggableView.imageUrl = recipeContainer.recipe.image;
     [draggableView.recipeImage sd_setImageWithURL:[NSURL URLWithString:draggableView.imageUrl] placeholderImage:nil];
     draggableView.delegate = self;
+    draggableView.likeCount.text = nil;
+    draggableView.saveCount.text = nil;
+    draggableView.saveLabel.hidden = YES;
+    draggableView.likeLabel.hidden = YES;
     return draggableView;
 }
 
@@ -207,8 +211,10 @@ NSString * const SAVE_IMG = @"save-btn";
     [delegate countLikesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(NSUInteger likes, NSError * _Nullable error) {
         if (likes) {
             card.likeCount.text = [[NSString alloc] initWithFormat:@"%lu", likes];
+            card.likeLabel.hidden = NO;
         } else {
-            card.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            card.likeCount.text = nil;
+            card.likeLabel.hidden = YES;
         }
     }];
 }
@@ -231,8 +237,10 @@ NSString * const SAVE_IMG = @"save-btn";
     [delegate countSavesFromDraggableViewBackgroundWithId:card.recipeId andCompletion:^(NSUInteger saves, NSError * _Nullable error) {
         if (saves) {
             card.saveCount.text = [[NSString alloc] initWithFormat:@"%lu", saves];
+            card.saveLabel.hidden = NO;
         } else {
-            card.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            card.saveCount.text = nil;
+            card.saveLabel.text = nil;
         }
     }];
 }

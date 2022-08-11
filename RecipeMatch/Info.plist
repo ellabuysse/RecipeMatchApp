@@ -20,7 +20,7 @@
 	<key>FacebookClientToken</key>
 	<string>205b2222c7ae47c21523c21fee20f9b7</string>
 	<key>FacebookDisplayName</key>
-	<string>RecipeMatcher</string>
+	<string>RecipeMatch</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -9,8 +9,9 @@
 #import "APIManager.h"
 #import "SDWebImage/SDWebImage.h"
 #import "FBSDKShareKit/FBSDKShareKit.h"
+#import "IngredientTableViewCell.h"
 
-@interface DetailsViewController ()
+@interface DetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *recipeTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *recipeImage;
 @property (strong, nonatomic) NSString *recipeUrl;
@@ -21,7 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *likeCount;
 @property (weak, nonatomic) IBOutlet UILabel *saveCount;
 @property (strong, nonatomic) RecipeModel *recipe;
-@property (weak, nonatomic) IBOutlet UITextView *ingredients;
+@property (weak, nonatomic) IBOutlet UILabel *ingredients;
 @property BOOL saved;
 @property BOOL liked;
 @end
@@ -36,7 +37,6 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.tintColor = UIColorFromRGB(0x0075E3);
-
     [self setupButtons]; // start API calls to prevent excess loading time
     // wait for fullRecipe data before setting info on screen
     [self fetchFullRecipeWithCompletion:^(BOOL succeeded, NSError *error){
@@ -90,6 +90,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
 // sets recipe details from fullRecipe
 - (void)fetchRecipeInfo {
     self.recipeTitle.text = self.recipe.label;
+    self.recipeTitle.layer.zPosition = 1;
     self.recipeUrl = self.recipe.url;
     [self.source setTitle:self.recipe.source forState:UIControlStateNormal];
     [self.source.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
@@ -147,7 +148,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         if (saves) {
             self.saveCount.text = [[NSString alloc] initWithFormat:@"%lu", saves];
         } else {
-            self.saveCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            self.saveCount.text = nil;
         }
     }];
 }
@@ -158,7 +159,7 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         if (likes) {
             self.likeCount.text = [[NSString alloc] initWithFormat:@"%lu", likes];
         } else {
-            self.likeCount.text = [[NSString alloc] initWithFormat:@"%d", 0];
+            self.likeCount.text = nil;
         }
     }];
 }
@@ -187,4 +188,17 @@ NSString * const BOOKMARK_KEY = @"bookmark";
         }];
     }
 }
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    IngredientTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ingredientCell" forIndexPath:indexPath];
+    cell.ingredient.text = [self.recipe.ingredientLines objectAtIndex:indexPath.row];
+    return  cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [self.recipe.ingredientLines count];
+}
+
 @end

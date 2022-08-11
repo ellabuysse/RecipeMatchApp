@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *yield;
 @property (nonatomic) NSArray *ingredientLines;
+@property (nonatomic) NSArray *ingredients;
 @end
 
 @interface RecipeContainerModel : JSONModel

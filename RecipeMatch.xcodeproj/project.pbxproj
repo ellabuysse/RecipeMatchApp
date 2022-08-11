@@ -34,6 +34,8 @@
 		7548BE8C288EFC0A00BC2070 /* SearchCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE8B288EFC0A00BC2070 /* SearchCollectionReusableView.m */; };
 		7548BE922893432700BC2070 /* EmptyCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE912893432700BC2070 /* EmptyCollectionReusableView.m */; };
 		7548BE952894535400BC2070 /* RecipeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7548BE942894535400BC2070 /* RecipeModel.m */; };
+		754CAA27289D8A34000C980B /* ProfileCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 754CAA26289D8A34000C980B /* ProfileCollectionReusableView.m */; };
+		754CAA2A289DBA8A000C980B /* IngredientTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 754CAA29289DBA8A000C980B /* IngredientTableViewCell.m */; };
 		A74E2894CD83D5E1047F12D0 /* Pods_RecipeMatch_RecipeMatchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26889765EC5EA3D03E86E404 /* Pods_RecipeMatch_RecipeMatchUITests.framework */; };
 		CA1A918B51F4079691FD76D0 /* Pods_RecipeMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11812B93E8622B188D62C6F7 /* Pods_RecipeMatch.framework */; };
 /* End PBXBuildFile section */
@@ -62,7 +64,7 @@
 		3B174C8644305350407D6119 /* Pods-RecipeMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatch.debug.xcconfig"; path = "Target Support Files/Pods-RecipeMatch/Pods-RecipeMatch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F510171507E7DD54422667D /* Pods-RecipeMatch-RecipeMatchUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatch-RecipeMatchUITests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeMatch-RecipeMatchUITests/Pods-RecipeMatch-RecipeMatchUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4FB57C47F701FE8B2A43690B /* Pods-RecipeMatchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatchTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeMatchTests/Pods-RecipeMatchTests.release.xcconfig"; sourceTree = "<group>"; };
-		750237B32876010F00367EE7 /* RecipeMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		750237B32876010F00367EE7 /* YesPeas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YesPeas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		750237B62876010F00367EE7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		750237B72876010F00367EE7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		750237B92876010F00367EE7 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -111,6 +113,10 @@
 		7548BE912893432700BC2070 /* EmptyCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyCollectionReusableView.m; sourceTree = "<group>"; };
 		7548BE932894535400BC2070 /* RecipeModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecipeModel.h; sourceTree = "<group>"; };
 		7548BE942894535400BC2070 /* RecipeModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecipeModel.m; sourceTree = "<group>"; };
+		754CAA25289D8A34000C980B /* ProfileCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileCollectionReusableView.h; sourceTree = "<group>"; };
+		754CAA26289D8A34000C980B /* ProfileCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileCollectionReusableView.m; sourceTree = "<group>"; };
+		754CAA28289DBA8A000C980B /* IngredientTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IngredientTableViewCell.h; sourceTree = "<group>"; };
+		754CAA29289DBA8A000C980B /* IngredientTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IngredientTableViewCell.m; sourceTree = "<group>"; };
 		92CB23593C6E5E15CA56F069 /* Pods-RecipeMatch-RecipeMatchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatch-RecipeMatchUITests.release.xcconfig"; path = "Target Support Files/Pods-RecipeMatch-RecipeMatchUITests/Pods-RecipeMatch-RecipeMatchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B2A4596869D9F6C74E37DA50 /* Pods_RecipeMatchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RecipeMatchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDF7F65A4F5CA2219A7D4C8B /* Pods-RecipeMatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeMatchTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeMatchTests/Pods-RecipeMatchTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -172,7 +178,7 @@
 		750237B42876010F00367EE7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				750237B32876010F00367EE7 /* RecipeMatch.app */,
+				750237B32876010F00367EE7 /* YesPeas.app */,
 				750237CE2876011000367EE7 /* RecipeMatchTests.xctest */,
 				750237D82876011000367EE7 /* RecipeMatchUITests.xctest */,
 			);
@@ -274,6 +280,10 @@
 				7548BE902893432700BC2070 /* EmptyCollectionReusableView.h */,
 				7548BE912893432700BC2070 /* EmptyCollectionReusableView.m */,
 				7548BE8B288EFC0A00BC2070 /* SearchCollectionReusableView.m */,
+				754CAA25289D8A34000C980B /* ProfileCollectionReusableView.h */,
+				754CAA26289D8A34000C980B /* ProfileCollectionReusableView.m */,
+				754CAA28289DBA8A000C980B /* IngredientTableViewCell.h */,
+				754CAA29289DBA8A000C980B /* IngredientTableViewCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -307,7 +317,7 @@
 			);
 			name = RecipeMatch;
 			productName = RecipeMatch;
-			productReference = 750237B32876010F00367EE7 /* RecipeMatch.app */;
+			productReference = 750237B32876010F00367EE7 /* YesPeas.app */;
 			productType = "com.apple.product-type.application";
 		};
 		750237CD2876011000367EE7 /* RecipeMatchTests */ = {
@@ -540,6 +550,8 @@
 				750238152878D17000367EE7 /* APIManager.m in Sources */,
 				7548BE862881D15700BC2070 /* LikedRecipe.m in Sources */,
 				750237BB2876010F00367EE7 /* SceneDelegate.m in Sources */,
+				754CAA2A289DBA8A000C980B /* IngredientTableViewCell.m in Sources */,
+				754CAA27289D8A34000C980B /* ProfileCollectionReusableView.m in Sources */,
 				750237F0287603C400367EE7 /* ProfileViewController.m in Sources */,
 				75023826287CA6E500367EE7 /* DetailsViewController.m in Sources */,
 				7548BE7B287F2C3700BC2070 /* PreferencesViewController.m in Sources */,
@@ -734,7 +746,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ellabuysse.RecipeMatch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = YesPeas;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -763,7 +775,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ellabuysse.RecipeMatch;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = YesPeas;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -115,15 +115,22 @@ static NSString* const CALORIES_DEFAULT = @"1000";
 
 // returns dropdown title based on enum type
 - (NSString *)getTitleFromType:(DropdownMenuType)type {
-    if (type == DropdownMenuTypeCuisine) {
-        return CUISINE_KEY;
-    } else if (type == DropdownMenuTypeHealth) {
-        return HEALTH_KEY;
-    } else if (type == DropdownMenuTypeDiet) {
-        return DIET_KEY;
-    } else {
-        return MEAL_TYPE_KEY;
+    NSString *title;
+    switch (type) {
+        case DropdownMenuTypeDiet:
+            title = [self.preferencesDict objectForKey:DIET_KEY];
+            break;
+        case DropdownMenuTypeMeal:
+            title = [self.preferencesDict objectForKey:MEAL_TYPE_KEY];
+            break;
+        case DropdownMenuTypeHealth:
+            title = [self.preferencesDict objectForKey:HEALTH_KEY];
+            break;
+        case DropdownMenuTypeCuisine:
+            title = [self.preferencesDict objectForKey:CUISINE_KEY];
+            break;
     }
+    return title;
 }
 
 // creates and returns a dropdown menu

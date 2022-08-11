@@ -8,8 +8,7 @@
 
 ## Overview
 ### Description
-YesPeas is a recipe swiping app that provides users with inspiration and ideas for recipes. Users can input preferences such as meal type and diet, search for specific recipes, and view saved recipes on their profile. Ultimately, users are able to discover new recipes quickly and in a fun and engaging way.
-
+YesPeas is a recipe swiping app that provides users with inspiration and ideas for recipes. Users can input preferences such as meal type, diet, and cuisine and swipe endlessly through recipes. Users can search for specific recipes, view recipe details, and view saved and liked recipes on their profile. Ultimately, users are able to discover new recipes quickly and in a fun and engaging way.
 
 ### App Evaluation
 
